@@ -40,26 +40,36 @@ public:
         outputParameters.device = outputDevIndex;
         if (outputParameters.device == paNoDevice)
         {
+            fprintf(stderr, "AudioDSPKernel: failed to find output device\n");
             return false;
         }
         
         outputParameters.channelCount = numOutputChannels;
         outputParameters.sampleFormat = paFloat32;
-        outputParameters.suggestedLatency = Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency;
+        const PaDeviceInfo *devInfo = Pa_GetDeviceInfo(outputParameters.device);
+        outputParameters.suggestedLatency = devInfo->defaultLowOutputLatency;
         
         outputParameters.hostApiSpecificStreamInfo = NULL;
+        
+        if (useFileInput)
+            sampleRate = audioFile->sampleRate();
+        else
+            sampleRate = 44100; //TODO change this to inputParameters value
+        
+        printf("AudioDSPKernel: open stream with sample rate: %lu\n", sampleRate);
         
         PaError err = Pa_OpenStream(&stream,
                                     NULL,
                                     &outputParameters,
                                     sampleRate,
-                                    paFramesPerBufferUnspecified,
+                                    1,
                                     0,
                                     &AudioDSPKernel::paCallback,
                                     this);
         
         if (err != paNoError)
         {
+            fprintf(stderr, "AudioDSPKernel: failed to open stream: %d\n", err);
             return false;
         }
         
@@ -101,6 +111,7 @@ public:
             return false;
         
         PaError err = Pa_StopStream(stream);
+        status = AudioManagerStatusDone;
         return (err == paNoError);
     }
     
@@ -127,7 +138,7 @@ public:
         {
             if (useFileInput)
             {
-                if (audioFile->nextFrame(&in))
+                if (audioFile->nextFrame(&in) != AudioFileBufferStatusOK)
                 {
                     ret = paComplete;
                     break;
@@ -137,7 +148,7 @@ public:
             dspCallback(in, out, numInputChannels, numOutputChannels, dspCallbackContext);
         }
         
-        return paContinue;
+        return ret;
     }
     
     static int paCallback(const void *inputBuffer, void *outputBuffer,
@@ -146,11 +157,12 @@ public:
                           PaStreamCallbackFlags statusFlags,
                           void *userData)
     {
-        return ((AudioDSPKernel *)userData)->paCallbackMethod(inputBuffer,
-                                                              outputBuffer,
-                                                              framesPerBuffer,
-                                                              timeInfo,
-                                                              statusFlags);
+        AudioDSPKernel *kernel = (AudioDSPKernel *)userData;
+        return kernel->paCallbackMethod(inputBuffer,
+                                        outputBuffer,
+                                        framesPerBuffer,
+                                        timeInfo,
+                                        statusFlags);
     }
     
     static void paStreamFinished(void *userData)

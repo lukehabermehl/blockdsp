@@ -26,7 +26,7 @@ typedef NS_ENUM(unsigned int, AudioFileBufferStatus)
 
 typedef NS_ENUM(unsigned int, AudioManagerStatus)
 {
-    AudioManagerStatusRunning,
+    AudioManagerStatusRunning = 0,
     AudioManagerStatusDone
 };
 

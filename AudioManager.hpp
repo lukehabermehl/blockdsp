@@ -29,6 +29,8 @@ public:
     /** Set the number of output channels */
     void setNumOutputChannels(int numOutputChannels);
     
+    /** Enable/disable looping when using an input file */
+    void setLooping(bool looping);
     
     /** Open the audio I/O streams. Returns true if successful */
     bool open();
@@ -41,6 +43,8 @@ public:
     
     /** Stop audio processing. Returns false if successful */
     bool stop();
+    
+    void sleep(unsigned long millisec);
     
     
     /** Get the current status of the Audio Manager */

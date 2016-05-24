@@ -203,6 +203,16 @@
 		A342C6CB1CF3ED9E000E354E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"${BUILD_DIR}/**",
+				);
+				OTHER_LDFLAGS = (
+					"-lsndfile",
+					"-lportaudio",
+					"-lblockdsp",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -210,6 +220,16 @@
 		A342C6CC1CF3ED9E000E354E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"${BUILD_DIR}/**",
+				);
+				OTHER_LDFLAGS = (
+					"-lsndfile",
+					"-lportaudio",
+					"-lblockdsp",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

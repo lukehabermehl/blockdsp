@@ -24,14 +24,13 @@ AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
             break;
     }
     
-    size_t nItems = totalSize();
     sndfile = sf_open(filepath, sfmode, &sfInfo);
+    _totalSize = sfInfo.channels * sfInfo.frames;
     readIndex = 0;
-    buf = new float[nItems];
-    _totalSize = sfInfo.frames * sfInfo.channels;
+    buf = new float[totalSize()];
     
     //TODO: don't read the whole file at once
-    sf_read_float(sndfile, &buf[0], nItems);
+    sf_read_float(sndfile, &buf[0], _totalSize);
 }
 
 AudioFile::~AudioFile()
@@ -58,10 +57,11 @@ void AudioFile::close()
 
 AudioFileBufferStatus AudioFile::nextFrame(float **frame)
 {
-    if (readIndex >= _totalSize)
+    if (readIndex >= totalSize())
         return AudioFileBufferStatusOutOfBounds;
     
-    *frame = &buf[readIndex++];
+    *frame = &buf[readIndex];
+    readIndex += sfInfo.channels;
     
     if (readIndex >= _totalSize)
     {
@@ -88,8 +88,16 @@ unsigned long AudioFile::numFrames()
     return sfInfo.frames;
 }
 
+int AudioFile::numChannels()
+{
+    return sfInfo.channels;
+}
+
 size_t AudioFile::totalSize()
 {
+    if (_totalSize == 0)
+        _totalSize = sfInfo.channels * sfInfo.frames;
+    
     return _totalSize;
 }
 

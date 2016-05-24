@@ -17,8 +17,8 @@ public:
     
     ~ScopedPaHandler()
     {
-        if (_result == paNoError)
-            Pa_Terminate();
+//        if (_result == paNoError)
+//            //Pa_Terminate();
     }
     
     PaError result() const {
@@ -31,10 +31,15 @@ private:
 
 AudioManager::AudioManager()
 {
-    ScopedPaHandler paInit;
-    if (paInit.result() != paNoError)
+    Pa_Initialize();
+    
+    int devCount = Pa_GetDeviceCount();
+    printf("AudioManager: Device Count: %d\n", devCount);
+    for (int i=0; i<devCount; i++)
     {
-        //TODO: notify PaInit error
+        const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
+        printf("AudioManager: found device: %s\n", info->name);
+        
     }
 }
 
@@ -64,12 +69,18 @@ void AudioManager::setProcessCallback(AudioProcessFunc fn, void *context)
 
 bool AudioManager::open()
 {
-    return dspKernel.open(Pa_GetDefaultOutputDevice());
+    return dspKernel.open(1);
 }
 
 bool AudioManager::close()
 {
-    return dspKernel.close();
+    if (dspKernel.close())
+    {
+        Pa_Terminate();
+        return true;
+    }
+    
+    return false;
 }
 
 bool AudioManager::start()
@@ -101,5 +112,15 @@ bool AudioManager::setInputFile(const char *fpath)
 AudioManagerStatus AudioManager::status()
 {
     return dspKernel.status;
+}
+
+void AudioManager::sleep(unsigned long millisec)
+{
+    Pa_Sleep(millisec);
+}
+
+void AudioManager::setLooping(bool looping)
+{
+    dspKernel.audioFile->setLooping(looping);
 }
 
