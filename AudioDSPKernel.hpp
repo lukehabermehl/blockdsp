@@ -12,20 +12,19 @@
 #include <portaudio.h>
 #include "libblockdsp.h"
 #include "AudioFile.hpp"
+#include "AudioProcessingUnit.hpp"
 
 class AudioDSPKernel {
 public:
     AudioDSPKernel()
     {
-        dspCallbackContext = 0;
+        audioProcessingUnit = NULL;
         numInputChannels = 1;
         numOutputChannels = 1;
         stream = 0;
         useFileInput = false;
         audioFile = 0;
         status = AudioManagerStatusDone;
-        
-        dspCallback = nullptr;
     }
     
     ~AudioDSPKernel()
@@ -145,7 +144,7 @@ public:
                 }
             }
             
-            dspCallback(in, out, numInputChannels, numOutputChannels, dspCallbackContext);
+            audioProcessingUnit->processAudio(in, out, numInputChannels, numOutputChannels);
         }
         
         return ret;
@@ -176,8 +175,7 @@ public:
     PaStream *stream;
     bool useFileInput;
     AudioFile *audioFile;
-    AudioProcessFunc dspCallback;
-    void *dspCallbackContext;
+    AudioProcessingUnit *audioProcessingUnit;
     AudioManagerStatus status;
 };
 

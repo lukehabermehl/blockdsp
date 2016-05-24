@@ -12,6 +12,7 @@
 #include <portaudio.h>
 #include "libblockdsp.h"
 #include "AudioDSPKernel.hpp"
+#include "AudioProcessingUnit.hpp"
 
 class AudioManager
 {
@@ -23,8 +24,8 @@ public:
     /** Specify the audio input source */
     void setInputMode(AudioInputMode mode);
     
-    /** Set the function to be called to process audio */
-    void setProcessCallback(AudioProcessFunc fn, void *context);
+    /** Pass in an instance of AudioProcessingUnit to do the DSP */
+    void setAudioProcessingUnit(AudioProcessingUnit *unit);
     
     /** Set the number of output channels */
     void setNumOutputChannels(int numOutputChannels);

@@ -61,10 +61,9 @@ void AudioManager::setInputMode(AudioInputMode mode)
     }
 }
 
-void AudioManager::setProcessCallback(AudioProcessFunc fn, void *context)
+void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)
 {
-    dspKernel.dspCallback = fn;
-    dspKernel.dspCallbackContext = context;
+    dspKernel.audioProcessingUnit = unit;
 }
 
 bool AudioManager::open()

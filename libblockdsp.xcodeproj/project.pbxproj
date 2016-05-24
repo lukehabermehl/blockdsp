@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A30320451CF5119800EBBFBA /* AudioProcessingUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A30320431CF5119800EBBFBA /* AudioProcessingUnit.cpp */; };
+		A30320461CF5119800EBBFBA /* AudioProcessingUnit.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A30320441CF5119800EBBFBA /* AudioProcessingUnit.hpp */; };
 		A342C6C91CF3ED9E000E354E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342C6C81CF3ED9E000E354E /* main.cpp */; };
 		A3D020FC1CF35D1400EC7C0D /* AudioManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D020FA1CF35D1400EC7C0D /* AudioManager.cpp */; };
 		A3D020FD1CF35D1400EC7C0D /* AudioManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D020FB1CF35D1400EC7C0D /* AudioManager.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -30,6 +32,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A30320431CF5119800EBBFBA /* AudioProcessingUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioProcessingUnit.cpp; sourceTree = "<group>"; };
+		A30320441CF5119800EBBFBA /* AudioProcessingUnit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AudioProcessingUnit.hpp; sourceTree = "<group>"; };
 		A342C6C61CF3ED9E000E354E /* dsptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dsptest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A3D020F31CF35CC800EC7C0D /* libblockdsp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblockdsp.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +80,8 @@
 				A3D020FA1CF35D1400EC7C0D /* AudioManager.cpp */,
 				A3D021021CF365AE00EC7C0D /* AudioDSPKernel.cpp */,
 				A3D021031CF365AE00EC7C0D /* AudioDSPKernel.hpp */,
+				A30320441CF5119800EBBFBA /* AudioProcessingUnit.hpp */,
+				A30320431CF5119800EBBFBA /* AudioProcessingUnit.cpp */,
 				A3D020FF1CF35ED800EC7C0D /* AudioFile.hpp */,
 				A3D020FE1CF35ED800EC7C0D /* AudioFile.cpp */,
 				A342C6C71CF3ED9E000E354E /* dsptest */,
@@ -99,6 +105,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A30320461CF5119800EBBFBA /* AudioProcessingUnit.hpp in Headers */,
 				A3D021011CF35ED800EC7C0D /* AudioFile.hpp in Headers */,
 				A3D020FD1CF35D1400EC7C0D /* AudioManager.hpp in Headers */,
 				A3D021051CF365AE00EC7C0D /* AudioDSPKernel.hpp in Headers */,
@@ -194,6 +201,7 @@
 				A3D021041CF365AE00EC7C0D /* AudioDSPKernel.cpp in Sources */,
 				A3D021001CF35ED800EC7C0D /* AudioFile.cpp in Sources */,
 				A3D020FC1CF35D1400EC7C0D /* AudioManager.cpp in Sources */,
+				A30320451CF5119800EBBFBA /* AudioProcessingUnit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

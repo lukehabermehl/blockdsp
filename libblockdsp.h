@@ -9,6 +9,8 @@
 #ifndef libblockdsp_h
 #define libblockdsp_h
 
+#include "AudioProcessingUnit.hpp"
+
 #ifndef NULL
 #define NULL 0
 #endif
