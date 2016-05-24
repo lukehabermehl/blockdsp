@@ -13,15 +13,36 @@
 #define NULL 0
 #endif
 
-static const int kNoError = 0;
-static const int kDoneReading = 1;
-static const int kOutOfBounds = 2;
+#ifndef NS_ENUM
+#define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
+#endif
 
-enum AudioManagerStatus : unsigned int
+typedef NS_ENUM(unsigned int, AudioFileBufferStatus)
+{
+    AudioFileBufferStatusOK = 0,
+    AudioFileBufferStatusDoneReading,
+    AudioFileBufferStatusOutOfBounds
+};
+
+typedef NS_ENUM(unsigned int, AudioManagerStatus)
 {
     AudioManagerStatusRunning,
     AudioManagerStatusDone
 };
+
+typedef NS_ENUM(unsigned int, AudioInputMode)
+{
+    AudioInputModeFile,
+    AudioInputModeMicrophone
+};
+
+typedef NS_ENUM(unsigned int, AudioFileMode)
+{
+    AudioFileModeReadOnly,
+    AudioFileModeWriteOnly,
+    AudioFileModeReadWrite
+};
+
 
 typedef void (*AudioProcessFunc)(float *inputBuffer,
                                 float *outputBuffer,

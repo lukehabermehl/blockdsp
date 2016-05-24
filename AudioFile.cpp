@@ -56,17 +56,26 @@ void AudioFile::close()
     buf = 0;
 }
 
-int AudioFile::nextFrame(float **frame)
+AudioFileBufferStatus AudioFile::nextFrame(float **frame)
 {
     if (readIndex >= _totalSize)
-        return kOutOfBounds;
+        return AudioFileBufferStatusOutOfBounds;
     
     *frame = &buf[readIndex++];
     
     if (readIndex >= _totalSize)
-        return kDoneReading;
+    {
+        if (isLooping())
+        {
+            readIndex -= _totalSize;
+        }
+        else
+        {
+            return AudioFileBufferStatusDoneReading;
+        }
+    }
 
-    return kNoError;
+    return AudioFileBufferStatusOK;
 }
 
 unsigned long AudioFile::sampleRate()
@@ -82,4 +91,14 @@ unsigned long AudioFile::numFrames()
 size_t AudioFile::totalSize()
 {
     return _totalSize;
+}
+
+void AudioFile::setLooping(bool looping)
+{
+    _looping = looping;
+}
+
+bool AudioFile::isLooping()
+{
+    return _looping;
 }
