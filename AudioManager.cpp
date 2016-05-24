@@ -56,6 +56,12 @@ void AudioManager::setInputMode(AudioInputMode mode)
     }
 }
 
+void AudioManager::setProcessCallback(AudioProcessFunc fn, void *context)
+{
+    dspKernel.dspCallback = fn;
+    dspKernel.dspCallbackContext = context;
+}
+
 bool AudioManager::open()
 {
     return dspKernel.open(Pa_GetDefaultOutputDevice());
@@ -90,5 +96,10 @@ bool AudioManager::setInputFile(const char *fpath)
     dspKernel.audioFile = audioFile;
     
     return true;
+}
+
+AudioManagerStatus AudioManager::status()
+{
+    return dspKernel.status;
 }
 

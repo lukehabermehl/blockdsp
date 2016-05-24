@@ -13,7 +13,8 @@
 #include "libblockdsp.h"
 #include "AudioDSPKernel.hpp"
 
-enum AudioInputMode {
+enum AudioInputMode
+{
     AudioInputModeFile,
     AudioInputModeMicrophone
 };
@@ -25,6 +26,7 @@ public:
     
     bool setInputFile(const char *fpath);
     void setInputMode(AudioInputMode mode);
+    void setProcessCallback(AudioProcessFunc fn, void *context);
     
     void setNumOutputChannels(int numOutputChannels);
     
@@ -32,6 +34,8 @@ public:
     bool close();
     bool start();
     bool stop();
+    
+    AudioManagerStatus status();
     
 private:
     AudioDSPKernel dspKernel;

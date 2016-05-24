@@ -15,6 +15,25 @@
 
 class AudioDSPKernel {
 public:
+    AudioDSPKernel()
+    {
+        dspCallbackContext = 0;
+        numInputChannels = 1;
+        numOutputChannels = 1;
+        stream = 0;
+        useFileInput = false;
+        audioFile = 0;
+        status = AudioManagerStatusDone;
+        
+        dspCallback = nullptr;
+    }
+    
+    ~AudioDSPKernel()
+    {
+        if (stream)
+            close();
+    }
+    
     bool open(PaDeviceIndex outputDevIndex)
     {
         PaStreamParameters outputParameters;
@@ -72,6 +91,7 @@ public:
             return false;
         
         PaError err = Pa_StartStream(stream);
+        status = AudioManagerStatusRunning;
         return (err == paNoError);
     }
     
@@ -86,7 +106,7 @@ public:
     
     void paStreamFinishedMethod()
     {
-        //TODO
+        status = AudioManagerStatusDone;
     }
     
     int paCallbackMethod(const void *inputBuffer, void *outputBuffer,
@@ -94,7 +114,29 @@ public:
                          const PaStreamCallbackTimeInfo *timeInfo,
                          PaStreamCallbackFlags statusFlags)
     {
-        //TODO: implement DSP
+        float *out = (float *)outputBuffer;
+        float *in = 0;
+        if (!useFileInput)
+        {
+            in = (float *)inputBuffer;
+        }
+        
+        PaStreamCallbackResult ret = paContinue;
+        
+        for (unsigned long i=0; i<framesPerBuffer; i++)
+        {
+            if (useFileInput)
+            {
+                if (audioFile->nextFrame(&in))
+                {
+                    ret = paComplete;
+                    break;
+                }
+            }
+            
+            dspCallback(in, out, numInputChannels, numOutputChannels, dspCallbackContext);
+        }
+        
         return paContinue;
     }
     
@@ -117,11 +159,14 @@ public:
     }
     
     int numOutputChannels;
+    int numInputChannels;
     unsigned long sampleRate;
     PaStream *stream;
     bool useFileInput;
     AudioFile *audioFile;
-    
+    AudioProcessFunc dspCallback;
+    void *dspCallbackContext;
+    AudioManagerStatus status;
 };
 
 

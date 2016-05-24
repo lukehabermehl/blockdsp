@@ -29,8 +29,7 @@ public:
     unsigned long numFrames();
     int numChannels();
     size_t totalSize();
-    
-    void nextFrame(float *frame);
+    int nextFrame(float **frame);
     
     void close();
     
@@ -39,6 +38,7 @@ private:
     SF_INFO sfInfo;
     float *buf;
     size_t readIndex;
+    size_t _totalSize;
 };
 
 #endif /* AudioFile_hpp */

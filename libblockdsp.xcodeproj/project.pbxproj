@@ -7,16 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A342C6C91CF3ED9E000E354E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342C6C81CF3ED9E000E354E /* main.cpp */; };
 		A3D020FC1CF35D1400EC7C0D /* AudioManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D020FA1CF35D1400EC7C0D /* AudioManager.cpp */; };
-		A3D020FD1CF35D1400EC7C0D /* AudioManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D020FB1CF35D1400EC7C0D /* AudioManager.hpp */; };
+		A3D020FD1CF35D1400EC7C0D /* AudioManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D020FB1CF35D1400EC7C0D /* AudioManager.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		A3D021001CF35ED800EC7C0D /* AudioFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D020FE1CF35ED800EC7C0D /* AudioFile.cpp */; };
-		A3D021011CF35ED800EC7C0D /* AudioFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D020FF1CF35ED800EC7C0D /* AudioFile.hpp */; };
+		A3D021011CF35ED800EC7C0D /* AudioFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D020FF1CF35ED800EC7C0D /* AudioFile.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		A3D021041CF365AE00EC7C0D /* AudioDSPKernel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D021021CF365AE00EC7C0D /* AudioDSPKernel.cpp */; };
 		A3D021051CF365AE00EC7C0D /* AudioDSPKernel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D021031CF365AE00EC7C0D /* AudioDSPKernel.hpp */; };
 		A3D021071CF365D100EC7C0D /* libblockdsp.h in Headers */ = {isa = PBXBuildFile; fileRef = A3D021061CF365D100EC7C0D /* libblockdsp.h */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		A342C6C41CF3ED9E000E354E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		A342C6C61CF3ED9E000E354E /* dsptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dsptest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A3D020F31CF35CC800EC7C0D /* libblockdsp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblockdsp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3D020FA1CF35D1400EC7C0D /* AudioManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioManager.cpp; sourceTree = "<group>"; };
 		A3D020FB1CF35D1400EC7C0D /* AudioManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AudioManager.hpp; sourceTree = "<group>"; };
@@ -28,6 +43,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A342C6C31CF3ED9E000E354E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A3D020F01CF35CC800EC7C0D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -38,6 +60,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A342C6C71CF3ED9E000E354E /* dsptest */ = {
+			isa = PBXGroup;
+			children = (
+				A342C6C81CF3ED9E000E354E /* main.cpp */,
+			);
+			path = dsptest;
+			sourceTree = "<group>";
+		};
 		A3D020EA1CF35CC800EC7C0D = {
 			isa = PBXGroup;
 			children = (
@@ -48,6 +78,7 @@
 				A3D021031CF365AE00EC7C0D /* AudioDSPKernel.hpp */,
 				A3D020FF1CF35ED800EC7C0D /* AudioFile.hpp */,
 				A3D020FE1CF35ED800EC7C0D /* AudioFile.cpp */,
+				A342C6C71CF3ED9E000E354E /* dsptest */,
 				A3D020F41CF35CC800EC7C0D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				A3D020F31CF35CC800EC7C0D /* libblockdsp.a */,
+				A342C6C61CF3ED9E000E354E /* dsptest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -67,16 +99,33 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3D021071CF365D100EC7C0D /* libblockdsp.h in Headers */,
+				A3D021011CF35ED800EC7C0D /* AudioFile.hpp in Headers */,
 				A3D020FD1CF35D1400EC7C0D /* AudioManager.hpp in Headers */,
 				A3D021051CF365AE00EC7C0D /* AudioDSPKernel.hpp in Headers */,
-				A3D021011CF35ED800EC7C0D /* AudioFile.hpp in Headers */,
+				A3D021071CF365D100EC7C0D /* libblockdsp.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		A342C6C51CF3ED9E000E354E /* dsptest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A342C6CA1CF3ED9E000E354E /* Build configuration list for PBXNativeTarget "dsptest" */;
+			buildPhases = (
+				A342C6C21CF3ED9E000E354E /* Sources */,
+				A342C6C31CF3ED9E000E354E /* Frameworks */,
+				A342C6C41CF3ED9E000E354E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = dsptest;
+			productName = dsptest;
+			productReference = A342C6C61CF3ED9E000E354E /* dsptest */;
+			productType = "com.apple.product-type.tool";
+		};
 		A3D020F21CF35CC800EC7C0D /* libblockdsp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A3D020F71CF35CC800EC7C0D /* Build configuration list for PBXNativeTarget "libblockdsp" */;
@@ -103,6 +152,9 @@
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Luke Habermehl";
 				TargetAttributes = {
+					A342C6C51CF3ED9E000E354E = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 					A3D020F21CF35CC800EC7C0D = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -121,11 +173,20 @@
 			projectRoot = "";
 			targets = (
 				A3D020F21CF35CC800EC7C0D /* libblockdsp */,
+				A342C6C51CF3ED9E000E354E /* dsptest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A342C6C21CF3ED9E000E354E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A342C6C91CF3ED9E000E354E /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A3D020EF1CF35CC800EC7C0D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -139,6 +200,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		A342C6CB1CF3ED9E000E354E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A342C6CC1CF3ED9E000E354E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		A3D020F51CF35CC800EC7C0D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -245,6 +320,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A342C6CA1CF3ED9E000E354E /* Build configuration list for PBXNativeTarget "dsptest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A342C6CB1CF3ED9E000E354E /* Debug */,
+				A342C6CC1CF3ED9E000E354E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A3D020EE1CF35CC800EC7C0D /* Build configuration list for PBXProject "libblockdsp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -261,6 +345,7 @@
 				A3D020F91CF35CC800EC7C0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
