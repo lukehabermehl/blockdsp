@@ -8,32 +8,14 @@
 
 #include <iostream>
 #include "AudioManager.hpp"
-#include "BlockDSPSystem.hpp"
+#include "BlockDSPAPU.hpp"
 
 static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
 
 
-class DSPUnit : public AudioProcessingUnit
-{
-public:
-    BlockDSPSystem *system;
-    
-    virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels)
-    {
-        system->mainInputNode->inputBuffer = inputBuffer;
-        outputBuffer[0] = system->mainOutputNode->valueForChannel(0);
-        
-        if (numOutputChannels == 2)
-            outputBuffer[1] = system->mainOutputNode->valueForChannel(1);
-        
-        system->next();
-    }
-};
-
 int main(int argc, const char * argv[]) {
-    DSPUnit apunit;
-    BlockDSPSystem *system = BlockDSPSystem::systemForBiQuad(2);
-    apunit.system = system;
+    BlockDSPAPU apunit;
+    apunit.system = BlockDSPSystem::systemForBiQuad(2);
     
     printf("Start\n");
     printf("Setup audio manager\n");
@@ -63,6 +45,6 @@ int main(int argc, const char * argv[]) {
     audioManager.stop();
     audioManager.close();
     
-    delete system;
+    delete apunit.system;
     printf("Done\n");
 }
