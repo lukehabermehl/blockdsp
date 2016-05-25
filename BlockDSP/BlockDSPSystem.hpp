@@ -15,19 +15,6 @@
 #include <vector>
 #include <string>
 
-//class BlockDSPParameter {
-//public:
-//    BlockDSPParameter(const char *name, BlockDSPMutiplierNode *node);
-//    ~BlockDSPParameter();
-//    float getValue();
-//    void setValue(float val);
-//    const char *name();
-//    
-//private:
-//    std::string _name;
-//    BlockDSPMutiplierNode *_node;
-//};
-
 class BlockDSPSystem {
 public:
     BlockDSPInputNode *mainInputNode;
@@ -57,6 +44,7 @@ private:
     std::unordered_map<ssize_t, BlockDSPNode *> nodeMap;
     std::vector<BlockDSPDelayLine *>delayLines;
     std::unordered_map<std::string, BlockDSPParameter *> parameterMap;
+    
     uint32_t counter;
     uint32_t numChannels;
 };
