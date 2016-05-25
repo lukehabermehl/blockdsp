@@ -10,7 +10,7 @@
 #define AudioDSPKernel_hpp
 
 #include <portaudio.h>
-#include "libblockdsp.h"
+#include "audio_constants.h"
 #include "AudioFile.hpp"
 #include "AudioProcessingUnit.hpp"
 
@@ -19,6 +19,7 @@ public:
     AudioDSPKernel()
     {
         audioProcessingUnit = NULL;
+        passthroughUnit = AudioProcessingUnit::createPassthroughUnit();
         numInputChannels = 1;
         numOutputChannels = 1;
         stream = 0;
@@ -31,6 +32,14 @@ public:
     {
         if (stream)
             close();
+        
+        if (audioFile)
+        {
+            audioFile->close();
+            delete audioFile;
+        }
+        
+        delete passthroughUnit;
     }
     
     bool open(PaDeviceIndex outputDevIndex)
@@ -144,7 +153,17 @@ public:
                 }
             }
             
-            audioProcessingUnit->processAudio(in, out, numInputChannels, numOutputChannels);
+            //If no APU, passthrough
+            if (audioProcessingUnit == NULL)
+            {
+                passthroughUnit->processAudio(in, out, numInputChannels, numOutputChannels);
+            }
+            
+            else
+            {
+                audioProcessingUnit->processAudio(in, out, numInputChannels, numOutputChannels);
+            }
+            
         }
         
         return ret;
@@ -177,6 +196,9 @@ public:
     AudioFile *audioFile;
     AudioProcessingUnit *audioProcessingUnit;
     AudioManagerStatus status;
+    
+private:
+    AudioProcessingUnit *passthroughUnit;
 };
 
 

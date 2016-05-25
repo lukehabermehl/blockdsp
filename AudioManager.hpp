@@ -10,10 +10,11 @@
 #define AudioManager_hpp
 
 #include <portaudio.h>
-#include "libblockdsp.h"
+#include "audio_constants.h"
 #include "AudioDSPKernel.hpp"
 #include "AudioProcessingUnit.hpp"
 
+/** Provides an interface for loading and processing audio from a file or input device */
 class AudioManager
 {
 public:

@@ -22,3 +22,8 @@ void AudioProcessingUnit::processAudio(float *inputBuffer, float *outputBuffer, 
         outputBuffer[1] = inputBuffer[1];
     }
 }
+
+AudioProcessingUnit * AudioProcessingUnit::createPassthroughUnit()
+{
+    return new AudioProcessingUnit;
+}

@@ -1,15 +1,13 @@
 //
-//  libblockdsp.h
-//  libblockdsp
+//  blockdsp.h
+//  blockdsp
 //
 //  Created by Luke on 5/23/16.
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#ifndef libblockdsp_h
-#define libblockdsp_h
-
-#include "AudioProcessingUnit.hpp"
+#ifndef blockdsp_h
+#define blockdsp_h
 
 #ifndef NULL
 #define NULL 0
@@ -52,4 +50,4 @@ typedef void (*AudioProcessFunc)(float *inputBuffer,
                                 int numOutputChannels,
                                 void *context);
 
-#endif /* libblockdsp_h */
+#endif /* blockdsp_h */

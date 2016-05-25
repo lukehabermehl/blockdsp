@@ -9,7 +9,7 @@
 #ifndef AudioProcessingUnit_hpp
 #define AudioProcessingUnit_hpp
 
-#include "libblockdsp.h"
+#include "audio_constants.h"
 
 /** Abstract class */
 class AudioProcessingUnit
@@ -18,6 +18,8 @@ public:
     /** Override this method to do audio processing */
     virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels);
     virtual ~AudioProcessingUnit() {};
+    
+    static AudioProcessingUnit * createPassthroughUnit();
 };
 
 

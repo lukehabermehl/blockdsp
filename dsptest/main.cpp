@@ -8,33 +8,32 @@
 
 #include <iostream>
 #include "AudioManager.hpp"
-#include "libblockdsp.h"
+#include "BlockDSPSystem.hpp"
 
 static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
 
 
-class GainUnit : public AudioProcessingUnit
+class DSPUnit : public AudioProcessingUnit
 {
 public:
-    float gain;
+    BlockDSPSystem *system;
+    
     virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels)
     {
-        outputBuffer[0] = inputBuffer[0] * gain;
-        if (numInputChannels == 1 && numOutputChannels == 2)
-        {
-            outputBuffer[1] = outputBuffer[0];
-        }
+        system->mainInputNode->inputBuffer = inputBuffer;
+        outputBuffer[0] = system->mainOutputNode->valueForChannel(0);
         
-        else if (numInputChannels == 2 && numOutputChannels == 2)
-        {
-            outputBuffer[1] = inputBuffer[1] * gain;
-        }
+        if (numOutputChannels == 2)
+            outputBuffer[1] = system->mainOutputNode->valueForChannel(1);
+        
+        system->next();
     }
 };
 
 int main(int argc, const char * argv[]) {
-    GainUnit gainUnit;
-    gainUnit.gain = 1.0;
+    DSPUnit apunit;
+    BlockDSPSystem *system = BlockDSPSystem::systemForBiQuad(2);
+    apunit.system = system;
     
     printf("Start\n");
     printf("Setup audio manager\n");
@@ -42,7 +41,7 @@ int main(int argc, const char * argv[]) {
     audioManager.setNumOutputChannels(2);
     audioManager.setInputFile(input_file_path);
     audioManager.setInputMode(AudioInputModeFile);
-    audioManager.setAudioProcessingUnit(&gainUnit);
+    audioManager.setAudioProcessingUnit(&apunit);
     audioManager.setLooping(true);
     
     printf("Start audio\n");
@@ -63,5 +62,7 @@ int main(int argc, const char * argv[]) {
     
     audioManager.stop();
     audioManager.close();
+    
+    delete system;
     printf("Done\n");
 }

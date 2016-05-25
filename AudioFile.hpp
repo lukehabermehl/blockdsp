@@ -10,7 +10,7 @@
 #define AudioFile_hpp
 
 #include <sndfile.h>
-#include "libblockdsp.h"
+#include "audio_constants.h"
 
 class AudioFile
 {
