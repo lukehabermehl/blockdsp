@@ -19,6 +19,10 @@
 		A39D436D1CF550210003EB51 /* dsphelpers.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A39D436C1CF550210003EB51 /* dsphelpers.hpp */; };
 		A39D43711CF5577C0003EB51 /* BlockDSPAPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A39D436F1CF5577C0003EB51 /* BlockDSPAPU.cpp */; };
 		A39D43721CF5577C0003EB51 /* BlockDSPAPU.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A39D43701CF5577C0003EB51 /* BlockDSPAPU.hpp */; };
+		A3B8DF271CF61E70007FD8F4 /* BlockDSPParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3B8DF251CF61E70007FD8F4 /* BlockDSPParameter.cpp */; };
+		A3B8DF281CF61E70007FD8F4 /* BlockDSPParameter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3B8DF261CF61E70007FD8F4 /* BlockDSPParameter.hpp */; };
+		A3B8DF2B1CF6260B007FD8F4 /* BlockDSPNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3B8DF291CF6260B007FD8F4 /* BlockDSPNumber.cpp */; };
+		A3B8DF2C1CF6260B007FD8F4 /* BlockDSPNumber.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3B8DF2A1CF6260B007FD8F4 /* BlockDSPNumber.hpp */; };
 		A3D020FC1CF35D1400EC7C0D /* AudioManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D020FA1CF35D1400EC7C0D /* AudioManager.cpp */; };
 		A3D020FD1CF35D1400EC7C0D /* AudioManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D020FB1CF35D1400EC7C0D /* AudioManager.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		A3D021001CF35ED800EC7C0D /* AudioFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D020FE1CF35ED800EC7C0D /* AudioFile.cpp */; };
@@ -54,6 +58,10 @@
 		A39D436C1CF550210003EB51 /* dsphelpers.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dsphelpers.hpp; sourceTree = "<group>"; };
 		A39D436F1CF5577C0003EB51 /* BlockDSPAPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockDSPAPU.cpp; sourceTree = "<group>"; };
 		A39D43701CF5577C0003EB51 /* BlockDSPAPU.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BlockDSPAPU.hpp; sourceTree = "<group>"; };
+		A3B8DF251CF61E70007FD8F4 /* BlockDSPParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockDSPParameter.cpp; sourceTree = "<group>"; };
+		A3B8DF261CF61E70007FD8F4 /* BlockDSPParameter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BlockDSPParameter.hpp; sourceTree = "<group>"; };
+		A3B8DF291CF6260B007FD8F4 /* BlockDSPNumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockDSPNumber.cpp; sourceTree = "<group>"; };
+		A3B8DF2A1CF6260B007FD8F4 /* BlockDSPNumber.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BlockDSPNumber.hpp; sourceTree = "<group>"; };
 		A3D020F31CF35CC800EC7C0D /* libblockdsp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblockdsp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3D020FA1CF35D1400EC7C0D /* AudioManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioManager.cpp; sourceTree = "<group>"; };
 		A3D020FB1CF35D1400EC7C0D /* AudioManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AudioManager.hpp; sourceTree = "<group>"; };
@@ -109,6 +117,10 @@
 			isa = PBXGroup;
 			children = (
 				A39D436C1CF550210003EB51 /* dsphelpers.hpp */,
+				A3B8DF251CF61E70007FD8F4 /* BlockDSPParameter.cpp */,
+				A3B8DF261CF61E70007FD8F4 /* BlockDSPParameter.hpp */,
+				A3B8DF291CF6260B007FD8F4 /* BlockDSPNumber.cpp */,
+				A3B8DF2A1CF6260B007FD8F4 /* BlockDSPNumber.hpp */,
 				A39D435C1CF54F6C0003EB51 /* BlockDSPNode.cpp */,
 				A39D435D1CF54F6C0003EB51 /* BlockDSPNode.hpp */,
 				A39D435E1CF54F6C0003EB51 /* BlockDSPSystem.cpp */,
@@ -154,6 +166,8 @@
 				A39D43651CF54F6C0003EB51 /* BlockDSPNode.hpp in Headers */,
 				A39D43671CF54F6C0003EB51 /* BlockDSPSystem.hpp in Headers */,
 				A3D020FD1CF35D1400EC7C0D /* AudioManager.hpp in Headers */,
+				A3B8DF281CF61E70007FD8F4 /* BlockDSPParameter.hpp in Headers */,
+				A3B8DF2C1CF6260B007FD8F4 /* BlockDSPNumber.hpp in Headers */,
 				A3D021051CF365AE00EC7C0D /* AudioDSPKernel.hpp in Headers */,
 				A39D436B1CF54F6C0003EB51 /* DelayBuffer.h in Headers */,
 				A3D021071CF365D100EC7C0D /* audio_constants.h in Headers */,
@@ -254,6 +268,8 @@
 				A3D020FC1CF35D1400EC7C0D /* AudioManager.cpp in Sources */,
 				A30320451CF5119800EBBFBA /* AudioProcessingUnit.cpp in Sources */,
 				A39D43641CF54F6C0003EB51 /* BlockDSPNode.cpp in Sources */,
+				A3B8DF2B1CF6260B007FD8F4 /* BlockDSPNumber.cpp in Sources */,
+				A3B8DF271CF61E70007FD8F4 /* BlockDSPParameter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

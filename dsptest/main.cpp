@@ -12,7 +12,6 @@
 
 static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
 
-
 int main(int argc, const char * argv[]) {
     BlockDSPAPU apunit;
     apunit.system = BlockDSPSystem::systemForBiQuad(2);

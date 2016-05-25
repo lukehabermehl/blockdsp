@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "DelayBuffer.h"
+#include "BlockDSPNumber.hpp"
 
 class BlockDSPNode {
 public:
@@ -39,11 +40,12 @@ private:
 
 class BlockDSPMutiplierNode : public BlockDSPNode {
 public:
-    float coefficient = 1.0;
+    BlockDSPNumber *coefficient;
     
     BlockDSPMutiplierNode(uint32_t numChannels);
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
+    virtual ~BlockDSPMutiplierNode();
     
 private:
     BlockDSPNode *inputNode;

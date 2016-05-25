@@ -9,23 +9,6 @@
 #include "BlockDSPSystem.hpp"
 #include "dsphelpers.hpp"
 
-BlockDSPParameter::BlockDSPParameter(const char *name, BlockDSPMutiplierNode *node) {
-    _name = std::string(name);
-    _node = node;
-}
-
-void BlockDSPParameter::setValue(float val) {
-    _node->coefficient = val;
-}
-
-float BlockDSPParameter::getValue() {
-    return _node->coefficient;
-}
-
-const char *BlockDSPParameter::name() {
-    return _name.c_str();
-}
-
 BlockDSPSystem::BlockDSPSystem(uint32_t numChannels) {
     this->numChannels = numChannels;
     counter = 0;
@@ -142,24 +125,27 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels) {
     summer->connectInput(b1Node);
     summer->connectInput(b2Node);
     
-    system->addParameter(new BlockDSPParameter("a0", a0Node));
-    system->addParameter(new BlockDSPParameter("a1", a1Node));
-    system->addParameter(new BlockDSPParameter("a2", a2Node));
-    system->addParameter(new BlockDSPParameter("b1", b1Node));
-    system->addParameter(new BlockDSPParameter("b2", b2Node));
-    system->addParameter(new BlockDSPParameter("outgain", outGainNode));
-    
     BiQuadCoefficients coeffs;
     coeffs.calculateForLPF(1000, 3.0, 44100);
+
     
-    a0Node->coefficient = coeffs.a0;
-    a1Node->coefficient = coeffs.a1;
-    a2Node->coefficient = coeffs.a2;
-    b1Node->coefficient = -1 * coeffs.b1;
-    b2Node->coefficient = -1 * coeffs.b2;
+    a0Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a0);
+    a1Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a1);
+    a2Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a2);
+    b1Node->coefficient = BlockDSPNumber::numberForFloat(-1 * coeffs.b1);
+    b2Node->coefficient = BlockDSPNumber::numberForFloat(-1 * coeffs.b2);
+    
+    system->addParameter(new BlockDSPParameter(BlockDSPParameterTypeFloat, "a0", a0Node->coefficient, system));
+    system->addParameter(new BlockDSPParameter(BlockDSPParameterTypeFloat, "a1", a1Node->coefficient, system));
+    system->addParameter(new BlockDSPParameter(BlockDSPParameterTypeFloat, "a2", a2Node->coefficient, system));
+    system->addParameter(new BlockDSPParameter(BlockDSPParameterTypeFloat, "b1", b1Node->coefficient, system));
+    system->addParameter(new BlockDSPParameter(BlockDSPParameterTypeFloat, "b2", b2Node->coefficient, system));
+    
+    printf("a0 coeff: %f\n", a0Node->coefficient->floatValue());
+    printf("a1 coeff: %f\n", a1Node->coefficient->floatValue());
     
     system->mainOutputNode = outGainNode;
-    outGainNode->coefficient = 2.0;
+    outGainNode->coefficient = BlockDSPNumber::numberForFloat(2.0);
     
     return system;
 }

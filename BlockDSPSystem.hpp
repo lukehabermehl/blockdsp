@@ -10,22 +10,23 @@
 #define BlockDSPSystem_hpp
 
 #include "BlockDSPNode.hpp"
+#include "BlockDSPParameter.hpp"
 #include <unordered_map>
 #include <vector>
 #include <string>
 
-class BlockDSPParameter {
-public:
-    BlockDSPParameter(const char *name, BlockDSPMutiplierNode *node);
-    ~BlockDSPParameter();
-    float getValue();
-    void setValue(float val);
-    const char *name();
-    
-private:
-    std::string _name;
-    BlockDSPMutiplierNode *_node;
-};
+//class BlockDSPParameter {
+//public:
+//    BlockDSPParameter(const char *name, BlockDSPMutiplierNode *node);
+//    ~BlockDSPParameter();
+//    float getValue();
+//    void setValue(float val);
+//    const char *name();
+//    
+//private:
+//    std::string _name;
+//    BlockDSPMutiplierNode *_node;
+//};
 
 class BlockDSPSystem {
 public:
