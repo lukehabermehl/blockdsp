@@ -77,8 +77,8 @@ void BDCodeBuilder::openSourceFile()
     
     char filepath[1024];
     char headerFileName[256];
-    sprintf(filepath, "%s/%s.h", _dirpath, _name);
-    sprintf(filepath, "%s/%s.h", _dirpath, _name);
+    sprintf(filepath, "%s/%s.cpp", _dirpath, _name);
+    sprintf(headerFileName, "%s.h", _name);
     
     FILE *f = fopen(filepath, "w");
     

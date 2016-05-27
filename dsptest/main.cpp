@@ -10,7 +10,7 @@
 #include "AudioManager.hpp"
 #include "BlockDSPAPU.hpp"
 
-static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
+//static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
 
 //int main(int argc, const char * argv[]) {
 //    BlockDSPAPU apunit;
@@ -52,7 +52,10 @@ static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
 
 int main()
 {
-    BDCodeBuilder cb;
-    cb.writeHeaderFile("/Users/Luke/Desktop/testHeader.h");
-    cb.writeSourceFile("/Users/Luke/Desktop/testSrc.cpp", "testHeader.h");
+    BDCodeBuilder cb("test", "/Users/Luke/Desktop/");
+    cb.writeHeaderFile();
+    cb.openSourceFile();
+    
+    cb.addBlockNode("firstNode", BDBlockTypeSummer);
+    cb.closeSourceFile();
 }
