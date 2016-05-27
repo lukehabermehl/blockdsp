@@ -35,6 +35,7 @@ public:
     BlockDSPDelayLine *createDelayLine(BlockDSPNode *inputNode);
     BlockDSPSummerNode *createSummerNode();
     BlockDSPMutiplierNode *createMultiplierNode();
+    BlockDSPInputNode *createInputNode();
     BlockDSPParameter *createParameter(const char *name, BlockDSPParameterType type, BlockDSPNumber *target);
     
     BlockDSPSystem(uint32_t numChannels);

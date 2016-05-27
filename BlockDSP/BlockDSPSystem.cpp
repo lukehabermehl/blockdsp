@@ -75,6 +75,14 @@ BlockDSPMutiplierNode *BlockDSPSystem::createMultiplierNode() {
     return node;
 }
 
+BlockDSPInputNode *BlockDSPSystem::createInputNode()
+{
+    BlockDSPInputNode *node = new BlockDSPInputNode(numChannels);
+    addNode(node);
+    
+    return node;
+}
+
 void BlockDSPSystem::addParameter(BlockDSPParameter *param) {
     parameterMap[param->name()] = param;
 }
