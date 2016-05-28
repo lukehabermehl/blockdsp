@@ -49,6 +49,7 @@
 //}
 
 #include "BDCodeBuilder.hpp"
+#include <stdio.h>
 
 int main()
 {
@@ -57,5 +58,10 @@ int main()
     cb.openSourceFile();
     
     cb.addBlockNode("firstNode", BDBlockTypeSummer);
+    float f = 3.14159;
+    cb.addNumber("myNumber");
+    if (!(cb.setNumberDefaultValue("myNumber", BlockDSPParameterTypeFloat, &f)))
+        printf("Failed to set number value\n");
+        
     cb.closeSourceFile();
 }

@@ -23,6 +23,18 @@ BlockDSPSystem::~BlockDSPSystem() {
         delete node;
     }
     
+    for (auto it2=parameterMap.begin(); it2 != parameterMap.end(); it2++)
+    {
+        BlockDSPParameter *param = (*it2).second;
+        delete param;
+    }
+    
+    for (auto it3=numberMap.begin(); it3 != numberMap.end(); it3++)
+    {
+        BlockDSPNumber *num = (*it3).second;
+        delete num;
+    }
+    
     for (size_t i=0; i<delayLines.size(); i++) {
         delete delayLines[i];
     }
@@ -93,6 +105,16 @@ BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPPa
     addParameter(param);
     
     return param;
+}
+
+void BlockDSPSystem::addNumber(const char *name, BlockDSPNumber *number)
+{
+    std::string numName = std::string(name);
+    auto it = numberMap.find(numName);
+    if (it != numberMap.end())
+        return;
+    
+    numberMap[numName] = number;
 }
 
 BlockDSPParameter *BlockDSPSystem::parameterWithName(const char *name) {

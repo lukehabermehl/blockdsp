@@ -8,41 +8,44 @@
 
 #include "BlockDSPNumber.hpp"
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <cmath>
 
 BlockDSPNumber::BlockDSPNumber()
 {
-    _data = 0;
+    strcpy(_data, "0");
 }
 
 void BlockDSPNumber::setIntegerValue(int i)
 {
-    _data = (float)i;
+    sprintf(_data, "%d", i);
 }
 
 void BlockDSPNumber::setFloatValue(float f)
 {
-    _data = f;
+    sprintf(_data, "%.7f", f);
 }
 
 void BlockDSPNumber::setBoolValue(bool b)
 {
-    _data = b ? 1.0 : 0.0;
+    sprintf(_data, "%d", b ? 1 : 0);
 }
 
 int BlockDSPNumber::integerValue()
 {
-    return (int)(floorf(_data));
+    return atoi(_data);
 }
 
 float BlockDSPNumber::floatValue()
 {
-    return _data;
+    return strtof(_data, NULL);
 }
 
 bool BlockDSPNumber::boolValue()
 {
-    return (_data != 0.0);
+    int i = integerValue();
+    return (i != 0);
 }
 
 BlockDSPNumber * BlockDSPNumber::numberForInteger(int i)

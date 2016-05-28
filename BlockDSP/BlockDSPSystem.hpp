@@ -27,6 +27,7 @@ public:
     void addDelayLine(BlockDSPDelayLine *dl);
     void next();
     void addParameter(BlockDSPParameter *param);
+    void addNumber(const char *name, BlockDSPNumber *number);
     void reset();
     
     BlockDSPParameter *parameterWithName(const char *name);
@@ -45,6 +46,7 @@ private:
     std::unordered_map<ssize_t, BlockDSPNode *> nodeMap;
     std::vector<BlockDSPDelayLine *>delayLines;
     std::unordered_map<std::string, BlockDSPParameter *> parameterMap;
+    std::unordered_map<std::string, BlockDSPNumber *> numberMap;
     
     uint32_t counter;
     uint32_t numChannels;

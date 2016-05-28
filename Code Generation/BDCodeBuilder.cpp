@@ -31,6 +31,21 @@ void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType typ
     }
 }
 
+void BDStringForParameterType(char *str, BlockDSPParameterType type)
+{
+    switch (type)
+    {
+        case BlockDSPParameterTypeFloat:
+            strcpy(str, "BlockDSPParameterTypeFloat");
+        case BlockDSPParameterTypeBoolean:
+            strcpy(str, "BlockDSPParameterTypeBoolean");
+        case BlockDSPParameterTypeInteger:
+            strcpy(str, "BlockDSPParameterTypeInteger");
+        case BlockDSPParameterTypeUnsignedInt:
+            strcpy(str, "BlockDSPParameterTypeUnsignedInt");
+    }
+}
+
 BDCodeBuilder::BDCodeBuilder(const char *name, const char *dirpath)
 {
     _name = (char *)malloc(strlen(name) + 1);
@@ -48,9 +63,30 @@ BDCodeBuilder::~BDCodeBuilder()
     free(_dirpath);
 }
 
-void BDCodeBuilder::addCallbackCode(std::string callbackName, std::string code)
+void BDCodeBuilder::addCallbackCode(const char *callbackName, const char *code)
 {
-    callbackMap[callbackName] = code;
+    if (hasCallback(callbackName))
+        return;
+    
+    callbackMap[std::string(callbackName)] = std::string(code);
+}
+
+bool BDCodeBuilder::hasNode(const char *name)
+{
+    auto it = nodeSet.find(std::string(name));
+    return  !(it == nodeSet.end());
+}
+
+bool BDCodeBuilder::hasCallback(const char *name)
+{
+    auto it = callbackMap.find(std::string(name));
+    return  !(it == callbackMap.end());
+}
+
+bool BDCodeBuilder::hasNumber(const char *name)
+{
+    auto it = numSet.find(std::string(name));
+    return  !(it == numSet.end());
 }
 
 void BDCodeBuilder::writeHeaderFile()
@@ -109,6 +145,12 @@ void BDCodeBuilder::closeSourceFile()
 
 void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
 {
+    std::string strName = std::string(name);
+    if (hasNode(name))
+        return;
+    
+    nodeSet[strName] = true;
+    
     char typeStr[256];
     char factoryMethodName[256];
     
@@ -119,6 +161,90 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
 
 void BDCodeBuilder::addDelayLine(const char *name, const char *inputNodeName, size_t size)
 {
+    std::string nodeName = std::string(inputNodeName);
+    auto it = nodeSet.find(nodeName);
+    if (it == nodeSet.end())
+        return;
+    
     fprintf(_openFile, "BlockDSPDelayLine *%s = system->createDelayLine(%s);\n", name, inputNodeName);
+    fprintf(_openFile, "%s->setSize(%lu);\n", name, size);
+}
+
+void BDCodeBuilder::addCoefficient(const char *name, const char *callback, const char *target, BlockDSPParameterType type)
+{
+    const char *targetParam = target ?: "0";
+    char typeParam[20];
+    BDStringForParameterType(typeParam, type);
+    if (callback)
+    {
+        if (!hasCallback(callback))
+            return;
+    }
+    
+    fprintf(_openFile, "BlockDSPParameter *%s = system->createParameter(\"%s\", %s, %s);\n", name, name, typeParam, targetParam);
+    if (callback)
+        fprintf(_openFile, "%s->callback = %s;\n", name, callback);
+}
+
+bool BDCodeBuilder::addNumber(const char *name)
+{
+    if (hasNumber(name))
+        return false;
+    
+    std::string numName = std::string(name);
+    
+    numSet[numName] = true;
+    
+    fprintf(_openFile, "BlockDSPNumber *%s = new BlockDSPNumber();\n", name);
+    fprintf(_openFile, "system->addNumber(\"%s\", %s);\n", name, name);
+    
+    return true;
+}
+
+bool BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPParameterType valueType, void *value)
+{
+    std::string numName = std::string(numberName);
+    if (!hasNumber(numberName))
+        return false;
+    
+    switch (valueType)
+    {
+        case BlockDSPParameterTypeFloat:
+        {
+            fprintf(_openFile, "%s->setFloatValue(%f);\n", numberName, *((float *)value));
+            break;
+        }
+            
+        case BlockDSPParameterTypeBoolean:
+        {
+            fprintf(_openFile, "%s->setBoolValue(%s);\n", numberName, *((bool *)value) ? "true" : "false");
+            break;
+        }
+            
+        case BlockDSPParameterTypeInteger:
+        {
+            fprintf(_openFile, "%s->setIntegerValue(%d);\n", numberName, *((int *)value));
+            break;
+        }
+            
+        case BlockDSPParameterTypeUnsignedInt:
+        {
+            fprintf(_openFile, "%s->setIntegerValue(%ud);\n", numberName, *((unsigned int *)value));
+            break;
+        }
+    }
+    
+    return true;
+}
+
+void BDCodeBuilder::connect(const char *from, const char *to)
+{
+    std::string fromStr = std::string(from);
+    std::string toStr = std::string(to);
+    
+    if (!hasNode(from) || !hasNode(to))
+        return;
+    
+    fprintf(_openFile, "%s->connectInput(%s);\n", to, from);
 }
 
