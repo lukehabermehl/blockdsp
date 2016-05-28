@@ -11,6 +11,7 @@
 
 #include "BlockDSPNode.hpp"
 #include "BlockDSPParameter.hpp"
+#include "BlockDSPNumber.hpp"
 #include <unordered_map>
 #include <vector>
 #include <string>

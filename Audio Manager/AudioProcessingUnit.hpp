@@ -9,8 +9,6 @@
 #ifndef AudioProcessingUnit_hpp
 #define AudioProcessingUnit_hpp
 
-#include "audio_constants.h"
-
 /** Abstract class */
 class AudioProcessingUnit
 {

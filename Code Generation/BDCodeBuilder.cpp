@@ -9,6 +9,7 @@
 #include "BDCodeBuilder.hpp"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType type)
 {
@@ -97,7 +98,7 @@ void BDCodeBuilder::writeHeaderFile()
     FILE *f = fopen(filepath, "w");
     
     fprintf(f, "\n//This file was automatically generated.\n\n#ifndef BlockDSP_Factory_HPP\n#define BlockDSP_Factory_HPP\n");
-    fprintf(f, "\n#include <BlockDSPSystem.h>\n");
+    fprintf(f, "\n#include <BlockDSPSystem.hpp>\n");
     fprintf(f, "\nBlockDSPSystem * BlockDSPFactoryCreateSystem();\n");
     fprintf(f, "\n#endif\n");
     
@@ -119,7 +120,6 @@ void BDCodeBuilder::openSourceFile()
     FILE *f = fopen(filepath, "w");
     
     fprintf(f, "\n//This file was automatically generated.\n\n#include \"%s\"\n", headerFileName);
-    fprintf(f, "\nBlockDSPSystem * BlockDSPFactoryCreateSystem() {\n");
     
     for (auto it = callbackMap.begin(); it != callbackMap.end(); it++)
     {
@@ -138,6 +138,7 @@ void BDCodeBuilder::closeSourceFile()
     if (!_openFile)
         return;
     
+    fprintf(_openFile, "\nreturn system;\n");
     fprintf(_openFile, "\n}\n");
     fclose(_openFile);
     _openFile = 0;
@@ -246,5 +247,15 @@ void BDCodeBuilder::connect(const char *from, const char *to)
         return;
     
     fprintf(_openFile, "%s->connectInput(%s);\n", to, from);
+}
+
+const char *BDCodeBuilder::name()
+{
+    return _name;
+}
+
+const char *BDCodeBuilder::dirpath()
+{
+    return _dirpath;
 }
 

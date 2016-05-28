@@ -7,6 +7,7 @@
 //
 
 #include "BlockDSPParameter.hpp"
+#include "BlockDSPNumber.hpp"
 #include <string.h>
 
 BlockDSPParameter::BlockDSPParameter(BlockDSPParameterType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system)

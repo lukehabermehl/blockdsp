@@ -9,15 +9,14 @@
 #ifndef BlockDSPParameter_hpp
 #define BlockDSPParameter_hpp
 
-#include "audio_constants.h"
-#include "BlockDSPNumber.hpp"
+class BlockDSPNumber;
 
 #define BDSP_MAX_PARAMLEN 256
 
 class BlockDSPSystem;
 class BlockDSPParameter;
 
-typedef NS_ENUM(unsigned int, BlockDSPParameterType)
+enum BlockDSPParameterType
 {
     BlockDSPParameterTypeInteger,
     BlockDSPParameterTypeUnsignedInt,

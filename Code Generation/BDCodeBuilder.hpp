@@ -10,11 +10,10 @@
 #define BDCodeBuilder_hpp
 
 #include <unordered_map>
-#include "audio_constants.h"
 
 #include "BlockDSPSystem.hpp"
 
-typedef NS_ENUM(unsigned int, BDBlockType)
+enum BDBlockType : unsigned int
 {
     BDBlockTypeSummer,
     BDBlockTypeMultiplier,
@@ -43,6 +42,9 @@ public:
     bool hasNode(const char *name);
     bool hasCallback(const char *name);
     bool hasNumber(const char *name);
+    
+    const char *name();
+    const char *dirpath();
     
 private:
     char *_name;

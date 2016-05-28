@@ -10,8 +10,9 @@
 #define BlockDSPNode_h
 
 #include <vector>
-#include "DelayBuffer.h"
-#include "BlockDSPNumber.hpp"
+
+class BlockDSPNumber;
+class DelayBuffer;
 
 class BlockDSPNode {
 public:
@@ -55,8 +56,8 @@ class BlockDSPDelayLine;
 
 class BlockDSPDelayLineNode : public BlockDSPNode {
 public:
-    BlockDSPDelayLine *delayLine = nullptr;
-    size_t delayIndex = 0;
+    BlockDSPDelayLine *delayLine;
+    size_t delayIndex;
     
     BlockDSPDelayLineNode(uint32_t numChannels);
     virtual void connectInput(BlockDSPNode *inputNode);

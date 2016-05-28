@@ -10,9 +10,20 @@
 #define AudioManager_hpp
 
 #include <portaudio.h>
-#include "audio_constants.h"
 #include "AudioDSPKernel.hpp"
 #include "AudioProcessingUnit.hpp"
+
+enum AudioInputMode : unsigned int
+{
+    AudioInputModeFile,
+    AudioInputModeMicrophone
+};
+
+typedef void (*AudioProcessFunc)(float *inputBuffer,
+float *outputBuffer,
+int numInputChannels,
+int numOutputChannels,
+void *context);
 
 /** Provides an interface for loading and processing audio from a file or input device */
 class AudioManager

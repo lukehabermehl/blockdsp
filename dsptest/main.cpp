@@ -49,6 +49,7 @@
 //}
 
 #include "BDCodeBuilder.hpp"
+#include "BDCompiler.hpp"
 #include <stdio.h>
 
 int main()
@@ -64,4 +65,8 @@ int main()
         printf("Failed to set number value\n");
         
     cb.closeSourceFile();
+    
+    BDCompiler compiler(&cb);
+    compiler.setBuildPath("/Users/Luke/Desktop/build");
+    compiler.compileLibrary("/Users/Luke/Desktop/test.dylib");
 }

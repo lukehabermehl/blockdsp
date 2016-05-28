@@ -7,6 +7,8 @@
 //
 
 #include "BlockDSPNode.hpp"
+#include "DelayBuffer.h"
+#include "BlockDSPNumber.hpp"
 
 #pragma mark - BlockDSPNode
 BlockDSPNode::BlockDSPNode(uint32_t numChannels) {
@@ -64,7 +66,10 @@ BlockDSPMutiplierNode::~BlockDSPMutiplierNode() {
 
 
 #pragma mark - BlockDSPDelayLineNode
-BlockDSPDelayLineNode::BlockDSPDelayLineNode(uint32_t numChannels) : BlockDSPNode(numChannels) {}
+BlockDSPDelayLineNode::BlockDSPDelayLineNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
+    delayIndex = 0;
+    delayLine = 0;
+}
 
 void BlockDSPDelayLineNode::connectInput(BlockDSPNode *inputNode) {
     return;

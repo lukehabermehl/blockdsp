@@ -8,6 +8,7 @@
 
 #include "BlockDSPSystem.hpp"
 #include "dsphelpers.hpp"
+#include "BlockDSPNumber.hpp"
 
 BlockDSPSystem::BlockDSPSystem(uint32_t numChannels) {
     this->numChannels = numChannels;

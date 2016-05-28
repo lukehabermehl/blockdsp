@@ -10,7 +10,20 @@
 #define AudioFile_hpp
 
 #include <sndfile.h>
-#include "audio_constants.h"
+
+enum AudioFileMode : unsigned int
+{
+    AudioFileModeReadOnly,
+    AudioFileModeWriteOnly,
+    AudioFileModeReadWrite
+};
+
+enum AudioFileBufferStatus : unsigned int
+{
+    AudioFileBufferStatusOK = 0,
+    AudioFileBufferStatusDoneReading,
+    AudioFileBufferStatusOutOfBounds
+};
 
 class AudioFile
 {
