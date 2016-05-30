@@ -10,6 +10,8 @@
 #include "AudioFile.hpp"
 #include "AudioManager_Private.hpp"
 
+#include <portaudio.h>
+
 AudioManager::AudioManager()
 {
     Pa_Initialize();

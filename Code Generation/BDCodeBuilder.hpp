@@ -10,6 +10,7 @@
 #define BDCodeBuilder_hpp
 
 #include <unordered_map>
+#include <string>
 
 #include "BlockDSPSystem.hpp"
 

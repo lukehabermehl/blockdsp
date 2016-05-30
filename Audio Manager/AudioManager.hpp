@@ -9,7 +9,6 @@
 #ifndef AudioManager_hpp
 #define AudioManager_hpp
 
-#include <portaudio.h>
 #include "AudioProcessingUnit.hpp"
 
 /** Indicates where the Audio Manager will pull input from */

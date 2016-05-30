@@ -11,6 +11,10 @@
 
 #include "BlockDSPSystem.hpp"
 
+#include <vector>
+#include <unordered_map>
+#include <string>
+
 class BlockDSPSystem::pimpl
 {
 public:
