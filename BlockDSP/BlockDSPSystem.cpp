@@ -7,74 +7,78 @@
 //
 
 #include "BlockDSPSystem.hpp"
+#include "BlockDSPSystem_Private.hpp"
 #include "dsphelpers.hpp"
 #include "BlockDSPNumber.hpp"
 
 BlockDSPSystem::BlockDSPSystem(uint32_t numChannels) {
-    this->numChannels = numChannels;
-    counter = 0;
+    _pimpl = new pimpl;
+    _pimpl->numChannels = numChannels;
+    _pimpl->counter = 0;
     
     mainInputNode = new BlockDSPInputNode(numChannels);
     mainOutputNode = mainInputNode;
 }
 
 BlockDSPSystem::~BlockDSPSystem() {
-    for (auto it=nodeMap.begin(); it != nodeMap.end(); it++) {
+    for (auto it=_pimpl->nodeMap.begin(); it != _pimpl->nodeMap.end(); it++) {
         BlockDSPNode *node = (*it).second;
         delete node;
     }
     
-    for (auto it2=parameterMap.begin(); it2 != parameterMap.end(); it2++)
+    for (auto it2=_pimpl->parameterMap.begin(); it2 != _pimpl->parameterMap.end(); it2++)
     {
         BlockDSPParameter *param = (*it2).second;
         delete param;
     }
     
-    for (auto it3=numberMap.begin(); it3 != numberMap.end(); it3++)
+    for (auto it3=_pimpl->numberMap.begin(); it3 != _pimpl->numberMap.end(); it3++)
     {
         BlockDSPNumber *num = (*it3).second;
         delete num;
     }
     
-    for (size_t i=0; i<delayLines.size(); i++) {
-        delete delayLines[i];
+    for (size_t i=0; i<_pimpl->delayLines.size(); i++) {
+        delete _pimpl->delayLines[i];
     }
+    
+    delete _pimpl;
 }
 
 void BlockDSPSystem::addNode(BlockDSPNode *node) {
     if (node->nodeID < 0)
-        node->nodeID = counter++;
+        node->nodeID = _pimpl->counter++;
     
-    nodeMap[node->nodeID] = node;
+    _pimpl->nodeMap[node->nodeID] = node;
 }
 
 void BlockDSPSystem::removeNode(BlockDSPNode *node) {
-    auto it = nodeMap.find(node->nodeID);
-    if (it != nodeMap.end())
-        nodeMap.erase(it);
+    auto it = _pimpl->nodeMap.find(node->nodeID);
+    if (it != _pimpl->nodeMap.end())
+        _pimpl->nodeMap.erase(it);
 }
 
 void BlockDSPSystem::addDelayLine(BlockDSPDelayLine *dl) {
-    dl->id = counter++;
-    delayLines.push_back(dl);
+    dl->id = _pimpl->counter++;
+    _pimpl->delayLines.push_back(dl);
 }
 
 void BlockDSPSystem::next() {
-    for (size_t i=0; i<delayLines.size(); i++) {
-        BlockDSPDelayLine *dl = delayLines[i];
+    for (size_t i=0; i<_pimpl->delayLines.size(); i++) {
+        BlockDSPDelayLine *dl = _pimpl->delayLines[i];
         dl->shuffle();
     }
 }
 
 BlockDSPSummerNode *BlockDSPSystem::createSummerNode() {
-    BlockDSPSummerNode *summerNode = new BlockDSPSummerNode(numChannels);
+    BlockDSPSummerNode *summerNode = new BlockDSPSummerNode(_pimpl->numChannels);
     addNode(summerNode);
     
     return summerNode;
 }
 
 BlockDSPDelayLine *BlockDSPSystem::createDelayLine(BlockDSPNode *inputNode) {
-    BlockDSPDelayLine *delayLine = new BlockDSPDelayLine(numChannels);
+    BlockDSPDelayLine *delayLine = new BlockDSPDelayLine(_pimpl->numChannels);
     delayLine->inputNode = inputNode;
     addDelayLine(delayLine);
     
@@ -82,7 +86,7 @@ BlockDSPDelayLine *BlockDSPSystem::createDelayLine(BlockDSPNode *inputNode) {
 }
 
 BlockDSPMultiplierNode *BlockDSPSystem::createMultiplierNode() {
-    BlockDSPMultiplierNode *node = new BlockDSPMultiplierNode(numChannels);
+    BlockDSPMultiplierNode *node = new BlockDSPMultiplierNode(_pimpl->numChannels);
     addNode(node);
     
     return node;
@@ -90,14 +94,14 @@ BlockDSPMultiplierNode *BlockDSPSystem::createMultiplierNode() {
 
 BlockDSPInputNode *BlockDSPSystem::createInputNode()
 {
-    BlockDSPInputNode *node = new BlockDSPInputNode(numChannels);
+    BlockDSPInputNode *node = new BlockDSPInputNode(_pimpl->numChannels);
     addNode(node);
     
     return node;
 }
 
 void BlockDSPSystem::addParameter(BlockDSPParameter *param) {
-    parameterMap[param->name()] = param;
+    _pimpl->parameterMap[param->name()] = param;
 }
 
 BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPParameterType type, BlockDSPNumber *target)
@@ -111,16 +115,16 @@ BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPPa
 void BlockDSPSystem::addNumber(const char *name, BlockDSPNumber *number)
 {
     std::string numName = std::string(name);
-    auto it = numberMap.find(numName);
-    if (it != numberMap.end())
+    auto it = _pimpl->numberMap.find(numName);
+    if (it != _pimpl->numberMap.end())
         return;
     
-    numberMap[numName] = number;
+    _pimpl->numberMap[numName] = number;
 }
 
 BlockDSPParameter *BlockDSPSystem::parameterWithName(const char *name) {
-    auto it = parameterMap.find(name);
-    if (it != parameterMap.end()) {
+    auto it = _pimpl->parameterMap.find(name);
+    if (it != _pimpl->parameterMap.end()) {
         return it->second;
     }
     
@@ -128,8 +132,8 @@ BlockDSPParameter *BlockDSPSystem::parameterWithName(const char *name) {
 }
 
 BlockDSPNode *BlockDSPSystem::nodeWithID(ssize_t id) {
-    auto it = nodeMap.find(id);
-    if (it == nodeMap.end())
+    auto it = _pimpl->nodeMap.find(id);
+    if (it == _pimpl->nodeMap.end())
         return nullptr;
     
     return it->second;
@@ -187,9 +191,9 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels) {
 }
 
 void BlockDSPSystem::reset() {
-    for (size_t i=0; i<delayLines.size(); i++) {
-        delayLines[i]->reset();
+    for (size_t i=0; i<_pimpl->delayLines.size(); i++) {
+        _pimpl->delayLines[i]->reset();
     }
     
-    memset(mainInputNode->inputBuffer, 0, sizeof(float) * numChannels);
+    memset(mainInputNode->inputBuffer, 0, sizeof(float) * _pimpl->numChannels);
 }

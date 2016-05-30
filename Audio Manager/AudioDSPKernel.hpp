@@ -12,12 +12,8 @@
 #include <portaudio.h>
 #include "AudioFile.hpp"
 #include "AudioProcessingUnit.hpp"
-
-enum AudioManagerStatus : unsigned int
-{
-    AudioManagerStatusRunning = 0,
-    AudioManagerStatusDone
-};
+#include "AudioManager.hpp"
+#include <stdio.h>
 
 class AudioDSPKernel {
 public:

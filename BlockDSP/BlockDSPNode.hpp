@@ -9,7 +9,8 @@
 #ifndef BlockDSPNode_h
 #define BlockDSPNode_h
 
-#include <vector>
+#include <stdlib.h>
+#include <sys/types.h>
 
 class BlockDSPNumber;
 class DelayBuffer;
@@ -28,17 +29,20 @@ public:
     virtual ~BlockDSPNode();
     
 private:
-    uint32_t numChannels;
+    class pimpl;
+    pimpl *_pimpl;
 };
 
 class BlockDSPSummerNode : public BlockDSPNode {
 public:
     BlockDSPSummerNode(uint32_t numChannels);
+    virtual ~BlockDSPSummerNode();
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
     
 private:
-    std::vector<BlockDSPNode *>inputNodes;
+    class summerNodePimpl;
+    summerNodePimpl *_summerNodePimpl;
 };
 
 class BlockDSPMultiplierNode : public BlockDSPNode {
@@ -51,7 +55,8 @@ public:
     virtual ~BlockDSPMultiplierNode();
     
 private:
-    BlockDSPNode *inputNode;
+    class multiplierNodePimpl;
+    multiplierNodePimpl *_multiplierNodePimpl;
 };
 
 class BlockDSPDelayLine;
@@ -80,8 +85,8 @@ public:
     void reset();
     
 private:
-    DelayBuffer *delayBuffers;
-    uint32_t numChannels;
+    class delayLinePimpl;
+    delayLinePimpl *_delayLinePimpl;
 };
 
 class BlockDSPInputNode : public BlockDSPNode {

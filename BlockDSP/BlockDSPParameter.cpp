@@ -7,43 +7,49 @@
 //
 
 #include "BlockDSPParameter.hpp"
+#include "BlockDSPParameter_Private.hpp"
 #include "BlockDSPNumber.hpp"
 #include <string.h>
 
 BlockDSPParameter::BlockDSPParameter(BlockDSPParameterType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system)
 {
-    _type = type;
+    _pimpl->type = type;
     setTarget(target);
     setName(name);
     callback = 0;
-    _system = system;
+    _pimpl->system = system;
+}
+
+BlockDSPParameter::~BlockDSPParameter()
+{
+    delete _pimpl;
 }
 
 void BlockDSPParameter::setName(const char *name)
 {
-    strcpy(_name, name);
+    strcpy(_pimpl->name, name);
 }
 
 const char *BlockDSPParameter::name()
 {
-    return _name;
+    return _pimpl->name;
 }
 
 void BlockDSPParameter::setTarget(BlockDSPNumber *target)
 {
-    _target = target;
+    _pimpl->target = target;
 }
 
 bool BlockDSPParameter::setValue(float val)
 {
-    if (_type != BlockDSPParameterTypeFloat)
+    if (_pimpl->type != BlockDSPParameterTypeFloat)
         return false;
     
-    if (_target)
-        _target->setFloatValue(val);
+    if (_pimpl->target)
+        _pimpl->target->setFloatValue(val);
     
     if (callback)
-        (*callback)(_system, this, &val);
+        (*callback)(_pimpl->system, this, &val);
     
     return true;
     
@@ -51,29 +57,34 @@ bool BlockDSPParameter::setValue(float val)
 
 bool BlockDSPParameter::setValue(bool b)
 {
-    if (_type != BlockDSPParameterTypeBoolean)
+    if (_pimpl->type != BlockDSPParameterTypeBoolean)
         return false;
         
-    if (_target)
-        _target->setBoolValue(b);
+    if (_pimpl->target)
+        _pimpl->target->setBoolValue(b);
     
     if (callback)
-        (*callback)(_system, this, &b);
+        (*callback)(_pimpl->system, this, &b);
     
     return true;
 }
 
 bool BlockDSPParameter::setValue(int val)
 {
-    if (_type != BlockDSPParameterTypeInteger)
+    if (_pimpl->type != BlockDSPParameterTypeInteger)
         return false;
     
-    if (_target)
-        _target->setIntegerValue(val);
+    if (_pimpl->target)
+        _pimpl->target->setIntegerValue(val);
     
     if (callback)
-        (*callback)(_system, this, &val);
+        (*callback)(_pimpl->system, this, &val);
     
     return true;
+}
+
+BlockDSPParameter::pimpl::~pimpl()
+{
+    
 }
 

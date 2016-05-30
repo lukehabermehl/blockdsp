@@ -29,6 +29,8 @@ typedef void (* BlockDSPParameterCallback)(const BlockDSPSystem *, const BlockDS
 class BlockDSPParameter {
 public:
     BlockDSPParameter(BlockDSPParameterType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *);
+    ~BlockDSPParameter();
+    
     void setName(const char *name);
     const char *name();
     
@@ -42,10 +44,8 @@ public:
     BlockDSPParameterCallback callback;
     
 private:
-    char _name[BDSP_MAX_PARAMLEN];
-    BlockDSPNumber *_target;
-    BlockDSPParameterType _type;
-    BlockDSPSystem *_system;
+    class pimpl;
+    pimpl *_pimpl;
 };
 
 #endif /* BlockDSPParameter_hpp */

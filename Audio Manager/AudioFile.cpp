@@ -7,6 +7,7 @@
 //
 
 #include "AudioFile.hpp"
+#include "AudioFile_Private.hpp"
 
 AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
 {
@@ -24,50 +25,46 @@ AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
             break;
     }
     
-    sndfile = sf_open(filepath, sfmode, &sfInfo);
-    _totalSize = sfInfo.channels * sfInfo.frames;
-    readIndex = 0;
-    buf = new float[totalSize()];
+    _pimpl = new pimpl;
+    
+    _pimpl->sndfile = sf_open(filepath, sfmode, &_pimpl->sfInfo);
+    _pimpl->totalSize = _pimpl->sfInfo.channels * _pimpl->sfInfo.frames;
+    _pimpl->readIndex = 0;
+    _pimpl->buf = new float[totalSize()];
     
     //TODO: don't read the whole file at once
-    sf_read_float(sndfile, &buf[0], _totalSize);
+    sf_read_float(_pimpl->sndfile, &_pimpl->buf[0], _pimpl->totalSize);
 }
 
 AudioFile::~AudioFile()
 {
-    delete []buf;
-    if (sndfile)
-        sf_close(sndfile);
-    
-    if (buf)
-        delete []buf;
-    
+    delete _pimpl;
 }
 
 void AudioFile::close()
 {
-    if (sndfile)
-        sf_close(sndfile);
+    if (_pimpl->sndfile)
+        sf_close(_pimpl->sndfile);
     
-    sndfile = 0;
+    _pimpl->sndfile = 0;
     
-    delete []buf;
-    buf = 0;
+    delete []_pimpl->buf;
+    _pimpl->buf = 0;
 }
 
 AudioFileBufferStatus AudioFile::nextFrame(float **frame)
 {
-    if (readIndex >= totalSize())
+    if (_pimpl->readIndex >= totalSize())
         return AudioFileBufferStatusOutOfBounds;
     
-    *frame = &buf[readIndex];
-    readIndex += sfInfo.channels;
+    *frame = &_pimpl->buf[_pimpl->readIndex];
+    _pimpl->readIndex += _pimpl->sfInfo.channels;
     
-    if (readIndex >= _totalSize)
+    if (_pimpl->readIndex >= _pimpl->totalSize)
     {
         if (isLooping())
         {
-            readIndex -= _totalSize;
+            _pimpl->readIndex -= _pimpl->totalSize;
         }
         else
         {
@@ -80,33 +77,42 @@ AudioFileBufferStatus AudioFile::nextFrame(float **frame)
 
 unsigned long AudioFile::sampleRate()
 {
-    return sfInfo.samplerate;
+    return _pimpl->sfInfo.samplerate;
 }
 
 unsigned long AudioFile::numFrames()
 {
-    return sfInfo.frames;
+    return _pimpl->sfInfo.frames;
 }
 
 int AudioFile::numChannels()
 {
-    return sfInfo.channels;
+    return _pimpl->sfInfo.channels;
 }
 
 size_t AudioFile::totalSize()
 {
-    if (_totalSize == 0)
-        _totalSize = sfInfo.channels * sfInfo.frames;
+    if (_pimpl->totalSize == 0)
+        _pimpl->totalSize = _pimpl->sfInfo.channels * _pimpl->sfInfo.frames;
     
-    return _totalSize;
+    return _pimpl->totalSize;
 }
 
 void AudioFile::setLooping(bool looping)
 {
-    _looping = looping;
+    _pimpl->looping = looping;
 }
 
 bool AudioFile::isLooping()
 {
-    return _looping;
+    return _pimpl->looping;
+}
+
+AudioFile::pimpl::~pimpl()
+{
+    if (sndfile)
+        sf_close(sndfile);
+    
+    if (buf)
+        delete []buf;
 }

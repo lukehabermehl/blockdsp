@@ -8,26 +8,7 @@
 
 #include "AudioManager.hpp"
 #include "AudioFile.hpp"
-
-
-class ScopedPaHandler
-{
-public:
-    ScopedPaHandler() : _result(Pa_Initialize()) {};
-    
-    ~ScopedPaHandler()
-    {
-//        if (_result == paNoError)
-//            //Pa_Terminate();
-    }
-    
-    PaError result() const {
-        return _result;
-    }
-    
-private:
-    PaError _result;
-};
+#include "AudioManager_Private.hpp"
 
 AudioManager::AudioManager()
 {
@@ -41,11 +22,19 @@ AudioManager::AudioManager()
         printf("AudioManager: found device: %s\n", info->name);
         
     }
+    
+    _pimpl = new pimpl;
+    _pimpl->dspKernel = new AudioDSPKernel;
+}
+
+AudioManager::~AudioManager()
+{
+    delete _pimpl;
 }
 
 void AudioManager::setNumOutputChannels(int numOutputChannels)
 {
-    dspKernel.numOutputChannels = numOutputChannels;
+    _pimpl->dspKernel->numOutputChannels = numOutputChannels;
 }
 
 void AudioManager::setInputMode(AudioInputMode mode)
@@ -53,27 +42,27 @@ void AudioManager::setInputMode(AudioInputMode mode)
     switch (mode)
     {
         case AudioInputModeFile:
-            dspKernel.useFileInput = true;
+            _pimpl->dspKernel->useFileInput = true;
             break;
         default:
-            dspKernel.useFileInput = false;
+            _pimpl->dspKernel->useFileInput = false;
             break;
     }
 }
 
 void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)
 {
-    dspKernel.audioProcessingUnit = unit;
+    _pimpl->dspKernel->audioProcessingUnit = unit;
 }
 
 bool AudioManager::open()
 {
-    return dspKernel.open(1);
+    return _pimpl->dspKernel->open(1);
 }
 
 bool AudioManager::close()
 {
-    if (dspKernel.close())
+    if (_pimpl->dspKernel->close())
     {
         Pa_Terminate();
         return true;
@@ -84,12 +73,12 @@ bool AudioManager::close()
 
 bool AudioManager::start()
 {
-    return dspKernel.start();
+    return _pimpl->dspKernel->start();
 }
 
 bool AudioManager::stop()
 {
-    return dspKernel.stop();
+    return _pimpl->dspKernel->stop();
 }
 
 bool AudioManager::setInputFile(const char *fpath)
@@ -98,19 +87,19 @@ bool AudioManager::setInputFile(const char *fpath)
     if (audioFile == NULL)
         return false;
     
-    if (dspKernel.audioFile)
+    if (_pimpl->dspKernel->audioFile)
     {
-        dspKernel.audioFile->close();
+        _pimpl->dspKernel->audioFile->close();
     }
     
-    dspKernel.audioFile = audioFile;
+    _pimpl->dspKernel->audioFile = audioFile;
     
     return true;
 }
 
 AudioManagerStatus AudioManager::status()
 {
-    return dspKernel.status;
+    return _pimpl->dspKernel->status;
 }
 
 void AudioManager::sleep(unsigned long millisec)
@@ -120,6 +109,11 @@ void AudioManager::sleep(unsigned long millisec)
 
 void AudioManager::setLooping(bool looping)
 {
-    dspKernel.audioFile->setLooping(looping);
+    _pimpl->dspKernel->audioFile->setLooping(looping);
+}
+
+AudioManager::pimpl::~pimpl()
+{
+    delete dspKernel;
 }
 

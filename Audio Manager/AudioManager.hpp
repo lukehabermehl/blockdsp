@@ -10,26 +10,29 @@
 #define AudioManager_hpp
 
 #include <portaudio.h>
-#include "AudioDSPKernel.hpp"
 #include "AudioProcessingUnit.hpp"
 
+/** Indicates where the Audio Manager will pull input from */
 enum AudioInputMode : unsigned int
 {
     AudioInputModeFile,
     AudioInputModeMicrophone
 };
 
-typedef void (*AudioProcessFunc)(float *inputBuffer,
-float *outputBuffer,
-int numInputChannels,
-int numOutputChannels,
-void *context);
+/** Indicates the current status of the Audio Manager */
+enum AudioManagerStatus : unsigned int
+{
+    AudioManagerStatusRunning = 0,
+    AudioManagerStatusDone
+};
 
 /** Provides an interface for loading and processing audio from a file or input device */
 class AudioManager
 {
 public:
     AudioManager();
+    ~AudioManager();
+    
     /** Load input from file at specified path. Returns true if successful */
     bool setInputFile(const char *fpath);
     
@@ -57,14 +60,15 @@ public:
     /** Stop audio processing. Returns false if successful */
     bool stop();
     
+    /** Sleep the calling thread */
     void sleep(unsigned long millisec);
-    
     
     /** Get the current status of the Audio Manager */
     AudioManagerStatus status();
     
 private:
-    AudioDSPKernel dspKernel;
+    class pimpl;
+    pimpl *_pimpl;
 };
 
 

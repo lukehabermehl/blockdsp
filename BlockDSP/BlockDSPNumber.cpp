@@ -7,49 +7,55 @@
 //
 
 #include "BlockDSPNumber.hpp"
+#include "BlockDSPNumber_Private.hpp"
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
 
-static const int DATA_SIZE = 8;
 static const size_t INT_SIZE = sizeof(int);
 static const size_t FLOAT_SIZE = sizeof(float);
 static const size_t BOOL_SIZE = sizeof(bool);
 
 BlockDSPNumber::BlockDSPNumber()
 {
-    memset(_data, 0, DATA_SIZE);
+    _pimpl = new pimpl;
+    memset(_pimpl->data, 0, pimpl::dataSize);
+}
+
+BlockDSPNumber::~BlockDSPNumber()
+{
+    delete _pimpl;
 }
 
 void BlockDSPNumber::setIntegerValue(int i)
 {
-    memset(_data, 0, DATA_SIZE);
-    memcpy(_data, &i, INT_SIZE);
+    memset(_pimpl->data, 0, pimpl::dataSize);
+    memcpy(_pimpl->data, &i, INT_SIZE);
 }
 
 void BlockDSPNumber::setFloatValue(float f)
 {
-    memset(_data, 0, DATA_SIZE);
-    memcpy(&_data[DATA_SIZE - FLOAT_SIZE], &f, FLOAT_SIZE);
+    memset(_pimpl->data, 0, pimpl::dataSize);
+    memcpy(&_pimpl->data[pimpl::dataSize - FLOAT_SIZE], &f, FLOAT_SIZE);
 }
 
 void BlockDSPNumber::setBoolValue(bool b)
 {
-    memset(_data, 0, DATA_SIZE);
-    memcpy(&_data[DATA_SIZE - BOOL_SIZE], &b, BOOL_SIZE);
+    memset(_pimpl->data, 0, pimpl::dataSize);
+    memcpy(&_pimpl->data[pimpl::dataSize - BOOL_SIZE], &b, BOOL_SIZE);
 }
 
 int BlockDSPNumber::integerValue()
 {
     float f;
-    memcpy(&f, &_data[DATA_SIZE - FLOAT_SIZE], FLOAT_SIZE);
+    memcpy(&f, &_pimpl->data[pimpl::dataSize - FLOAT_SIZE], FLOAT_SIZE);
     return (int)f;
 }
 
 float BlockDSPNumber::floatValue()
 {
     float f;
-    memcpy(&f, &_data[DATA_SIZE - FLOAT_SIZE], FLOAT_SIZE);
+    memcpy(&f, &_pimpl->data[pimpl::dataSize - FLOAT_SIZE], FLOAT_SIZE);
     return f;
 }
 

@@ -80,6 +80,12 @@
 		A3F7446A1CF653F70004C79A /* dsphelpers.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = dsphelpers.hpp; path = BlockDSP/dsphelpers.hpp; sourceTree = "<group>"; };
 		A3F7447F1CF656860004C79A /* BDCodeBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BDCodeBuilder.cpp; path = "Code Generation/BDCodeBuilder.cpp"; sourceTree = "<group>"; };
 		A3F744801CF656860004C79A /* BDCodeBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BDCodeBuilder.hpp; path = "Code Generation/BDCodeBuilder.hpp"; sourceTree = "<group>"; };
+		A3FF33241CFC92EE0021953E /* AudioManager_Private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudioManager_Private.hpp; sourceTree = "<group>"; };
+		A3FF33251CFC958D0021953E /* AudioFile_Private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudioFile_Private.hpp; sourceTree = "<group>"; };
+		A3FF33281CFC98D30021953E /* BlockDSPNode_Private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlockDSPNode_Private.hpp; sourceTree = "<group>"; };
+		A3FF33291CFC9D100021953E /* BlockDSPNumber_Private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlockDSPNumber_Private.hpp; sourceTree = "<group>"; };
+		A3FF332A1CFC9E630021953E /* BlockDSPParameter_Private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlockDSPParameter_Private.hpp; sourceTree = "<group>"; };
+		A3FF332B1CFC9F6F0021953E /* BlockDSPSystem_Private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlockDSPSystem_Private.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +117,7 @@
 		A39D435B1CF54EDD0003EB51 /* Audio Manager */ = {
 			isa = PBXGroup;
 			children = (
+				A3FF33231CFC92CB0021953E /* Private Headers */,
 				A3F7444E1CF653C10004C79A /* AudioDSPKernel.cpp */,
 				A3F7444F1CF653C10004C79A /* AudioDSPKernel.hpp */,
 				A3F744501CF653C10004C79A /* AudioFile.cpp */,
@@ -126,6 +133,7 @@
 		A39D436E1CF5529D0003EB51 /* BlockDSP */ = {
 			isa = PBXGroup;
 			children = (
+				A3FF33271CFC988B0021953E /* Private Headers */,
 				A3F7445E1CF653F70004C79A /* BlockDSPAPU.cpp */,
 				A3F7445F1CF653F70004C79A /* BlockDSPAPU.hpp */,
 				A3F744601CF653F70004C79A /* BlockDSPNode.cpp */,
@@ -184,6 +192,26 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		A3FF33231CFC92CB0021953E /* Private Headers */ = {
+			isa = PBXGroup;
+			children = (
+				A3FF33241CFC92EE0021953E /* AudioManager_Private.hpp */,
+				A3FF33251CFC958D0021953E /* AudioFile_Private.hpp */,
+			);
+			name = "Private Headers";
+			sourceTree = "<group>";
+		};
+		A3FF33271CFC988B0021953E /* Private Headers */ = {
+			isa = PBXGroup;
+			children = (
+				A3FF33281CFC98D30021953E /* BlockDSPNode_Private.hpp */,
+				A3FF33291CFC9D100021953E /* BlockDSPNumber_Private.hpp */,
+				A3FF332A1CFC9E630021953E /* BlockDSPParameter_Private.hpp */,
+				A3FF332B1CFC9F6F0021953E /* BlockDSPSystem_Private.hpp */,
+			);
+			name = "Private Headers";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -235,6 +263,7 @@
 				A3D020EF1CF35CC800EC7C0D /* Sources */,
 				A3D020F01CF35CC800EC7C0D /* Frameworks */,
 				A3D020F11CF35CC800EC7C0D /* Headers */,
+				A3FF33261CFC97750021953E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -279,6 +308,22 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A3FF33261CFC97750021953E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -f $BUILT_PRODUCTS_DIR/usr/local/include/* /usr/local/include/\ncp -f $BUILT_PRODUCTS_DIR/libblockdsp.a /usr/local/lib/";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A342C6C21CF3ED9E000E354E /* Sources */ = {

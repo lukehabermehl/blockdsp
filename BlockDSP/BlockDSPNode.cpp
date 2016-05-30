@@ -7,19 +7,23 @@
 //
 
 #include "BlockDSPNode.hpp"
+#include "BlockDSPNode_Private.hpp"
 #include "DelayBuffer.h"
 #include "BlockDSPNumber.hpp"
 
 #pragma mark - BlockDSPNode
 BlockDSPNode::BlockDSPNode(uint32_t numChannels) {
-    this->numChannels = numChannels;
+    _pimpl = new pimpl;
+    _pimpl->numChannels = numChannels;
     nodeID = -1;
 }
 
-BlockDSPNode::~BlockDSPNode() {}
+BlockDSPNode::~BlockDSPNode() {
+    delete _pimpl;
+}
 
 uint32_t BlockDSPNode::getChannelCount() {
-    return numChannels;
+    return _pimpl->numChannels;
 }
 
 void BlockDSPNode::connectInput(BlockDSPNode *inputNode) {
@@ -32,16 +36,23 @@ float BlockDSPNode::valueForChannel(uint32_t channelNo) {
 
 #pragma mark - BlockDSPSummerNode
 
-BlockDSPSummerNode::BlockDSPSummerNode(uint32_t numChannels) : BlockDSPNode(numChannels) {}
+BlockDSPSummerNode::BlockDSPSummerNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
+    _summerNodePimpl = new summerNodePimpl;
+}
+
+BlockDSPSummerNode::~BlockDSPSummerNode()
+{
+    delete _summerNodePimpl;
+}
 
 void BlockDSPSummerNode::connectInput(BlockDSPNode *inputNode) {
-    inputNodes.push_back(inputNode);
+    _summerNodePimpl->inputNodes.push_back(inputNode);
 }
 
 float BlockDSPSummerNode::valueForChannel(uint32_t channelNo) {
     float val = 0.0;
-    for (size_t i=0; i<inputNodes.size(); i++) {
-        val += inputNodes[i]->valueForChannel(channelNo);
+    for (size_t i=0; i<_summerNodePimpl->inputNodes.size(); i++) {
+        val += _summerNodePimpl->inputNodes[i]->valueForChannel(channelNo);
     }
     
     return val;
@@ -50,18 +61,20 @@ float BlockDSPSummerNode::valueForChannel(uint32_t channelNo) {
 #pragma mark - BlockDSPMultiplierNode
 BlockDSPMultiplierNode::BlockDSPMultiplierNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
     coefficient = BlockDSPNumber::numberForFloat(1.0);
+    _multiplierNodePimpl = new multiplierNodePimpl;
 }
 
 void BlockDSPMultiplierNode::connectInput(BlockDSPNode *inputNode) {
-    this->inputNode = inputNode;
+    _multiplierNodePimpl->inputNode = inputNode;
 }
 
 float BlockDSPMultiplierNode::valueForChannel(uint32_t channelNo) {
-    return inputNode->valueForChannel(channelNo) * coefficient->floatValue();
+    return _multiplierNodePimpl->inputNode->valueForChannel(channelNo) * coefficient->floatValue();
 }
 
 BlockDSPMultiplierNode::~BlockDSPMultiplierNode() {
     delete coefficient;
+    delete _multiplierNodePimpl;
 }
 
 
@@ -82,18 +95,21 @@ float BlockDSPDelayLineNode::valueForChannel(uint32_t channelNo) {
 #pragma mark - BlockDSPDelayLine
 BlockDSPDelayLine::BlockDSPDelayLine(uint32_t numChannels) {
     id = -1;
-    this->numChannels = numChannels;
-    delayBuffers = new DelayBuffer[numChannels];
+    _delayLinePimpl = new delayLinePimpl;
+    _delayLinePimpl->numChannels = numChannels;
+    _delayLinePimpl->delayBuffers = new DelayBuffer[numChannels];
 }
 
 BlockDSPDelayLine::~BlockDSPDelayLine() {
-    if (numChannels > 0) {
-        delete []delayBuffers;
+    if (_delayLinePimpl->numChannels > 0) {
+        delete []_delayLinePimpl->delayBuffers;
     }
+    
+    delete _delayLinePimpl;
 }
 
 BlockDSPDelayLineNode *BlockDSPDelayLine::nodeForDelayIndex(size_t index) {
-    BlockDSPDelayLineNode *dlnode = new BlockDSPDelayLineNode(numChannels);
+    BlockDSPDelayLineNode *dlnode = new BlockDSPDelayLineNode(_delayLinePimpl->numChannels);
     dlnode->delayLine = this;
     dlnode->delayIndex = index;
     
@@ -101,24 +117,24 @@ BlockDSPDelayLineNode *BlockDSPDelayLine::nodeForDelayIndex(size_t index) {
 }
 
 float BlockDSPDelayLine::valueForDelayIndex(size_t delayIndex, uint32_t channelNo) {
-    return delayBuffers[channelNo].sampleAtDelayIndex(delayIndex);
+    return _delayLinePimpl->delayBuffers[channelNo].sampleAtDelayIndex(delayIndex);
 }
 
 void BlockDSPDelayLine::setSize(size_t delaySize) {
-    for (size_t i=0; i<numChannels; i++) {
-        delayBuffers[i].initWithSize(delaySize);
+    for (size_t i=0; i<_delayLinePimpl->numChannels; i++) {
+        _delayLinePimpl->delayBuffers[i].initWithSize(delaySize);
     }
 }
 
 void BlockDSPDelayLine::shuffle() {
-    for (uint32_t i=0; i<numChannels; i++) {
-        delayBuffers[i].shuffleIn(inputNode->valueForChannel(i));
+    for (uint32_t i=0; i<_delayLinePimpl->numChannels; i++) {
+        _delayLinePimpl->delayBuffers[i].shuffleIn(inputNode->valueForChannel(i));
     }
 }
 
 void BlockDSPDelayLine::reset() {
-    for (size_t i=0; i<numChannels; i++) {
-        delayBuffers[i].reset();
+    for (size_t i=0; i<_delayLinePimpl->numChannels; i++) {
+        _delayLinePimpl->delayBuffers[i].reset();
     }
 }
 

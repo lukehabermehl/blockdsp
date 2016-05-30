@@ -44,13 +44,8 @@ public:
     ~BlockDSPSystem();
     
 private:
-    std::unordered_map<BlockDSPNodeID, BlockDSPNode *> nodeMap;
-    std::vector<BlockDSPDelayLine *>delayLines;
-    std::unordered_map<std::string, BlockDSPParameter *> parameterMap;
-    std::unordered_map<std::string, BlockDSPNumber *> numberMap;
-    
-    uint32_t counter;
-    uint32_t numChannels;
+    class pimpl;
+    pimpl *_pimpl;
 };
 
 #endif /* BlockDSPSystem_hpp */

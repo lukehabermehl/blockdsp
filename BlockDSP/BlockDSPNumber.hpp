@@ -13,6 +13,7 @@ class BlockDSPNumber
 {
 public:
     BlockDSPNumber();
+    ~BlockDSPNumber();
     
     static BlockDSPNumber * numberForFloat(float f);
     static BlockDSPNumber * numberForInteger(int i);
@@ -27,7 +28,8 @@ public:
     void setBoolValue(bool b);
     
 private:
-    unsigned char _data[8];
+    class pimpl;
+    pimpl *_pimpl;
 };
 
 #endif /* BlockDSPNumber_hpp */

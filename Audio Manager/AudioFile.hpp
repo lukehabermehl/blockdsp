@@ -9,7 +9,7 @@
 #ifndef AudioFile_hpp
 #define AudioFile_hpp
 
-#include <sndfile.h>
+#include <stdlib.h>
 
 enum AudioFileMode : unsigned int
 {
@@ -55,12 +55,8 @@ public:
     bool isLooping();
     
 private:
-    SNDFILE *sndfile;
-    SF_INFO sfInfo;
-    float *buf;
-    size_t readIndex;
-    size_t _totalSize;
-    bool _looping;
+    class pimpl;
+    pimpl *_pimpl;
 };
 
 #endif /* AudioFile_hpp */
