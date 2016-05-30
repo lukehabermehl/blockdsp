@@ -13,6 +13,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#define BD_FILE_CHECK() if (!_openFile) { _error = BDCodeBuilderErrorFileNotOpen; return; }
+
 void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType type)
 {
     switch (type)
@@ -162,15 +164,13 @@ void BDCodeBuilder::openSourceFile()
     fprintf(f, "MAIN_OUTPUT_NODE->coefficient->setFloatValue(1.0);\n");
     
     _openFile = f;
+    
+    BD_FILE_CHECK();
 }
 
 void BDCodeBuilder::closeSourceFile()
 {
-    if (!_openFile)
-    {
-        _error = BDCodeBuilderErrorNotFound;
-        return;
-    }
+    BD_FILE_CHECK();
     
     fprintf(_openFile, "\nreturn system;\n");
     fprintf(_openFile, "\n}\n");
@@ -180,6 +180,8 @@ void BDCodeBuilder::closeSourceFile()
 
 void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
 {
+    BD_FILE_CHECK();
+    
     std::string strName = std::string(name);
     if (hasNode(name))
     {
@@ -206,6 +208,8 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
 
 void BDCodeBuilder::addDelayLine(const char *name, const char *inputNodeName, size_t size)
 {
+    BD_FILE_CHECK();
+    
     if (!hasNode(inputNodeName))
     {
         _error = BDCodeBuilderErrorNotFound;
@@ -221,6 +225,8 @@ void BDCodeBuilder::addDelayLine(const char *name, const char *inputNodeName, si
 
 void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex)
 {
+    BD_FILE_CHECK();
+    
     if (hasNode(nodeName))
     {
         _error = BDCodeBuilderErrorNonUnique;
@@ -239,6 +245,8 @@ void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLine
 
 void BDCodeBuilder::addCoefficient(const char *name, const char *callback, const char *target, BlockDSPParameterType type)
 {
+    BD_FILE_CHECK();
+    
     const char *targetParam = target ?: "0";
     char typeParam[20];
     BDStringForParameterType(typeParam, type);
@@ -255,6 +263,8 @@ void BDCodeBuilder::addCoefficient(const char *name, const char *callback, const
 
 void BDCodeBuilder::addNumber(const char *name)
 {
+    BD_FILE_CHECK();
+    
     if (hasNumber(name))
     {
         _error = BDCodeBuilderErrorNonUnique;
@@ -271,6 +281,8 @@ void BDCodeBuilder::addNumber(const char *name)
 
 void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPParameterType valueType, void *value)
 {
+    BD_FILE_CHECK();
+    
     std::string numName = std::string(numberName);
     if (!hasNumber(numberName))
     {
@@ -308,6 +320,8 @@ void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPParame
 
 void BDCodeBuilder::connect(const char *from, const char *to)
 {
+    BD_FILE_CHECK();
+    
     if (!hasNode(from) || !hasNode(to))
     {
         _error = BDCodeBuilderErrorNotFound;

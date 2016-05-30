@@ -25,7 +25,8 @@ enum BDCodeBuilderError : unsigned int
     BDCodeBuilderErrorNoError = 0,
     BDCodeBuilderErrorBadPath,
     BDCodeBuilderErrorNonUnique,
-    BDCodeBuilderErrorNotFound
+    BDCodeBuilderErrorNotFound,
+    BDCodeBuilderErrorFileNotOpen
 };
 
 class BDCodeBuilder
