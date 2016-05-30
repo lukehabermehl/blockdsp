@@ -7,14 +7,15 @@
 //
 
 #include "BDCodeBuilder.hpp"
+#include "BDCodeBuilder_Private.hpp"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <string>
 
-#define BD_FILE_CHECK() if (!_openFile) { _error = BDCodeBuilderErrorFileNotOpen; return; }
+#define BD_FILE_CHECK() if (!_pimpl->openFile) { _pimpl->error = BDCodeBuilderErrorFileNotOpen; return; }
 
 void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType type)
 {
@@ -54,25 +55,29 @@ void BDStringForParameterType(char *str, BlockDSPParameterType type)
 
 BDCodeBuilder::BDCodeBuilder(const char *name, const char *dirpath)
 {
-    _name = (char *)malloc(strlen(name) + 1);
-    _dirpath = (char *)malloc(strlen(dirpath) + 1);
+    _pimpl = new pimpl;
     
-    _openFile = 0;
-    _error = BDCodeBuilderErrorNoError;
+    _pimpl->name = (char *)malloc(strlen(name) + 1);
+    _pimpl->dirpath = (char *)malloc(strlen(dirpath) + 1);
     
-    strcpy(_name, name);
-    strcpy(_dirpath, dirpath);
+    _pimpl->openFile = 0;
+    _pimpl->error = BDCodeBuilderErrorNoError;
+    
+    strcpy(_pimpl->name, name);
+    strcpy(_pimpl->dirpath, dirpath);
     
     struct stat st;
-    if (stat(_dirpath, &st) == -1)
-        mkdir(_dirpath, 0700);
+    if (stat(_pimpl->dirpath, &st) == -1)
+        mkdir(_pimpl->dirpath, 0700);
     
 }
 
 BDCodeBuilder::~BDCodeBuilder()
 {
-    free(_name);
-    free(_dirpath);
+    free(_pimpl->name);
+    free(_pimpl->dirpath);
+    
+    delete _pimpl;
 }
 
 void BDCodeBuilder::addCallbackCode(const char *callbackName, const char *code)
@@ -80,42 +85,42 @@ void BDCodeBuilder::addCallbackCode(const char *callbackName, const char *code)
     if (hasCallback(callbackName))
         return;
     
-    callbackMap[std::string(callbackName)] = std::string(code);
+    _pimpl->callbackMap[std::string(callbackName)] = std::string(code);
 }
 
 bool BDCodeBuilder::hasNode(const char *name)
 {
-    auto it = nodeSet.find(std::string(name));
-    return  !(it == nodeSet.end());
+    auto it = _pimpl->nodeSet.find(std::string(name));
+    return  !(it == _pimpl->nodeSet.end());
 }
 
 bool BDCodeBuilder::hasCallback(const char *name)
 {
-    auto it = callbackMap.find(std::string(name));
-    return  !(it == callbackMap.end());
+    auto it = _pimpl->callbackMap.find(std::string(name));
+    return  !(it == _pimpl->callbackMap.end());
 }
 
 bool BDCodeBuilder::hasNumber(const char *name)
 {
-    auto it = numSet.find(std::string(name));
-    return  !(it == numSet.end());
+    auto it = _pimpl->numSet.find(std::string(name));
+    return  !(it == _pimpl->numSet.end());
 }
 
 bool BDCodeBuilder::hasDelayLine(const char *name)
 {
-    auto it = delayLineSet.find(std::string(name));
-    return  !(it == delayLineSet.end());
+    auto it = _pimpl->delayLineSet.find(std::string(name));
+    return  !(it == _pimpl->delayLineSet.end());
 }
 
 void BDCodeBuilder::writeHeaderFile()
 {
     char filepath[1024];
-    sprintf(filepath, "%s/%s.h", _dirpath, _name);
+    sprintf(filepath, "%s/%s.h", _pimpl->dirpath, _pimpl->name);
     
     FILE *f = fopen(filepath, "w");
     if (!f)
     {
-        _error = BDCodeBuilderErrorBadPath;
+        _pimpl->error = BDCodeBuilderErrorBadPath;
         return;
     }
     
@@ -129,33 +134,33 @@ void BDCodeBuilder::writeHeaderFile()
 
 void BDCodeBuilder::openSourceFile()
 {
-    if (_openFile)
+    if (_pimpl->openFile)
     {
-        fclose(_openFile);
+        fclose(_pimpl->openFile);
     }
     
     char filepath[1024];
     char headerFileName[256];
-    sprintf(filepath, "%s/%s.cpp", _dirpath, _name);
-    sprintf(headerFileName, "%s.h", _name);
+    sprintf(filepath, "%s/%s.cpp", _pimpl->dirpath, _pimpl->name);
+    sprintf(headerFileName, "%s.h", _pimpl->name);
     
     FILE *f = fopen(filepath, "w");
     if (!f)
     {
-        _error = BDCodeBuilderErrorBadPath;
+        _pimpl->error = BDCodeBuilderErrorBadPath;
         return;
     }
     
     fprintf(f, "\n//This file was automatically generated.\n\n#include \"%s\"\n", headerFileName);
     
-    for (auto it = callbackMap.begin(); it != callbackMap.end(); it++)
+    for (auto it = _pimpl->callbackMap.begin(); it != _pimpl->callbackMap.end(); it++)
     {
         fprintf(f, "\nvoid %s(BlockDSPSystem *system, BlockDSPParameter *parameter, void *value) {", it->first.c_str());
         fprintf(f, "\n\t%s\n}\n", it->second.c_str());
     }
     
-    nodeSet["MAIN_INPUT_NODE"] = true;
-    nodeSet["MAIN_OUTPUT_NODE"] = true;
+    _pimpl->nodeSet["MAIN_INPUT_NODE"] = true;
+    _pimpl->nodeSet["MAIN_OUTPUT_NODE"] = true;
     
     fprintf(f, "\nBlockDSPSystem * BlockDSPFactoryCreateSystem() {\n");
     fprintf(f, "BlockDSPSystem *system = new BlockDSPSystem(2);\n");
@@ -164,7 +169,7 @@ void BDCodeBuilder::openSourceFile()
     fprintf(f, "system->mainOutputNode = MAIN_OUTPUT_NODE;\n");
     fprintf(f, "MAIN_OUTPUT_NODE->coefficient->setFloatValue(1.0);\n");
     
-    _openFile = f;
+    _pimpl->openFile = f;
     
     BD_FILE_CHECK();
 }
@@ -173,10 +178,10 @@ void BDCodeBuilder::closeSourceFile()
 {
     BD_FILE_CHECK();
     
-    fprintf(_openFile, "\nreturn system;\n");
-    fprintf(_openFile, "\n}\n");
-    fclose(_openFile);
-    _openFile = 0;
+    fprintf(_pimpl->openFile, "\nreturn system;\n");
+    fprintf(_pimpl->openFile, "\n}\n");
+    fclose(_pimpl->openFile);
+    _pimpl->openFile = 0;
 }
 
 void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
@@ -186,24 +191,24 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
     std::string strName = std::string(name);
     if (hasNode(name))
     {
-        _error = BDCodeBuilderErrorNonUnique;
+        _pimpl->error = BDCodeBuilderErrorNonUnique;
         return;
     }
     
     char typeStr[256];
     char factoryMethodName[256];
     
-    nodeSet[strName] = true;
+    _pimpl->nodeSet[strName] = true;
     
     BDInfoForBlockType(typeStr, factoryMethodName, type);
     
-    fprintf(_openFile, "%s *%s = system->%s();\n", typeStr, name, factoryMethodName);
+    fprintf(_pimpl->openFile, "%s *%s = system->%s();\n", typeStr, name, factoryMethodName);
     if (type == BDBlockTypeMultiplier)
     {
         //Use typeStr for space efficiency
         sprintf(typeStr, "%s->coefficient", name);
-        numSet[typeStr] = true;
-        fprintf(_openFile, "%s = BlockDSPNumber::numberForFloat(0.0);\n", typeStr);
+        _pimpl->numSet[typeStr] = true;
+        fprintf(_pimpl->openFile, "%s = BlockDSPNumber::numberForFloat(0.0);\n", typeStr);
     }
 }
 
@@ -213,15 +218,15 @@ void BDCodeBuilder::addDelayLine(const char *name, const char *inputNodeName, si
     
     if (!hasNode(inputNodeName))
     {
-        _error = BDCodeBuilderErrorNotFound;
+        _pimpl->error = BDCodeBuilderErrorNotFound;
         return;
     }
     
     
-    delayLineSet[std::string(name)] = true;
+    _pimpl->delayLineSet[std::string(name)] = true;
     
-    fprintf(_openFile, "BlockDSPDelayLine *%s = system->createDelayLine(%s);\n", name, inputNodeName);
-    fprintf(_openFile, "%s->setSize(%lu);\n", name, size);
+    fprintf(_pimpl->openFile, "BlockDSPDelayLine *%s = system->createDelayLine(%s);\n", name, inputNodeName);
+    fprintf(_pimpl->openFile, "%s->setSize(%lu);\n", name, size);
 }
 
 void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex)
@@ -230,18 +235,18 @@ void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLine
     
     if (hasNode(nodeName))
     {
-        _error = BDCodeBuilderErrorNonUnique;
+        _pimpl->error = BDCodeBuilderErrorNonUnique;
         return;
     }
     
     if (!hasDelayLine(delayLineName))
     {
-        _error = BDCodeBuilderErrorNotFound;
+        _pimpl->error = BDCodeBuilderErrorNotFound;
         return;
     }
     
-    nodeSet[std::string(nodeName)] = true;
-    fprintf(_openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu);\n", nodeName, delayLineName, delayIndex);
+    _pimpl->nodeSet[std::string(nodeName)] = true;
+    fprintf(_pimpl->openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu);\n", nodeName, delayLineName, delayIndex);
 }
 
 void BDCodeBuilder::addCoefficient(const char *name, const char *callback, const char *target, BlockDSPParameterType type)
@@ -257,9 +262,9 @@ void BDCodeBuilder::addCoefficient(const char *name, const char *callback, const
             return;
     }
     
-    fprintf(_openFile, "BlockDSPParameter *%s = system->createParameter(\"%s\", %s, %s);\n", name, name, typeParam, targetParam);
+    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = system->createParameter(\"%s\", %s, %s);\n", name, name, typeParam, targetParam);
     if (callback)
-        fprintf(_openFile, "%s->callback = %s;\n", name, callback);
+        fprintf(_pimpl->openFile, "%s->callback = %s;\n", name, callback);
 }
 
 void BDCodeBuilder::addNumber(const char *name)
@@ -268,16 +273,16 @@ void BDCodeBuilder::addNumber(const char *name)
     
     if (hasNumber(name))
     {
-        _error = BDCodeBuilderErrorNonUnique;
+        _pimpl->error = BDCodeBuilderErrorNonUnique;
         return;
     }
     
     std::string numName = std::string(name);
     
-    numSet[numName] = true;
+    _pimpl->numSet[numName] = true;
     
-    fprintf(_openFile, "BlockDSPNumber *%s = new BlockDSPNumber();\n", name);
-    fprintf(_openFile, "system->addNumber(\"%s\", %s);\n", name, name);
+    fprintf(_pimpl->openFile, "BlockDSPNumber *%s = new BlockDSPNumber();\n", name);
+    fprintf(_pimpl->openFile, "system->addNumber(\"%s\", %s);\n", name, name);
 }
 
 void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPParameterType valueType, void *value)
@@ -287,7 +292,7 @@ void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPParame
     std::string numName = std::string(numberName);
     if (!hasNumber(numberName))
     {
-        _error = BDCodeBuilderErrorNotFound;
+        _pimpl->error = BDCodeBuilderErrorNotFound;
         return;
     }
     
@@ -295,25 +300,25 @@ void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPParame
     {
         case BlockDSPParameterTypeFloat:
         {
-            fprintf(_openFile, "%s->setFloatValue(%f);\n", numberName, *((float *)value));
+            fprintf(_pimpl->openFile, "%s->setFloatValue(%f);\n", numberName, *((float *)value));
             break;
         }
             
         case BlockDSPParameterTypeBoolean:
         {
-            fprintf(_openFile, "%s->setBoolValue(%s);\n", numberName, *((bool *)value) ? "true" : "false");
+            fprintf(_pimpl->openFile, "%s->setBoolValue(%s);\n", numberName, *((bool *)value) ? "true" : "false");
             break;
         }
             
         case BlockDSPParameterTypeInteger:
         {
-            fprintf(_openFile, "%s->setIntegerValue(%d);\n", numberName, *((int *)value));
+            fprintf(_pimpl->openFile, "%s->setIntegerValue(%d);\n", numberName, *((int *)value));
             break;
         }
             
         case BlockDSPParameterTypeUnsignedInt:
         {
-            fprintf(_openFile, "%s->setIntegerValue(%ud);\n", numberName, *((unsigned int *)value));
+            fprintf(_pimpl->openFile, "%s->setIntegerValue(%ud);\n", numberName, *((unsigned int *)value));
             break;
         }
     }
@@ -325,27 +330,27 @@ void BDCodeBuilder::connect(const char *from, const char *to)
     
     if (!hasNode(from) || !hasNode(to))
     {
-        _error = BDCodeBuilderErrorNotFound;
+        _pimpl->error = BDCodeBuilderErrorNotFound;
         return;
     }
     
-    fprintf(_openFile, "%s->connectInput(%s);\n", to, from);
+    fprintf(_pimpl->openFile, "%s->connectInput(%s);\n", to, from);
 }
 
 const char *BDCodeBuilder::name()
 {
-    return _name;
+    return _pimpl->name;
 }
 
 const char *BDCodeBuilder::dirpath()
 {
-    return _dirpath;
+    return _pimpl->dirpath;
 }
 
 BDCodeBuilderError BDCodeBuilder::error()
 {
-    BDCodeBuilderError rv = _error;
-    _error = BDCodeBuilderErrorNoError;
+    BDCodeBuilderError rv = _pimpl->error;
+    _pimpl->error = BDCodeBuilderErrorNoError;
     
     return rv;
 }

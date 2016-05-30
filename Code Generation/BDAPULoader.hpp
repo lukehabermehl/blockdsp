@@ -9,7 +9,7 @@
 #ifndef BDAPULoader_hpp
 #define BDAPULoader_hpp
 
-class BlockDSPAPU;
+#include "BlockDSPAPU.hpp"
 
 enum BDAPULoaderError : unsigned int
 {
@@ -29,8 +29,8 @@ public:
     
     
 private:
-    void *_handle;
-    BDAPULoaderError _error;
+    class pimpl;
+    pimpl *_pimpl;
 };
 
 #endif /* BDAPULoader_hpp */

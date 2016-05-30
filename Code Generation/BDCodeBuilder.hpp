@@ -9,9 +9,6 @@
 #ifndef BDCodeBuilder_hpp
 #define BDCodeBuilder_hpp
 
-#include <unordered_map>
-#include <string>
-
 #include "BlockDSPSystem.hpp"
 
 enum BDBlockType : unsigned int
@@ -61,15 +58,8 @@ public:
     BDCodeBuilderError error();
     
 private:
-    char *_name;
-    char *_dirpath;
-    FILE *_openFile;
-    BDCodeBuilderError _error;
-    std::unordered_map<std::string, std::string> callbackMap;
-    std::unordered_map<std::string, bool> nodeSet;
-    std::unordered_map<std::string, bool> numSet;
-    std::unordered_map<std::string, bool> delayLineSet;
-    
+    class pimpl;
+    pimpl *_pimpl;
 };
 
 #endif /* BDCodeBuilder_hpp */

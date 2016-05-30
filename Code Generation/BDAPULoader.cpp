@@ -7,7 +7,7 @@
 //
 
 #include "BDAPULoader.hpp"
-#include "BlockDSPAPU.hpp"
+#include "BDAPULoader_Private.hpp"
 #include "BlockDSPSystem.hpp"
 #include <dlfcn.h>
 
@@ -15,14 +15,18 @@
 
 BDAPULoader::BDAPULoader()
 {
-    _handle = 0;
-    _error = BDAPULoaderErrorNoError;
+    _pimpl = new pimpl;
+    
+    _pimpl->handle = 0;
+    _pimpl->error = BDAPULoaderErrorNoError;
 }
 
 BDAPULoader::~BDAPULoader()
 {
-    if (_handle)
-        dlclose(_handle);
+    if (_pimpl->handle)
+        dlclose(_pimpl->handle);
+    
+    delete _pimpl;
 }
 
 BlockDSPAPU * BDAPULoader::loadAPU(const char *filepath)
@@ -30,7 +34,7 @@ BlockDSPAPU * BDAPULoader::loadAPU(const char *filepath)
     void *dllHandle = dlopen(filepath, RTLD_NOW);
     if (!dllHandle)
     {
-        _error = BDAPULoaderErrorLibraryLoadFailed;
+        _pimpl->error = BDAPULoaderErrorLibraryLoadFailed;
         return NULL;
     }
     
@@ -39,11 +43,11 @@ BlockDSPAPU * BDAPULoader::loadAPU(const char *filepath)
     BlockDSPSystem * (*systemFactoryFn)(void) = (BlockDSPSystem *(*)(void))dlsym(dllHandle, kSystemFactoryFuncName);
     if (dlerror() != NULL)
     {
-        _error = BDAPULoaderErrorSymbolNotFound;
+        _pimpl->error = BDAPULoaderErrorSymbolNotFound;
         return NULL;
     }
     
-    _handle = dllHandle;
+    _pimpl->handle = dllHandle;
     
     BlockDSPSystem *system = systemFactoryFn();
     BlockDSPAPU *apu = new BlockDSPAPU();
@@ -54,9 +58,9 @@ BlockDSPAPU * BDAPULoader::loadAPU(const char *filepath)
 
 void BDAPULoader::close()
 {
-    if (_handle)
+    if (_pimpl->handle)
     {
-        dlclose(_handle);
-        _handle = 0;
+        dlclose(_pimpl->handle);
+        _pimpl->handle = 0;
     }
 }
