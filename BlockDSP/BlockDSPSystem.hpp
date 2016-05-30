@@ -32,7 +32,7 @@ public:
     void reset();
     
     BlockDSPParameter *parameterWithName(const char *name);
-    BlockDSPNode *nodeWithID(ssize_t id);
+    BlockDSPNode *nodeWithID(BlockDSPNodeID id);
     
     BlockDSPDelayLine *createDelayLine(BlockDSPNode *inputNode);
     BlockDSPSummerNode *createSummerNode();
@@ -44,7 +44,7 @@ public:
     ~BlockDSPSystem();
     
 private:
-    std::unordered_map<ssize_t, BlockDSPNode *> nodeMap;
+    std::unordered_map<BlockDSPNodeID, BlockDSPNode *> nodeMap;
     std::vector<BlockDSPDelayLine *>delayLines;
     std::unordered_map<std::string, BlockDSPParameter *> parameterMap;
     std::unordered_map<std::string, BlockDSPNumber *> numberMap;

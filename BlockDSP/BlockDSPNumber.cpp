@@ -7,39 +7,50 @@
 //
 
 #include "BlockDSPNumber.hpp"
-#include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <cmath>
+
+static const int DATA_SIZE = 8;
+static const size_t INT_SIZE = sizeof(int);
+static const size_t FLOAT_SIZE = sizeof(float);
+static const size_t BOOL_SIZE = sizeof(bool);
 
 BlockDSPNumber::BlockDSPNumber()
 {
-    strcpy(_data, "0");
+    memset(_data, 0, DATA_SIZE);
 }
 
 void BlockDSPNumber::setIntegerValue(int i)
 {
-    sprintf(_data, "%d", i);
+    memset(_data, 0, DATA_SIZE);
+    memcpy(_data, &i, INT_SIZE);
 }
 
 void BlockDSPNumber::setFloatValue(float f)
 {
-    sprintf(_data, "%.7f", f);
+    memset(_data, 0, DATA_SIZE);
+    memcpy(&_data[DATA_SIZE - FLOAT_SIZE], &f, FLOAT_SIZE);
 }
 
 void BlockDSPNumber::setBoolValue(bool b)
 {
-    sprintf(_data, "%d", b ? 1 : 0);
+    memset(_data, 0, DATA_SIZE);
+    memcpy(&_data[DATA_SIZE - BOOL_SIZE], &b, BOOL_SIZE);
 }
 
 int BlockDSPNumber::integerValue()
 {
-    return atoi(_data);
+    float f;
+    memcpy(&f, &_data[DATA_SIZE - FLOAT_SIZE], FLOAT_SIZE);
+    return (int)f;
 }
 
 float BlockDSPNumber::floatValue()
 {
-    return strtof(_data, NULL);
+    float f;
+    memcpy(&f, &_data[DATA_SIZE - FLOAT_SIZE], FLOAT_SIZE);
+    return f;
 }
 
 bool BlockDSPNumber::boolValue()

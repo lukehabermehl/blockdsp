@@ -11,9 +11,12 @@
 #include "BlockDSPSystem.hpp"
 #include <dlfcn.h>
 
+#define kSystemFactoryFuncName "BlockDSPFactoryCreateSystem"
+
 BDAPULoader::BDAPULoader()
 {
     _handle = 0;
+    _error = BDAPULoaderErrorNoError;
 }
 
 BDAPULoader::~BDAPULoader()
@@ -27,24 +30,22 @@ BlockDSPAPU * BDAPULoader::loadAPU(const char *filepath)
     void *dllHandle = dlopen(filepath, RTLD_NOW);
     if (!dllHandle)
     {
-        printf("%s\n", dlerror());
+        _error = BDAPULoaderErrorLibraryLoadFailed;
         return NULL;
     }
     
-    dlerror();
+    dlerror(); //clear dlerror
     
-    BlockDSPSystem * (*systemFactoryFn)(void) = (BlockDSPSystem *(*)(void))dlsym(dllHandle, "BlockDSPFactoryCreateSystem");
+    BlockDSPSystem * (*systemFactoryFn)(void) = (BlockDSPSystem *(*)(void))dlsym(dllHandle, kSystemFactoryFuncName);
     if (dlerror() != NULL)
     {
-        printf("%s\n", dlerror());
+        _error = BDAPULoaderErrorSymbolNotFound;
         return NULL;
     }
     
     _handle = dllHandle;
     
-    
     BlockDSPSystem *system = systemFactoryFn();
-    
     BlockDSPAPU *apu = new BlockDSPAPU();
     apu->system = system;
     

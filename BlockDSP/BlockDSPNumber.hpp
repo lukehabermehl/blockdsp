@@ -27,7 +27,7 @@ public:
     void setBoolValue(bool b);
     
 private:
-    char _data[256];
+    unsigned char _data[8];
 };
 
 #endif /* BlockDSPNumber_hpp */

@@ -14,9 +14,11 @@
 class BlockDSPNumber;
 class DelayBuffer;
 
+typedef ssize_t BlockDSPNodeID;
+
 class BlockDSPNode {
 public:
-    ssize_t nodeID;
+    BlockDSPNodeID nodeID;
     
     BlockDSPNode(uint32_t numChannels);
     virtual void connectInput(BlockDSPNode *inputNode);

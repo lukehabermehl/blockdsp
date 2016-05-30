@@ -11,6 +11,13 @@
 
 class BlockDSPAPU;
 
+enum BDAPULoaderError : unsigned int
+{
+    BDAPULoaderErrorNoError = 0,
+    BDAPULoaderErrorLibraryLoadFailed,
+    BDAPULoaderErrorSymbolNotFound
+};
+
 class BDAPULoader
 {
 public:
@@ -23,6 +30,7 @@ public:
     
 private:
     void *_handle;
+    BDAPULoaderError _error;
 };
 
 #endif /* BDAPULoader_hpp */
