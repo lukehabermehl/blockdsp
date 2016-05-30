@@ -24,6 +24,7 @@ BDCompiler::BDCompiler(BDCodeBuilder *builder)
     _buildpath = std::string(builder->dirpath());
     
     handler = 0;
+    _error = BDCompilerErrorNoError;
 }
 
 BDCompiler::~BDCompiler()
@@ -59,8 +60,10 @@ bool BDCompiler::compileLibrary(const char *outputPath)
     
     if (system(oss.str().c_str()))
     {
+        _error = BDCompilerErrorSourceCompileFailed;
+        
         if (handler)
-            handler(false, outputPath);
+            handler(false, this);
         
         return false;;
     }
@@ -68,7 +71,13 @@ bool BDCompiler::compileLibrary(const char *outputPath)
     oss.clear();
     oss.str("");
     oss << "mv *.o " << _buildpath;
-    system(oss.str().c_str());
+    if (system(oss.str().c_str()))
+    {
+        _error = BDCompilerErrorMoveObjectsFailed;
+        
+        if (handler)
+            handler(false, this);
+    }
     
     oss.clear();
     oss.str("");
@@ -78,14 +87,24 @@ bool BDCompiler::compileLibrary(const char *outputPath)
 
     if (system(oss.str().c_str()))
     {
+        _error = BDCompilerErrorCompileLibFailed;
+        
         if (handler)
-            handler(false, outputPath);
+            handler(false, this);
         
         return false;
     }
     
     if (handler)
-        handler(true, outputPath);
+        handler(true, this);
     
     return true;
+}
+
+BDCompilerError BDCompiler::error()
+{
+    BDCompilerError rv = _error;
+    _error = BDCompilerErrorNoError;
+    
+    return rv;
 }

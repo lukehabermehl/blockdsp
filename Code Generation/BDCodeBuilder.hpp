@@ -20,6 +20,14 @@ enum BDBlockType : unsigned int
     BDBlockTypeInput
 };
 
+enum BDCodeBuilderError : unsigned int
+{
+    BDCodeBuilderErrorNoError = 0,
+    BDCodeBuilderErrorBadPath,
+    BDCodeBuilderErrorNonUnique,
+    BDCodeBuilderErrorNotFound
+};
+
 class BDCodeBuilder
 {
 public:
@@ -34,8 +42,8 @@ public:
     void addDelayLine(const char *name, const char *inputNodeName, size_t size);
     void getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex);
     void addCoefficient(const char *name, const char *callback, const char *target, BlockDSPParameterType type);
-    bool addNumber(const char *name);
-    bool setNumberDefaultValue(const char *numberName, BlockDSPParameterType valueType, void *value);
+    void addNumber(const char *name);
+    void setNumberDefaultValue(const char *numberName, BlockDSPParameterType valueType, void *value);
     void connect(const char *from, const char *to);
     
     void addCallbackCode(const char *callbackName, const char *code);
@@ -48,14 +56,18 @@ public:
     const char *name();
     const char *dirpath();
     
+    BDCodeBuilderError error();
+    
 private:
     char *_name;
     char *_dirpath;
     FILE *_openFile;
+    BDCodeBuilderError _error;
     std::unordered_map<std::string, std::string> callbackMap;
     std::unordered_map<std::string, bool> nodeSet;
     std::unordered_map<std::string, bool> numSet;
     std::unordered_map<std::string, bool> delayLineSet;
+    
 };
 
 #endif /* BDCodeBuilder_hpp */

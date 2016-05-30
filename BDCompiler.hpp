@@ -12,7 +12,17 @@
 #include "BDCodeBuilder.hpp"
 #include <string>
 
-typedef void (* BDCompilerHandler)(bool, const char *);
+class BDCompiler;
+
+typedef void (* BDCompilerHandler)(bool, BDCompiler *);
+
+enum BDCompilerError : unsigned int
+{
+    BDCompilerErrorNoError = 0,
+    BDCompilerErrorSourceCompileFailed,
+    BDCompilerErrorMoveObjectsFailed,
+    BDCompilerErrorCompileLibFailed
+};
 
 class BDCompiler
 {
@@ -24,6 +34,8 @@ public:
     void setBlockDSPHeaderPath(const char *headerpath);
     void setBuildPath(const char *buildpath);
     
+    BDCompilerError error();
+    
     bool compileLibrary(const char *outputPath);
     
     BDCompilerHandler handler;
@@ -34,6 +46,8 @@ private:
     std::string _libpath;
     std::string _headerpath;
     std::string _buildpath;
+    
+    BDCompilerError _error;
 };
 
 #endif /* BDCompiler_hpp */
