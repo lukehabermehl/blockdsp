@@ -81,8 +81,8 @@ BlockDSPDelayLine *BlockDSPSystem::createDelayLine(BlockDSPNode *inputNode) {
     return delayLine;
 }
 
-BlockDSPMutiplierNode *BlockDSPSystem::createMultiplierNode() {
-    BlockDSPMutiplierNode *node = new BlockDSPMutiplierNode(numChannels);
+BlockDSPMultiplierNode *BlockDSPSystem::createMultiplierNode() {
+    BlockDSPMultiplierNode *node = new BlockDSPMultiplierNode(numChannels);
     addNode(node);
     
     return node;
@@ -143,13 +143,13 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels) {
     BlockDSPDelayLine *outDelayLine = system->createDelayLine(summer);
     outDelayLine->setSize(2);
     
-    BlockDSPMutiplierNode *a0Node = system->createMultiplierNode();
-    BlockDSPMutiplierNode *a1Node = system->createMultiplierNode();
-    BlockDSPMutiplierNode *a2Node = system->createMultiplierNode();
-    BlockDSPMutiplierNode *b1Node = system->createMultiplierNode();
-    BlockDSPMutiplierNode *b2Node = system->createMultiplierNode();
+    BlockDSPMultiplierNode *a0Node = system->createMultiplierNode();
+    BlockDSPMultiplierNode *a1Node = system->createMultiplierNode();
+    BlockDSPMultiplierNode *a2Node = system->createMultiplierNode();
+    BlockDSPMultiplierNode *b1Node = system->createMultiplierNode();
+    BlockDSPMultiplierNode *b2Node = system->createMultiplierNode();
     
-    BlockDSPMutiplierNode *outGainNode = system->createMultiplierNode();
+    BlockDSPMultiplierNode *outGainNode = system->createMultiplierNode();
     outGainNode->connectInput(summer);
     
     a0Node->connectInput(system->mainInputNode);

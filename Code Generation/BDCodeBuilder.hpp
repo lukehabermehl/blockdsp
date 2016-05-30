@@ -32,6 +32,7 @@ public:
     
     void addBlockNode(const char *name, BDBlockType type);
     void addDelayLine(const char *name, const char *inputNodeName, size_t size);
+    void getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex);
     void addCoefficient(const char *name, const char *callback, const char *target, BlockDSPParameterType type);
     bool addNumber(const char *name);
     bool setNumberDefaultValue(const char *numberName, BlockDSPParameterType valueType, void *value);
@@ -42,6 +43,7 @@ public:
     bool hasNode(const char *name);
     bool hasCallback(const char *name);
     bool hasNumber(const char *name);
+    bool hasDelayLine(const char *name);
     
     const char *name();
     const char *dirpath();
@@ -53,6 +55,7 @@ private:
     std::unordered_map<std::string, std::string> callbackMap;
     std::unordered_map<std::string, bool> nodeSet;
     std::unordered_map<std::string, bool> numSet;
+    std::unordered_map<std::string, bool> delayLineSet;
 };
 
 #endif /* BDCodeBuilder_hpp */

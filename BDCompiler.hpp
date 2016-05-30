@@ -10,6 +10,7 @@
 #define BDCompiler_hpp
 
 #include "BDCodeBuilder.hpp"
+#include <string>
 
 typedef void (* BDCompilerHandler)(bool, const char *);
 
@@ -29,10 +30,10 @@ public:
     
     
 private:
-    char *_srcpath;
-    char *_libpath;
-    char *_headerpath;
-    char *_buildpath;
+    std::string _srcpath;
+    std::string _libpath;
+    std::string _headerpath;
+    std::string _buildpath;
 };
 
 #endif /* BDCompiler_hpp */

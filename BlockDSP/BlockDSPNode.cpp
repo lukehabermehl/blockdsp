@@ -48,19 +48,19 @@ float BlockDSPSummerNode::valueForChannel(uint32_t channelNo) {
 }
 
 #pragma mark - BlockDSPMultiplierNode
-BlockDSPMutiplierNode::BlockDSPMutiplierNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
+BlockDSPMultiplierNode::BlockDSPMultiplierNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
     coefficient = BlockDSPNumber::numberForFloat(1.0);
 }
 
-void BlockDSPMutiplierNode::connectInput(BlockDSPNode *inputNode) {
+void BlockDSPMultiplierNode::connectInput(BlockDSPNode *inputNode) {
     this->inputNode = inputNode;
 }
 
-float BlockDSPMutiplierNode::valueForChannel(uint32_t channelNo) {
+float BlockDSPMultiplierNode::valueForChannel(uint32_t channelNo) {
     return inputNode->valueForChannel(channelNo) * coefficient->floatValue();
 }
 
-BlockDSPMutiplierNode::~BlockDSPMutiplierNode() {
+BlockDSPMultiplierNode::~BlockDSPMultiplierNode() {
     delete coefficient;
 }
 

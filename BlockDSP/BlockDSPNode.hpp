@@ -39,14 +39,14 @@ private:
     std::vector<BlockDSPNode *>inputNodes;
 };
 
-class BlockDSPMutiplierNode : public BlockDSPNode {
+class BlockDSPMultiplierNode : public BlockDSPNode {
 public:
     BlockDSPNumber *coefficient;
     
-    BlockDSPMutiplierNode(uint32_t numChannels);
+    BlockDSPMultiplierNode(uint32_t numChannels);
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
-    virtual ~BlockDSPMutiplierNode();
+    virtual ~BlockDSPMultiplierNode();
     
 private:
     BlockDSPNode *inputNode;
