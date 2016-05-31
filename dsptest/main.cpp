@@ -91,7 +91,8 @@ int main(int argc, const char * argv[]) {
     AudioManager audioManager;
     BDLog("[setup]", "Start Audio Manager");
     audioManager.setNumOutputChannels(2);
-    audioManager.setInputFile(input_file_path);
+    AudioFile *file = new AudioFile(input_file_path, AudioFileModeReadOnly);
+    audioManager.setInputFile(file);
     audioManager.setInputMode(AudioInputModeFile);
     audioManager.setAudioProcessingUnit(apunit);
     audioManager.setLooping(true);

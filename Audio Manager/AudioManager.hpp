@@ -10,6 +10,7 @@
 #define AudioManager_hpp
 
 #include "AudioProcessingUnit.hpp"
+#include "AudioFile.hpp"
 
 /** Indicates where the Audio Manager will pull input from */
 enum AudioInputMode : unsigned int
@@ -32,8 +33,8 @@ public:
     AudioManager();
     ~AudioManager();
     
-    /** Load input from file at specified path. Returns true if successful */
-    bool setInputFile(const char *fpath);
+    /** Load input from file */
+    bool setInputFile(AudioFile *file);
     
     /** Specify the audio input source */
     void setInputMode(AudioInputMode mode);

@@ -82,10 +82,9 @@ bool AudioManager::stop()
     return _pimpl->dspKernel->stop();
 }
 
-bool AudioManager::setInputFile(const char *fpath)
+bool AudioManager::setInputFile(AudioFile *file)
 {
-    AudioFile *audioFile = new AudioFile(fpath, AudioFileModeReadOnly);
-    if (audioFile == NULL)
+    if (file == NULL || file->mode() == AudioFileModeWriteOnly)
         return false;
     
     if (_pimpl->dspKernel->audioFile)
@@ -93,7 +92,7 @@ bool AudioManager::setInputFile(const char *fpath)
         _pimpl->dspKernel->audioFile->close();
     }
     
-    _pimpl->dspKernel->audioFile = audioFile;
+    _pimpl->dspKernel->audioFile = file;
     
     return true;
 }

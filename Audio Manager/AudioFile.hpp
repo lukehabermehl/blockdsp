@@ -43,6 +43,9 @@ public:
     /** The total number of samples in the file */
     size_t totalSize();
     
+    /** The IO mode the file was opened with */
+    AudioFileMode mode();
+    
     /** Set frame to point to the next audio frame
      @returns The status of the buffer after reading the frame
      */

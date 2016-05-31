@@ -22,13 +22,13 @@
 		A31E34411CFCBD8F0051A6FB /* BDLogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A31E343F1CFCBD8F0051A6FB /* BDLogger.hpp */; };
 		A342C6C91CF3ED9E000E354E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342C6C81CF3ED9E000E354E /* main.cpp */; };
 		A3D16D3B1CFB231600B99903 /* BDAPULoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D16D391CFB231600B99903 /* BDAPULoader.cpp */; };
-		A3D16D3C1CFB231600B99903 /* BDAPULoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D16D3A1CFB231600B99903 /* BDAPULoader.hpp */; };
+		A3D16D3C1CFB231600B99903 /* BDAPULoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D16D3A1CFB231600B99903 /* BDAPULoader.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3F744561CF653C10004C79A /* AudioDSPKernel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F7444E1CF653C10004C79A /* AudioDSPKernel.cpp */; };
 		A3F744571CF653C10004C79A /* AudioDSPKernel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3F7444F1CF653C10004C79A /* AudioDSPKernel.hpp */; };
 		A3F744581CF653C10004C79A /* AudioFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F744501CF653C10004C79A /* AudioFile.cpp */; };
 		A3F744591CF653C10004C79A /* AudioFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3F744511CF653C10004C79A /* AudioFile.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3F7445A1CF653C10004C79A /* AudioManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F744521CF653C10004C79A /* AudioManager.cpp */; };
-		A3F7445B1CF653C10004C79A /* AudioManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3F744531CF653C10004C79A /* AudioManager.hpp */; };
+		A3F7445B1CF653C10004C79A /* AudioManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3F744531CF653C10004C79A /* AudioManager.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3F7445C1CF653C10004C79A /* AudioProcessingUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F744541CF653C10004C79A /* AudioProcessingUnit.cpp */; };
 		A3F7445D1CF653C10004C79A /* AudioProcessingUnit.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3F744551CF653C10004C79A /* AudioProcessingUnit.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3F7446B1CF653F70004C79A /* BlockDSPAPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F7445E1CF653F70004C79A /* BlockDSPAPU.cpp */; };
@@ -258,14 +258,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3D16D3C1CFB231600B99903 /* BDAPULoader.hpp in Headers */,
 				A31E34301CFCBC920051A6FB /* BDCompiler_Private.hpp in Headers */,
 				A31E342F1CFCBC920051A6FB /* BDCodeBuilder_Private.hpp in Headers */,
 				A3F744741CF653F70004C79A /* BlockDSPSystem.hpp in Headers */,
 				A3F7446C1CF653F70004C79A /* BlockDSPAPU.hpp in Headers */,
+				A3D16D3C1CFB231600B99903 /* BDAPULoader.hpp in Headers */,
 				A3F744701CF653F70004C79A /* BlockDSPNumber.hpp in Headers */,
 				A3F744721CF653F70004C79A /* BlockDSPParameter.hpp in Headers */,
 				A3F7446E1CF653F70004C79A /* BlockDSPNode.hpp in Headers */,
+				A3F7445B1CF653C10004C79A /* AudioManager.hpp in Headers */,
 				A31E34411CFCBD8F0051A6FB /* BDLogger.hpp in Headers */,
 				A31E34341CFCBCA60051A6FB /* BlockDSPNode_Private.hpp in Headers */,
 				A31E342A1CFCBC810051A6FB /* BDCompiler.hpp in Headers */,
@@ -277,7 +278,6 @@
 				A3F744591CF653C10004C79A /* AudioFile.hpp in Headers */,
 				A31E343C1CFCBCBD0051A6FB /* AudioManager_Private.hpp in Headers */,
 				A31E34381CFCBCAC0051A6FB /* BlockDSPSystem_Private.hpp in Headers */,
-				A3F7445B1CF653C10004C79A /* AudioManager.hpp in Headers */,
 				A31E34361CFCBCA60051A6FB /* BlockDSPParameter_Private.hpp in Headers */,
 				A3F744571CF653C10004C79A /* AudioDSPKernel.hpp in Headers */,
 				A3F744761CF653F70004C79A /* DelayBuffer.h in Headers */,

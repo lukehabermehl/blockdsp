@@ -15,7 +15,9 @@ enum BDBlockType : unsigned int
 {
     BDBlockTypeSummer,
     BDBlockTypeMultiplier,
-    BDBlockTypeInput
+    BDBlockTypeInput,
+    BDBlockTypeDelayLine,
+    BDBlockTypeInvalid,
 };
 
 enum BDCodeBuilderError : unsigned int

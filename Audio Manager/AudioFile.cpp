@@ -27,6 +27,7 @@ AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
     
     _pimpl = new pimpl;
     
+    _pimpl->mode = mode;
     _pimpl->sndfile = sf_open(filepath, sfmode, &_pimpl->sfInfo);
     _pimpl->totalSize = _pimpl->sfInfo.channels * _pimpl->sfInfo.frames;
     _pimpl->readIndex = 0;
@@ -106,6 +107,11 @@ void AudioFile::setLooping(bool looping)
 bool AudioFile::isLooping()
 {
     return _pimpl->looping;
+}
+
+AudioFileMode AudioFile::mode()
+{
+    return _pimpl->mode;
 }
 
 AudioFile::pimpl::~pimpl()
