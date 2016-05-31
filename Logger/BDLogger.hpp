@@ -24,12 +24,10 @@ public:
     
     void log(const char *prefix, const char *s);
     
-    std::vector<std::string> queue;
+    class pimpl;
     
-    std::mutex queueLock;
-    std::thread workerThread;
-    
-    bool shutdown;
+private:
+    pimpl *_pimpl;
 };
 
 void BDLog(const char *prefix, const char *s);

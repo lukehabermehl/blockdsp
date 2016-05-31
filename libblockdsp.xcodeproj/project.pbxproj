@@ -76,6 +76,7 @@
 		A31E343F1CFCBD8F0051A6FB /* BDLogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BDLogger.hpp; path = Logger/BDLogger.hpp; sourceTree = "<group>"; };
 		A342C6C61CF3ED9E000E354E /* dsptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dsptest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		A3C6D4991CFD0BB80022A815 /* BDLogger_Private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BDLogger_Private.hpp; sourceTree = "<group>"; };
 		A3D020F31CF35CC800EC7C0D /* libblockdsp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblockdsp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3D16D391CFB231600B99903 /* BDAPULoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BDAPULoader.cpp; path = "Code Generation/BDAPULoader.cpp"; sourceTree = "<group>"; };
 		A3D16D3A1CFB231600B99903 /* BDAPULoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BDAPULoader.hpp; path = "Code Generation/BDAPULoader.hpp"; sourceTree = "<group>"; };
@@ -137,6 +138,7 @@
 			children = (
 				A31E343E1CFCBD8F0051A6FB /* BDLogger.cpp */,
 				A31E343F1CFCBD8F0051A6FB /* BDLogger.hpp */,
+				A3C6D4991CFD0BB80022A815 /* BDLogger_Private.hpp */,
 			);
 			name = Logger;
 			sourceTree = "<group>";

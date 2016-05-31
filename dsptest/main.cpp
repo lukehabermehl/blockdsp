@@ -109,8 +109,8 @@ int main(int argc, const char * argv[]) {
         exit(1);
     }
     
-    //Play for 10 seconds
-    audioManager.sleep(10 * 1000);
+    //Play for 5 seconds
+    audioManager.sleep(5 * 1000);
     
     audioManager.stop();
     audioManager.close();

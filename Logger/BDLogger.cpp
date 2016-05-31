@@ -7,6 +7,7 @@
 //
 
 #include "BDLogger.hpp"
+#include "BDLogger_Private.hpp"
 
 #include <thread>
 #include <mutex>
@@ -16,7 +17,7 @@
 static std::once_flag onceFlag;
 static const uint32_t nanosec_sleep = 1000;
 
-void logger_append(BDLogger *logger, std::string s)
+void logger_append(BDLogger::pimpl *logger, std::string s)
 {
     logger->queueLock.lock();
     
@@ -25,7 +26,7 @@ void logger_append(BDLogger *logger, std::string s)
     logger->queueLock.unlock();
 }
 
-void logger_worker(BDLogger *logger)
+void logger_worker(BDLogger::pimpl *logger)
 {
     while (!logger->shutdown)
     {
@@ -51,14 +52,17 @@ void logger_worker(BDLogger *logger)
 
 BDLogger::BDLogger()
 {
-    shutdown = false;
-    workerThread = std::thread(logger_worker, this);
+    _pimpl = new pimpl;
+    _pimpl->shutdown = false;
+    _pimpl->workerThread = std::thread(logger_worker, _pimpl);
 }
 
 BDLogger::~BDLogger()
 {
-    shutdown = true;
-    workerThread.join();
+    _pimpl->shutdown = true;
+    _pimpl->workerThread.join();
+    
+    delete _pimpl;
 }
 
 BDLogger *BDLogger::sharedLogger()
@@ -80,7 +84,7 @@ void BDLogger::log(const char *prefix, const char *s)
     
     oss << prefix << ": " << s;
     
-    logger_append(this, oss.str());
+    logger_append(_pimpl, oss.str());
 }
 
 void BDLog(const char *prefix, const char *s)
