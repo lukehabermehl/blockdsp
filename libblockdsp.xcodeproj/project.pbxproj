@@ -18,6 +18,8 @@
 		A31E34381CFCBCAC0051A6FB /* BlockDSPSystem_Private.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A31E34371CFCBCAC0051A6FB /* BlockDSPSystem_Private.hpp */; };
 		A31E343B1CFCBCBD0051A6FB /* AudioFile_Private.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A31E34391CFCBCBD0051A6FB /* AudioFile_Private.hpp */; };
 		A31E343C1CFCBCBD0051A6FB /* AudioManager_Private.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A31E343A1CFCBCBD0051A6FB /* AudioManager_Private.hpp */; };
+		A31E34401CFCBD8F0051A6FB /* BDLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A31E343E1CFCBD8F0051A6FB /* BDLogger.cpp */; };
+		A31E34411CFCBD8F0051A6FB /* BDLogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A31E343F1CFCBD8F0051A6FB /* BDLogger.hpp */; };
 		A342C6C91CF3ED9E000E354E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342C6C81CF3ED9E000E354E /* main.cpp */; };
 		A3D16D3B1CFB231600B99903 /* BDAPULoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D16D391CFB231600B99903 /* BDAPULoader.cpp */; };
 		A3D16D3C1CFB231600B99903 /* BDAPULoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D16D3A1CFB231600B99903 /* BDAPULoader.hpp */; };
@@ -70,6 +72,8 @@
 		A31E34371CFCBCAC0051A6FB /* BlockDSPSystem_Private.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BlockDSPSystem_Private.hpp; path = BlockDSP/BlockDSPSystem_Private.hpp; sourceTree = "<group>"; };
 		A31E34391CFCBCBD0051A6FB /* AudioFile_Private.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AudioFile_Private.hpp; path = "Audio Manager/AudioFile_Private.hpp"; sourceTree = "<group>"; };
 		A31E343A1CFCBCBD0051A6FB /* AudioManager_Private.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AudioManager_Private.hpp; path = "Audio Manager/AudioManager_Private.hpp"; sourceTree = "<group>"; };
+		A31E343E1CFCBD8F0051A6FB /* BDLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BDLogger.cpp; path = Logger/BDLogger.cpp; sourceTree = "<group>"; };
+		A31E343F1CFCBD8F0051A6FB /* BDLogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BDLogger.hpp; path = Logger/BDLogger.hpp; sourceTree = "<group>"; };
 		A342C6C61CF3ED9E000E354E /* dsptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dsptest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A3D020F31CF35CC800EC7C0D /* libblockdsp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblockdsp.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +132,15 @@
 			name = "Private Headers";
 			sourceTree = "<group>";
 		};
+		A31E343D1CFCBD710051A6FB /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+				A31E343E1CFCBD8F0051A6FB /* BDLogger.cpp */,
+				A31E343F1CFCBD8F0051A6FB /* BDLogger.hpp */,
+			);
+			name = Logger;
+			sourceTree = "<group>";
+		};
 		A342C6C71CF3ED9E000E354E /* dsptest */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +189,7 @@
 		A3D020EA1CF35CC800EC7C0D = {
 			isa = PBXGroup;
 			children = (
+				A31E343D1CFCBD710051A6FB /* Logger */,
 				A3F7444D1CF6538A0004C79A /* Code Generation */,
 				A39D436E1CF5529D0003EB51 /* BlockDSP */,
 				A39D435B1CF54EDD0003EB51 /* Audio Manager */,
@@ -250,6 +264,7 @@
 				A3F744701CF653F70004C79A /* BlockDSPNumber.hpp in Headers */,
 				A3F744721CF653F70004C79A /* BlockDSPParameter.hpp in Headers */,
 				A3F7446E1CF653F70004C79A /* BlockDSPNode.hpp in Headers */,
+				A31E34411CFCBD8F0051A6FB /* BDLogger.hpp in Headers */,
 				A31E34341CFCBCA60051A6FB /* BlockDSPNode_Private.hpp in Headers */,
 				A31E342A1CFCBC810051A6FB /* BDCompiler.hpp in Headers */,
 				A3F744821CF656860004C79A /* BDCodeBuilder.hpp in Headers */,
@@ -371,6 +386,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3F7445A1CF653C10004C79A /* AudioManager.cpp in Sources */,
+				A31E34401CFCBD8F0051A6FB /* BDLogger.cpp in Sources */,
 				A3F744711CF653F70004C79A /* BlockDSPParameter.cpp in Sources */,
 				A3F7446D1CF653F70004C79A /* BlockDSPNode.cpp in Sources */,
 				A3F744581CF653C10004C79A /* AudioFile.cpp in Sources */,

@@ -14,6 +14,8 @@
 #include "dsphelpers.hpp"
 #include "BDCompiler.hpp"
 
+#include "BDLogger.hpp"
+
 #define SAFE_DEL(_x) if (_x) delete _x
 
 static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
@@ -83,27 +85,27 @@ int main(int argc, const char * argv[]) {
     
     BlockDSPAPU *apunit = load_apu("/Users/Luke/Desktop/test.dylib");
     if (!apunit)
-        printf("FAILED to load APU\n");
+        BDLog("[setup]", "FAILED to load APU");
     
-    printf("Start\n");
-    printf("Setup audio manager\n");
+    BDLog("[setup]", "Start");
     AudioManager audioManager;
+    BDLog("[setup]", "Start Audio Manager");
     audioManager.setNumOutputChannels(2);
     audioManager.setInputFile(input_file_path);
     audioManager.setInputMode(AudioInputModeFile);
     audioManager.setAudioProcessingUnit(apunit);
     audioManager.setLooping(true);
     
-    printf("Start audio\n");
+    BDLog("[setup]", "Start Audio");
     
     if (!audioManager.open())
     {
-        printf("AudioManager failed to open\n");
+        BDLog("[ERROR]", "Audio Manager failed to open");
         exit(1);
     }
     if (!audioManager.start())
     {
-        printf("AudioManager failed to start\n");
+        BDLog("[ERROR]", "Audio Manager failed to start");
         exit(1);
     }
     
@@ -116,5 +118,5 @@ int main(int argc, const char * argv[]) {
     SAFE_DEL(apunit);
     SAFE_DEL(apuLoader);
     
-    printf("Done\n");
+    BDLog("", "Done");
 }

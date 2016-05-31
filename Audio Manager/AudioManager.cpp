@@ -9,20 +9,19 @@
 #include "AudioManager.hpp"
 #include "AudioFile.hpp"
 #include "AudioManager_Private.hpp"
+#include "BDLogger.hpp"
 
 #include <portaudio.h>
 
 AudioManager::AudioManager()
 {
     Pa_Initialize();
-    
     int devCount = Pa_GetDeviceCount();
-    printf("AudioManager: Device Count: %d\n", devCount);
+    
     for (int i=0; i<devCount; i++)
     {
         const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
-        printf("AudioManager: found device: %s\n", info->name);
-        
+        BDLogFormat("[AudioManager]", "found device: %s", info->name);
     }
     
     _pimpl = new pimpl;
