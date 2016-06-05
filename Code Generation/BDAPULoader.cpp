@@ -11,7 +11,7 @@
 #include "BlockDSPSystem.hpp"
 #include <dlfcn.h>
 
-#define kSystemFactoryFuncName "BlockDSPFactoryCreateSystem"
+#define kAPUFactoryFuncName "AudioProcessingUnitFactoryCreate"
 
 BDAPULoader::BDAPULoader()
 {
@@ -29,7 +29,7 @@ BDAPULoader::~BDAPULoader()
     delete _pimpl;
 }
 
-BlockDSPAPU * BDAPULoader::loadAPU(const char *filepath)
+AudioProcessingUnit * BDAPULoader::loadAPU(const char *filepath)
 {
     void *dllHandle = dlopen(filepath, RTLD_NOW);
     if (!dllHandle)
@@ -40,7 +40,7 @@ BlockDSPAPU * BDAPULoader::loadAPU(const char *filepath)
     
     dlerror(); //clear dlerror
     
-    BlockDSPSystem * (*systemFactoryFn)(void) = (BlockDSPSystem *(*)(void))dlsym(dllHandle, kSystemFactoryFuncName);
+    AudioProcessingUnit * (*apuFactoryFn)(void) = (AudioProcessingUnit *(*)(void))dlsym(dllHandle, kAPUFactoryFuncName);
     if (dlerror() != NULL)
     {
         _pimpl->error = BDAPULoaderErrorSymbolNotFound;
@@ -49,9 +49,7 @@ BlockDSPAPU * BDAPULoader::loadAPU(const char *filepath)
     
     _pimpl->handle = dllHandle;
     
-    BlockDSPSystem *system = systemFactoryFn();
-    BlockDSPAPU *apu = new BlockDSPAPU();
-    apu->system = system;
+    AudioProcessingUnit *apu = apuFactoryFn();
     
     return apu;
 }

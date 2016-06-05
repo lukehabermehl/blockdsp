@@ -35,6 +35,9 @@ void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType typ
             strcpy(typeName, "BlockDSPMultiplierNode");
             strcpy(factoryMethodName, "createMultiplierNode");
             break;
+            
+        default:
+            break;
     }
 }
 
@@ -125,8 +128,9 @@ void BDCodeBuilder::writeHeaderFile()
     }
     
     fprintf(f, "\n//This file was automatically generated.\n\n#ifndef BlockDSP_Factory_HPP\n#define BlockDSP_Factory_HPP\n");
-    fprintf(f, "\n#include <BlockDSPSystem.hpp>\n");
+    fprintf(f, "\n#include <BlockDSPSystem.hpp>\n#include <BlockDSPAPU.hpp>\n");
     fprintf(f, "\nextern \"C\" BlockDSPSystem * BlockDSPFactoryCreateSystem();\n");
+    fprintf(f, "\nextern \"C\" AudioProcessingUnit *AudioProcessingUnitFactoryCreate();\n");
     fprintf(f, "\n#endif\n");
     
     fclose(f);
@@ -180,6 +184,8 @@ void BDCodeBuilder::closeSourceFile()
     
     fprintf(_pimpl->openFile, "\nreturn system;\n");
     fprintf(_pimpl->openFile, "\n}\n");
+    fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() {\n");
+    fprintf(_pimpl->openFile, "BlockDSPAPU *unit = new BlockDSPAPU();\nunit->system = BlockDSPFactoryCreateSystem();\nreturn unit;\n}\n");
     fclose(_pimpl->openFile);
     _pimpl->openFile = 0;
 }

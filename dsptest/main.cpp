@@ -21,7 +21,7 @@
 static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
 static BDAPULoader *apuLoader = 0;
 
-BlockDSPAPU * load_apu(const char *filepath)
+AudioProcessingUnit * load_apu(const char *filepath)
 {
     if (!apuLoader)
         apuLoader = new BDAPULoader;
@@ -83,7 +83,7 @@ void write_test_system(const char *outputdir)
 int main(int argc, const char * argv[]) {
     write_test_system("/Users/Luke/Desktop/test");
     
-    BlockDSPAPU *apunit = load_apu("/Users/Luke/Desktop/test.dylib");
+    AudioProcessingUnit *apunit = load_apu("/Users/Luke/Desktop/test.dylib");
     if (!apunit)
         BDLog("[setup]", "FAILED to load APU");
     

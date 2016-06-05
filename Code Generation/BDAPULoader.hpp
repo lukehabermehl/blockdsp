@@ -24,7 +24,7 @@ public:
     BDAPULoader();
     ~BDAPULoader();
     
-    BlockDSPAPU *loadAPU(const char *filepath);
+    AudioProcessingUnit *loadAPU(const char *filepath);
     void close();
     
     
