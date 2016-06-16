@@ -26,6 +26,19 @@ enum AudioManagerStatus : unsigned int
     AudioManagerStatusDone
 };
 
+typedef unsigned int AudioDeviceIndex;
+
+/** Contains useful information about an output device */
+struct AudioDeviceInfo
+{
+    /** Index number of the device */
+    AudioDeviceIndex index;
+    /** Name of the device */
+    const char *name;
+    /** Next device in the linked list or NULL */
+    AudioDeviceInfo *next;
+};
+
 /** Provides an interface for loading and processing audio from a file or input device */
 class AudioManager
 {
@@ -38,6 +51,15 @@ public:
     
     /** Specify the audio input source */
     void setInputMode(AudioInputMode mode);
+    
+    /** Set the output device */
+    void setOutputDeviceIndex(AudioDeviceIndex devIndex);
+    
+    /** Get the current output device index */
+    AudioDeviceIndex getOutputDeviceIndex();
+    
+    /** Get a linked list of available output device info structs */
+    AudioDeviceInfo* getOutputDeviceInfo() const;
     
     /** Pass in an instance of AudioProcessingUnit to do the DSP */
     void setAudioProcessingUnit(AudioProcessingUnit *unit);

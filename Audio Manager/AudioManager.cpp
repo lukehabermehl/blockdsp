@@ -17,15 +17,29 @@ AudioManager::AudioManager()
 {
     Pa_Initialize();
     int devCount = Pa_GetDeviceCount();
+    AudioDeviceInfo *outputDevice = NULL;
     
     for (int i=0; i<devCount; i++)
     {
         const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
+        if (i==0)
+        {
+            _pimpl->outputDeviceInfo = AudioDeviceInfoCreate(i, info->name);
+            outputDevice = _pimpl->outputDeviceInfo;
+            
+        }
+        else
+        {
+            outputDevice->next = AudioDeviceInfoCreate(i, info->name);
+            outputDevice = outputDevice->next;
+        }
+        
         BDLogFormat("[AudioManager]", "found device: %s", info->name);
     }
     
     _pimpl = new pimpl;
     _pimpl->dspKernel = new AudioDSPKernel;
+    _pimpl->outputDeviceIndex = 1;
 }
 
 AudioManager::~AudioManager()
@@ -51,6 +65,21 @@ void AudioManager::setInputMode(AudioInputMode mode)
     }
 }
 
+AudioDeviceIndex AudioManager::getOutputDeviceIndex()
+{
+    return _pimpl->outputDeviceIndex;
+}
+
+void AudioManager::setOutputDeviceIndex(unsigned int devIndex)
+{
+    _pimpl->outputDeviceIndex = devIndex;
+}
+
+AudioDeviceInfo* AudioManager::getOutputDeviceInfo() const
+{
+    return _pimpl->outputDeviceInfo;
+}
+
 void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)
 {
     _pimpl->dspKernel->audioProcessingUnit = unit;
@@ -58,7 +87,7 @@ void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)
 
 bool AudioManager::open()
 {
-    return _pimpl->dspKernel->open(1);
+    return _pimpl->dspKernel->open(getOutputDeviceIndex());
 }
 
 bool AudioManager::close()
