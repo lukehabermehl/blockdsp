@@ -20,6 +20,7 @@
 		A31E343C1CFCBCBD0051A6FB /* AudioManager_Private.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A31E343A1CFCBCBD0051A6FB /* AudioManager_Private.hpp */; };
 		A31E34401CFCBD8F0051A6FB /* BDLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A31E343E1CFCBD8F0051A6FB /* BDLogger.cpp */; };
 		A31E34411CFCBD8F0051A6FB /* BDLogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A31E343F1CFCBD8F0051A6FB /* BDLogger.hpp */; };
+		A329C6301D15997000D8D7CF /* blockdsp.h in Headers */ = {isa = PBXBuildFile; fileRef = A329C62F1D1596B800D8D7CF /* blockdsp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A342C6C91CF3ED9E000E354E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342C6C81CF3ED9E000E354E /* main.cpp */; };
 		A3D16D3B1CFB231600B99903 /* BDAPULoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D16D391CFB231600B99903 /* BDAPULoader.cpp */; };
 		A3D16D3C1CFB231600B99903 /* BDAPULoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D16D3A1CFB231600B99903 /* BDAPULoader.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -74,6 +75,7 @@
 		A31E343A1CFCBCBD0051A6FB /* AudioManager_Private.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AudioManager_Private.hpp; path = "Audio Manager/AudioManager_Private.hpp"; sourceTree = "<group>"; };
 		A31E343E1CFCBD8F0051A6FB /* BDLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BDLogger.cpp; path = Logger/BDLogger.cpp; sourceTree = "<group>"; };
 		A31E343F1CFCBD8F0051A6FB /* BDLogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BDLogger.hpp; path = Logger/BDLogger.hpp; sourceTree = "<group>"; };
+		A329C62F1D1596B800D8D7CF /* blockdsp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blockdsp.h; sourceTree = "<group>"; };
 		A342C6C61CF3ED9E000E354E /* dsptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dsptest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A3C6D4991CFD0BB80022A815 /* BDLogger_Private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BDLogger_Private.hpp; sourceTree = "<group>"; };
@@ -143,6 +145,14 @@
 			name = Logger;
 			sourceTree = "<group>";
 		};
+		A329C6311D159BF700D8D7CF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A329C62F1D1596B800D8D7CF /* blockdsp.h */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		A342C6C71CF3ED9E000E354E /* dsptest */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +208,7 @@
 				A342C6C71CF3ED9E000E354E /* dsptest */,
 				A3D020F41CF35CC800EC7C0D /* Products */,
 				A3F744781CF6543F0004C79A /* Resources */,
+				A329C6311D159BF700D8D7CF /* Supporting Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -258,6 +269,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A329C6301D15997000D8D7CF /* blockdsp.h in Headers */,
 				A31E34301CFCBC920051A6FB /* BDCompiler_Private.hpp in Headers */,
 				A31E342F1CFCBC920051A6FB /* BDCodeBuilder_Private.hpp in Headers */,
 				A3F744741CF653F70004C79A /* BlockDSPSystem.hpp in Headers */,
@@ -370,7 +382,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -f $BUILT_PRODUCTS_DIR/usr/local/include/* /usr/local/include/\ncp -f $BUILT_PRODUCTS_DIR/libblockdsp.a /usr/local/lib/";
+			shellScript = "M_INCLUDE_DIR=\"/usr/local/include/blockdsp\"\nM_LIB_DIR=\"/usr/local/lib\"\n\n# Move blockdsp.h to /usr/local/include\nmv $BUILT_PRODUCTS_DIR/usr/local/include/blockdsp.h /usr/local/include/\n\n# Make sure the blockdsp include subdir exists\nif [ ! -d $M_INCLUDE_DIR ]; then\n  mkdir $M_INCLUDE_DIR\nfi\n\n# Copy public headers to include path\ncp -f $BUILT_PRODUCTS_DIR/usr/local/include/* $M_INCLUDE_DIR/\ncp -f $BUILT_PRODUCTS_DIR/libblockdsp.a $M_LIB_DIR\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
