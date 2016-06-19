@@ -37,7 +37,6 @@ public:
         if (audioFile)
         {
             audioFile->close();
-            delete audioFile;
         }
         
         delete passthroughUnit;

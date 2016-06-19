@@ -11,14 +11,14 @@
 
 #include <stdlib.h>
 
-enum AudioFileMode : unsigned int
+enum AudioFileMode
 {
     AudioFileModeReadOnly,
     AudioFileModeWriteOnly,
     AudioFileModeReadWrite
 };
 
-enum AudioFileBufferStatus : unsigned int
+enum AudioFileBufferStatus
 {
     AudioFileBufferStatusOK = 0,
     AudioFileBufferStatusDoneReading,

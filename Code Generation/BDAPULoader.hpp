@@ -11,7 +11,7 @@
 
 #include "BlockDSPAPU.hpp"
 
-enum BDAPULoaderError : unsigned int
+enum BDAPULoaderError
 {
     BDAPULoaderErrorNoError = 0,
     BDAPULoaderErrorLibraryLoadFailed,

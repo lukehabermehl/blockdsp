@@ -13,14 +13,14 @@
 #include "AudioFile.hpp"
 
 /** Indicates where the Audio Manager will pull input from */
-enum AudioInputMode : unsigned int
+enum AudioInputMode
 {
     AudioInputModeFile,
     AudioInputModeMicrophone
 };
 
 /** Indicates the current status of the Audio Manager */
-enum AudioManagerStatus : unsigned int
+enum AudioManagerStatus
 {
     AudioManagerStatusRunning = 0,
     AudioManagerStatusDone

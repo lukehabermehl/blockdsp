@@ -11,7 +11,7 @@
 
 #include "BlockDSPSystem.hpp"
 
-enum BDBlockType : unsigned int
+enum BDBlockType
 {
     BDBlockTypeSummer,
     BDBlockTypeMultiplier,
@@ -20,7 +20,7 @@ enum BDBlockType : unsigned int
     BDBlockTypeInvalid,
 };
 
-enum BDCodeBuilderError : unsigned int
+enum BDCodeBuilderError
 {
     BDCodeBuilderErrorNoError = 0,
     BDCodeBuilderErrorBadPath,

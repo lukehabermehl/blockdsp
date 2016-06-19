@@ -13,6 +13,7 @@
 
 BlockDSPParameter::BlockDSPParameter(BlockDSPParameterType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system)
 {
+    _pimpl = new pimpl;
     _pimpl->type = type;
     setTarget(target);
     setName(name);

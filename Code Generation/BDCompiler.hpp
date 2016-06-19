@@ -15,7 +15,7 @@ class BDCompiler;
 
 typedef void (* BDCompilerHandler)(bool, BDCompiler *);
 
-enum BDCompilerError : unsigned int
+enum BDCompilerError
 {
     BDCompilerErrorNoError = 0,
     BDCompilerErrorSourceCompileFailed,
