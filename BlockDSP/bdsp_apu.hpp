@@ -9,8 +9,8 @@
 #ifndef BlockDSPAPU_hpp
 #define BlockDSPAPU_hpp
 
-#include "AudioProcessingUnit.hpp"
-#include "BlockDSPSystem.hpp"
+#include "autil_audioprocessingunit.hpp"
+#include "bdsp_system.hpp"
 
 class BlockDSPAPU : public AudioProcessingUnit
 {

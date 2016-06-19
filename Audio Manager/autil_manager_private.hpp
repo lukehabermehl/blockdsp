@@ -9,8 +9,8 @@
 #ifndef AudioManager_Private_h
 #define AudioManager_Private_h
 
-#include "AudioManager.hpp"
-#include "AudioDSPKernel.hpp"
+#include "autil_manager.hpp"
+#include "autil_dspkernel.hpp"
 
 #include <string.h>
 

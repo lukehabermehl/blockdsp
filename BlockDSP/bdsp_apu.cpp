@@ -6,7 +6,7 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "BlockDSPAPU.hpp"
+#include "bdsp_apu.hpp"
 
 void BlockDSPAPU::processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels)
 {

@@ -9,7 +9,7 @@
 #ifndef BDLogger_Private_h
 #define BDLogger_Private_h
 
-#include "BDLogger.hpp"
+#include "bdsp_logger.hpp"
 
 #include <string>
 #include <vector>

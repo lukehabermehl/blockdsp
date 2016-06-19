@@ -9,7 +9,7 @@
 #ifndef BDCodeBuilder_hpp
 #define BDCodeBuilder_hpp
 
-#include "BlockDSPSystem.hpp"
+#include "bdsp_system.hpp"
 
 enum BDBlockType
 {

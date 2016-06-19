@@ -12,16 +12,16 @@
 
 #ifndef blockdsp_h
 #define blockdsp_h
-
-#include <blockdsp/APUParameter.hpp>
-#include <blockdsp/AudioFile.hpp>
-#include <blockdsp/AudioManager.hpp>
-#include <blockdsp/AudioProcessingUnit.hpp>
-#include <blockdsp/BDAPULoader.hpp>
-#include <blockdsp/BDCodeBuilder.hpp>
-#include <blockdsp/BlockDSPNode.hpp>
-#include <blockdsp/BlockDSPNumber.hpp>
-#include <blockdsp/BlockDSPParameter.hpp>
-#include <blockdsp/BlockDSPSystem.hpp>
+#include <blockdsp/autil_file.hpp>
+#include <blockdsp/autil_manager.hpp>
+#include <blockdsp/autil_audioprocessingunit.hpp>
+#include <blockdsp/bdsp_apuloader.hpp>
+#include <blockdsp/bdsp_codebuilder.hpp>
+#include <blockdsp/bdsp_compiler.hpp>
+#include <blockdsp/bdsp_node.hpp>
+#include <blockdsp/bdsp_number.hpp>
+#include <blockdsp/bdsp_parameter.hpp>
+#include <blockdsp/bdsp_system.hpp>
+#include <blockdsp/bdsp_logger.hpp>
 
 #endif /* blockdsp_h */

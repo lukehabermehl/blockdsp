@@ -10,10 +10,11 @@
 #define AudioDSPKernel_hpp
 
 #include <portaudio.h>
-#include "AudioFile.hpp"
-#include "AudioProcessingUnit.hpp"
-#include "AudioManager.hpp"
 #include <stdio.h>
+
+#include "autil_file.hpp"
+#include "autil_audioprocessingunit.hpp"
+#include "autil_manager.hpp"
 
 class AudioDSPKernel {
 public:

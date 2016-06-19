@@ -6,15 +6,19 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "AudioManager.hpp"
-#include "AudioFile.hpp"
-#include "AudioManager_Private.hpp"
-#include "BDLogger.hpp"
+#include "autil_manager.hpp"
+#include "autil_manager_private.hpp"
+#include "autil_file.hpp"
+#include "bdsp_logger.hpp"
 
 #include <portaudio.h>
 
 AudioManager::AudioManager()
 {
+    _pimpl = new pimpl;
+    _pimpl->dspKernel = new AudioDSPKernel;
+    _pimpl->outputDeviceIndex = 1;
+    
     Pa_Initialize();
     int devCount = Pa_GetDeviceCount();
     AudioDeviceInfo *outputDevice = NULL;
@@ -36,10 +40,6 @@ AudioManager::AudioManager()
         
         BDLogFormat("[AudioManager]", "found device: %s", info->name);
     }
-    
-    _pimpl = new pimpl;
-    _pimpl->dspKernel = new AudioDSPKernel;
-    _pimpl->outputDeviceIndex = 1;
 }
 
 AudioManager::~AudioManager()

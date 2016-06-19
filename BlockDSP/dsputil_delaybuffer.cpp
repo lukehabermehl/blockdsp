@@ -2,7 +2,7 @@
 //
 //Author: Luke Habermehl
 //
-#include "DelayBuffer.h"
+#include "dsputil_delaybuffer.hpp"
 #include <stdexcept>
 
 DelayBuffer::DelayBuffer()

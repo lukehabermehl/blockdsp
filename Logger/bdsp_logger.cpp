@@ -6,8 +6,8 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "BDLogger.hpp"
-#include "BDLogger_Private.hpp"
+#include "bdsp_logger.hpp"
+#include "bdsp_logger_private.hpp"
 
 #include <thread>
 #include <mutex>
