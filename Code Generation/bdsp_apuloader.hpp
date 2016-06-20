@@ -9,7 +9,7 @@
 #ifndef BDAPULoader_hpp
 #define BDAPULoader_hpp
 
-#include "BlockDSPAPU.hpp"
+#include "bdsp_apu.hpp"
 
 enum BDAPULoaderError
 {

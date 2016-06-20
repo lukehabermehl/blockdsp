@@ -6,10 +6,10 @@
 //
 //
 
-#include "BlockDSPNode.hpp"
-#include "BlockDSPNode_Private.hpp"
-#include "DelayBuffer.h"
-#include "BlockDSPNumber.hpp"
+#include "bdsp_node.hpp"
+#include "bdsp_node_private.hpp"
+#include "dsputil_delaybuffer.hpp"
+#include "bdsp_number.hpp"
 
 #pragma mark - BlockDSPNode
 BlockDSPNode::BlockDSPNode(uint32_t numChannels) {

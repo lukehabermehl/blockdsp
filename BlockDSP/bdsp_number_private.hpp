@@ -9,7 +9,7 @@
 #ifndef BlockDSPNumber_Private_h
 #define BlockDSPNumber_Private_h
 
-#include "BlockDSPNumber.hpp"
+#include "bdsp_number.hpp"
 
 class BlockDSPNumber::pimpl
 {

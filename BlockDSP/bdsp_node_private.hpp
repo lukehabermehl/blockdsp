@@ -9,7 +9,7 @@
 #ifndef BlockDSPNode_Private_h
 #define BlockDSPNode_Private_h
 
-#include "BlockDSPNode.hpp"
+#include "bdsp_node.hpp"
 #include <vector>
 
 class BlockDSPNode::pimpl

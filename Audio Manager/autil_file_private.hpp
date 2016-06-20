@@ -9,7 +9,7 @@
 #ifndef AudioFile_Private_h
 #define AudioFile_Private_h
 
-#include "AudioFile.hpp"
+#include "autil_file.hpp"
 #include <sndfile.h>
 
 class AudioFile::pimpl

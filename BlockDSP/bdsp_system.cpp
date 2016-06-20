@@ -6,10 +6,10 @@
 //
 //
 
-#include "BlockDSPSystem.hpp"
-#include "BlockDSPSystem_Private.hpp"
+#include "bdsp_system.hpp"
+#include "bdsp_system_private.hpp"
 #include "dsphelpers.hpp"
-#include "BlockDSPNumber.hpp"
+#include "bdsp_number.hpp"
 
 BlockDSPSystem::BlockDSPSystem(uint32_t numChannels) {
     _pimpl = new pimpl;

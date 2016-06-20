@@ -9,7 +9,7 @@
 #ifndef BDCompiler_hpp
 #define BDCompiler_hpp
 
-#include "BDCodeBuilder.hpp"
+#include "bdsp_codebuilder.hpp"
 
 class BDCompiler;
 

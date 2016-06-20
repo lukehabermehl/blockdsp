@@ -9,7 +9,7 @@
 #ifndef BDCompiler_Private_h
 #define BDCompiler_Private_h
 
-#include "BDCompiler.hpp"
+#include "bdsp_compiler.hpp"
 #include <string>
 
 class BDCompiler::pimpl

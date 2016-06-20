@@ -9,7 +9,7 @@
 #ifndef BlockDSPSystem_Private_h
 #define BlockDSPSystem_Private_h
 
-#include "BlockDSPSystem.hpp"
+#include "bdsp_system.hpp"
 
 #include <vector>
 #include <unordered_map>

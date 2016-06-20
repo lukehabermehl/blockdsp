@@ -9,7 +9,7 @@
 #ifndef BlockDSPParameter_Private_h
 #define BlockDSPParameter_Private_h
 
-#include "BlockDSPParameter.hpp"
+#include "bdsp_parameter.hpp"
 
 class BlockDSPParameter::pimpl
 {

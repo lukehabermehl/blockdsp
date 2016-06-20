@@ -6,7 +6,7 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "AudioProcessingUnit.hpp"
+#include "autil_audioprocessingunit.hpp"
 
 void AudioProcessingUnit::processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels)
 {

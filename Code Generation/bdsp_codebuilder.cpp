@@ -6,8 +6,8 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "BDCodeBuilder.hpp"
-#include "BDCodeBuilder_Private.hpp"
+#include "bdsp_codebuilder.hpp"
+#include "bdsp_codebuilder_private.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -128,7 +128,7 @@ void BDCodeBuilder::writeHeaderFile()
     }
     
     fprintf(f, "\n//This file was automatically generated.\n\n#ifndef BlockDSP_Factory_HPP\n#define BlockDSP_Factory_HPP\n");
-    fprintf(f, "\n#include <BlockDSPSystem.hpp>\n#include <BlockDSPAPU.hpp>\n");
+    fprintf(f, "\n#include <blockdsp.h>");
     fprintf(f, "\nextern \"C\" BlockDSPSystem * BlockDSPFactoryCreateSystem();\n");
     fprintf(f, "\nextern \"C\" AudioProcessingUnit *AudioProcessingUnitFactoryCreate();\n");
     fprintf(f, "\n#endif\n");

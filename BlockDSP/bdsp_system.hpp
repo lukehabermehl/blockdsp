@@ -9,9 +9,9 @@
 #ifndef BlockDSPSystem_hpp
 #define BlockDSPSystem_hpp
 
-#include "BlockDSPNode.hpp"
-#include "BlockDSPParameter.hpp"
-#include "BlockDSPNumber.hpp"
+#include "bdsp_node.hpp"
+#include "bdsp_parameter.hpp"
+#include "bdsp_number.hpp"
 
 class BlockDSPSystem {
 public:

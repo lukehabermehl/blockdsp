@@ -6,8 +6,8 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "BDCompiler.hpp"
-#include "BDCompiler_Private.hpp"
+#include "bdsp_compiler.hpp"
+#include "bdsp_compiler_private.hpp"
 #include <stdlib.h>
 #include <sstream>
 #include <sys/stat.h>

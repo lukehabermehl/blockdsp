@@ -6,8 +6,8 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "AudioFile.hpp"
-#include "AudioFile_Private.hpp"
+#include "autil_file.hpp"
+#include "autil_file_private.hpp"
 
 AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
 {

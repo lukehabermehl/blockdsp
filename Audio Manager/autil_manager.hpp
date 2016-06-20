@@ -9,8 +9,8 @@
 #ifndef AudioManager_hpp
 #define AudioManager_hpp
 
-#include "AudioProcessingUnit.hpp"
-#include "AudioFile.hpp"
+#include "autil_audioprocessingunit.hpp"
+#include "autil_file.hpp"
 
 /** Indicates where the Audio Manager will pull input from */
 enum AudioInputMode

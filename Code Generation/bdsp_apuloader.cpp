@@ -6,9 +6,9 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "BDAPULoader.hpp"
-#include "BDAPULoader_Private.hpp"
-#include "BlockDSPSystem.hpp"
+#include "bdsp_apuloader.hpp"
+#include "bdsp_apuloader_private.hpp"
+#include "bdsp_system.hpp"
 #include <dlfcn.h>
 
 #define kAPUFactoryFuncName "AudioProcessingUnitFactoryCreate"

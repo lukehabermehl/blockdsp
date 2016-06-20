@@ -6,9 +6,9 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "BlockDSPParameter.hpp"
-#include "BlockDSPParameter_Private.hpp"
-#include "BlockDSPNumber.hpp"
+#include "bdsp_parameter.hpp"
+#include "bdsp_parameter_private.hpp"
+#include "bdsp_number.hpp"
 #include <string.h>
 
 BlockDSPParameter::BlockDSPParameter(BlockDSPParameterType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system)

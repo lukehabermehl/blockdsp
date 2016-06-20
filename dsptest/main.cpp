@@ -7,14 +7,8 @@
 //
 
 #include <iostream>
-#include "AudioManager.hpp"
-#include "BlockDSPAPU.hpp"
-#include "BDAPULoader.hpp"
-#include "BDCodeBuilder.hpp"
 #include "dsphelpers.hpp"
-#include "BDCompiler.hpp"
-
-#include "BDLogger.hpp"
+#include <blockdsp.h>
 
 #define SAFE_DEL(_x) if (_x) delete _x
 

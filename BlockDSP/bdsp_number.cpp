@@ -6,8 +6,8 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "BlockDSPNumber.hpp"
-#include "BlockDSPNumber_Private.hpp"
+#include "bdsp_number.hpp"
+#include "bdsp_number_private.hpp"
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>

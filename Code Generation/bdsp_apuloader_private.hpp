@@ -9,7 +9,7 @@
 #ifndef BDAPULoader_Private_h
 #define BDAPULoader_Private_h
 
-#include "BDAPULoader.hpp"
+#include "bdsp_apuloader.hpp"
 
 class BDAPULoader::pimpl
 {

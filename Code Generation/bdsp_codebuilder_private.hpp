@@ -9,7 +9,7 @@
 #ifndef BDCodeBuilder_Private_h
 #define BDCodeBuilder_Private_h
 
-#include "BDCodeBuilder.hpp"
+#include "bdsp_codebuilder.hpp"
 #include <string>
 #include <unordered_map>
 
