@@ -16,10 +16,12 @@
 #include <thread>
 #include <mutex>
 
+struct BDLoggerQueueItem;
+
 class BDLogger::pimpl
 {
 public:
-    std::vector<std::string> queue;
+    std::vector<BDLoggerQueueItem *> queue;
     
     std::mutex queueLock;
     std::thread workerThread;

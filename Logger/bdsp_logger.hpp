@@ -22,7 +22,7 @@ public:
     
     static BDLogger *sharedLogger();
     
-    void log(const char *prefix, const char *s);
+    void log(const char *prefix, const char *s, FILE *f);
     
     class pimpl;
     
@@ -32,5 +32,6 @@ private:
 
 void BDLog(const char *prefix, const char *s);
 void BDLogFormat(const char *prefix, const char *format, ...);
+void BDLogError(const char *prefix, const char *format, ...);
 
 #endif /* BDLogger_hpp */

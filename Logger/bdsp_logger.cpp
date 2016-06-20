@@ -17,12 +17,24 @@
 static std::once_flag onceFlag;
 static const uint32_t nanosec_sleep = 1000;
 
-void logger_append(BDLogger::pimpl *logger, std::string s)
+struct BDLoggerQueueItem {
+    std::string str;
+    FILE *file;
+};
+
+BDLoggerQueueItem * BDLoggerQueueItemCreate(std::string s, FILE *file=stdout)
+{
+    BDLoggerQueueItem *qItem = new BDLoggerQueueItem;
+    qItem->str = s;
+    qItem->file = file;
+    
+    return qItem;
+}
+
+void logger_append(BDLogger::pimpl *logger, BDLoggerQueueItem *qItem)
 {
     logger->queueLock.lock();
-    
-    logger->queue.push_back(s);
-    
+    logger->queue.push_back(qItem);
     logger->queueLock.unlock();
 }
 
@@ -42,7 +54,7 @@ void logger_worker(BDLogger::pimpl *logger)
         
         for (size_t i=0; i<logger->queue.size(); i++)
         {
-            printf("%s\n", logger->queue[i].c_str());
+            fprintf(logger->queue[i]->file, "%s\n", logger->queue[i]->str.c_str());
         }
         
         logger->queue.clear();
@@ -76,7 +88,7 @@ BDLogger *BDLogger::sharedLogger()
     return _sharedLogger;
 }
 
-void BDLogger::log(const char *prefix, const char *s)
+void BDLogger::log(const char *prefix, const char *s, FILE *f)
 {
     std::ostringstream oss;
     oss.clear();
@@ -84,12 +96,12 @@ void BDLogger::log(const char *prefix, const char *s)
     
     oss << prefix << ": " << s;
     
-    logger_append(_pimpl, oss.str());
+    logger_append(_pimpl, BDLoggerQueueItemCreate(oss.str(), f));
 }
 
 void BDLog(const char *prefix, const char *s)
 {
-    BDLogger::sharedLogger()->log(prefix, s);
+    BDLogger::sharedLogger()->log(prefix, s, stdout);
 }
 
 void BDLogFormat(const char *prefix, const char *format, ...)
@@ -99,8 +111,18 @@ void BDLogFormat(const char *prefix, const char *format, ...)
     va_start(args, format);
     vsprintf(logstr, format, args);
     
-    BDLogger::sharedLogger()->log(prefix, logstr);
+    BDLogger::sharedLogger()->log(prefix, logstr, stdout);
     va_end(args);
+}
+
+void BDLogError(const char *prefix, const char *format, ...)
+{
+    char logstr[4096];
+    va_list args;
+    va_start(args, format);
+    vsprintf(logstr, format, args);
     
+    BDLogger::sharedLogger()->log(prefix, logstr, stderr);
+    va_end(args);
 }
 
