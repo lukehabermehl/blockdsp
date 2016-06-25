@@ -17,16 +17,12 @@
 static std::once_flag onceFlag;
 static const uint32_t nanosec_sleep = 1000;
 
-struct BDLoggerQueueItem {
-    std::string str;
-    FILE *file;
-};
-
 BDLoggerQueueItem * BDLoggerQueueItemCreate(std::string s, FILE *file=stdout)
 {
     BDLoggerQueueItem *qItem = new BDLoggerQueueItem;
     qItem->str = s;
     qItem->file = file;
+    qItem->next = NULL;
     
     return qItem;
 }
@@ -34,7 +30,7 @@ BDLoggerQueueItem * BDLoggerQueueItemCreate(std::string s, FILE *file=stdout)
 void logger_append(BDLogger::pimpl *logger, BDLoggerQueueItem *qItem)
 {
     logger->queueLock.lock();
-    logger->queue.push_back(qItem);
+    logger->queue->append(qItem);
     logger->queueLock.unlock();
 }
 
@@ -42,7 +38,7 @@ void logger_worker(BDLogger::pimpl *logger)
 {
     while (!logger->shutdown)
     {
-        if (logger->queue.empty())
+        if (logger->queue == NULL)
         {
             struct timespec tm1, tm2;
             tm1.tv_nsec = nanosec_sleep;
@@ -51,26 +47,28 @@ void logger_worker(BDLogger::pimpl *logger)
         }
         
         logger->queueLock.lock();
+        BDLoggerQueue *queue = logger->queue;
+        logger->queue = new BDLoggerQueue;
+        logger->queueLock.unlock();
         
-        for (size_t i=0; i<logger->queue.size(); i++)
+        BDLoggerQueueItem *qItem = queue->first;
+        while (qItem != NULL)
         {
-            fprintf(logger->queue[i]->file, "%s\n", logger->queue[i]->str.c_str());
+            fprintf(qItem->file, "%s\n", qItem->str.c_str());
             if (logger->outputFile)
-            {
-                fprintf(logger->outputFile, "%s\n", logger->queue[i]->str.c_str());
-            }
+                fprintf(logger->outputFile, "%s\n", qItem->str.c_str());
+            
+            queue->popFront();
+            qItem = queue->first;
         }
         
-        logger->queue.clear();
-        logger->queueLock.unlock();
+        delete queue;
     }
 }
 
 BDLogger::BDLogger()
 {
     _pimpl = new pimpl;
-    _pimpl->shutdown = false;
-    _pimpl->outputFile = NULL;
     _pimpl->workerThread = std::thread(logger_worker, _pimpl);
 }
 
@@ -80,6 +78,11 @@ BDLogger::~BDLogger()
     _pimpl->workerThread.join();
     if (_pimpl->outputFile)
         fclose(_pimpl->outputFile);
+    
+    if (_pimpl->queue)
+    {
+        delete _pimpl->queue;
+    }
     
     delete _pimpl;
 }
@@ -136,5 +139,43 @@ void BDLogError(const char *prefix, const char *format, ...)
     
     BDLogger::sharedLogger()->log(prefix, logstr, stderr);
     va_end(args);
+}
+
+void BDLoggerQueue::append(BDLoggerQueueItem *item)
+{
+    if (first == NULL)
+    {
+        first = item;
+        last = item;
+    }
+    else
+    {
+        last->next = item;
+        last = last->next;
+    }
+}
+
+void BDLoggerQueue::popFront()
+{
+    if (last == first)
+    {
+        delete first;
+        first = NULL;
+        last = NULL;
+    }
+    else
+    {
+        BDLoggerQueueItem *temp = first;
+        first = first->next;
+        delete temp;
+    }
+}
+
+BDLoggerQueue::~BDLoggerQueue()
+{
+    while (first)
+    {
+        popFront();
+    }
 }
 

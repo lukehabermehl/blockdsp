@@ -12,16 +12,43 @@
 #include "bdsp_logger.hpp"
 
 #include <string>
-#include <vector>
 #include <thread>
 #include <mutex>
 
-struct BDLoggerQueueItem;
+class BDLoggerQueue;
+
+struct BDLoggerQueueItem {
+    std::string str;
+    FILE *file;
+    BDLoggerQueueItem *next;
+};
+
+class BDLoggerQueue {
+public:
+    BDLoggerQueue() :
+    first(NULL),
+    last(NULL)
+    {
+    }
+    ~BDLoggerQueue();
+    BDLoggerQueueItem *first;
+    BDLoggerQueueItem *last;
+    
+    void append(BDLoggerQueueItem *item);
+    void popFront();
+};
 
 class BDLogger::pimpl
 {
 public:
-    std::vector<BDLoggerQueueItem *> queue;
+    pimpl() :
+    queue(new BDLoggerQueue),
+    outputFile(NULL),
+    shutdown(false)
+    {
+    }
+    
+    BDLoggerQueue *queue;
     
     std::mutex queueLock;
     std::thread workerThread;
