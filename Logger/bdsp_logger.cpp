@@ -55,6 +55,10 @@ void logger_worker(BDLogger::pimpl *logger)
         for (size_t i=0; i<logger->queue.size(); i++)
         {
             fprintf(logger->queue[i]->file, "%s\n", logger->queue[i]->str.c_str());
+            if (logger->outputFile)
+            {
+                fprintf(logger->outputFile, "%s\n", logger->queue[i]->str.c_str());
+            }
         }
         
         logger->queue.clear();
@@ -66,6 +70,7 @@ BDLogger::BDLogger()
 {
     _pimpl = new pimpl;
     _pimpl->shutdown = false;
+    _pimpl->outputFile = NULL;
     _pimpl->workerThread = std::thread(logger_worker, _pimpl);
 }
 
@@ -73,6 +78,8 @@ BDLogger::~BDLogger()
 {
     _pimpl->shutdown = true;
     _pimpl->workerThread.join();
+    if (_pimpl->outputFile)
+        fclose(_pimpl->outputFile);
     
     delete _pimpl;
 }
@@ -97,6 +104,11 @@ void BDLogger::log(const char *prefix, const char *s, FILE *f)
     oss << prefix << ": " << s;
     
     logger_append(_pimpl, BDLoggerQueueItemCreate(oss.str(), f));
+}
+
+void BDLogger::setOutputFile(const char *filepath)
+{
+    _pimpl->outputFile = fopen(filepath, "a");
 }
 
 void BDLog(const char *prefix, const char *s)

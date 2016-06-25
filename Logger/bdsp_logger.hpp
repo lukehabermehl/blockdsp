@@ -23,6 +23,7 @@ public:
     static BDLogger *sharedLogger();
     
     void log(const char *prefix, const char *s, FILE *f);
+    void setOutputFile(const char *filepath);
     
     class pimpl;
     

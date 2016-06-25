@@ -25,6 +25,7 @@ public:
     
     std::mutex queueLock;
     std::thread workerThread;
+    FILE *outputFile;
     
     bool shutdown;
 };
