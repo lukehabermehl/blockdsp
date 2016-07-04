@@ -13,6 +13,8 @@
 
 #include <portaudio.h>
 
+static const char *kAudioManagerLogPrefix = "[AudioManager]";
+
 AudioManager::AudioManager()
 {
     _pimpl = new pimpl;
@@ -38,7 +40,7 @@ AudioManager::AudioManager()
             outputDevice = outputDevice->next;
         }
         
-        BDLogFormat("[AudioManager]", "found device: %s", info->name);
+        BDLogFormat(kAudioManagerLogPrefix, "found device: %s", info->name);
     }
 }
 

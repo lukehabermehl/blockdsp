@@ -95,12 +95,12 @@ int main(int argc, const char * argv[]) {
     
     if (!audioManager.open())
     {
-        BDLog("[ERROR]", "Audio Manager failed to open");
+        BDLogError("[ERROR]", "Audio Manager failed to open");
         exit(1);
     }
     if (!audioManager.start())
     {
-        BDLog("[ERROR]", "Audio Manager failed to start");
+        BDLogError("[ERROR]", "Audio Manager failed to start");
         exit(1);
     }
     

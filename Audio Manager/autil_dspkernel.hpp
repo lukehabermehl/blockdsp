@@ -10,11 +10,13 @@
 #define AudioDSPKernel_hpp
 
 #include <portaudio.h>
-#include <stdio.h>
 
 #include "autil_file.hpp"
 #include "autil_audioprocessingunit.hpp"
 #include "autil_manager.hpp"
+#include "bdsp_logger.hpp"
+
+static const char *kAudioDSPKernelLogPrefix = "[AudioDSPKernel]";
 
 class AudioDSPKernel {
 public:
@@ -49,7 +51,7 @@ public:
         outputParameters.device = outputDevIndex;
         if (outputParameters.device == paNoDevice)
         {
-            fprintf(stderr, "AudioDSPKernel: failed to find output device\n");
+            BDLogError(kAudioDSPKernelLogPrefix, "Failed to find output device!");
             return false;
         }
         
@@ -65,7 +67,7 @@ public:
         else
             sampleRate = 44100; //TODO change this to inputParameters value
         
-        printf("AudioDSPKernel: open stream with sample rate: %lu\n", sampleRate);
+        BDLogFormat(kAudioDSPKernelLogPrefix, "Open stream with sample rate: %lu", sampleRate);
         
         PaError err = Pa_OpenStream(&stream,
                                     NULL,
@@ -78,7 +80,7 @@ public:
         
         if (err != paNoError)
         {
-            fprintf(stderr, "AudioDSPKernel: failed to open stream: %d\n", err);
+            BDLogError(kAudioDSPKernelLogPrefix, "Failed to open stream! PAError code: %d", err);
             return false;
         }
         
