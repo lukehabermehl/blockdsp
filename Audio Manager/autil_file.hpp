@@ -57,8 +57,8 @@ public:
     void setLooping(bool looping);
     bool isLooping();
     
-private:
     class pimpl;
+private:
     pimpl *_pimpl;
 };
 

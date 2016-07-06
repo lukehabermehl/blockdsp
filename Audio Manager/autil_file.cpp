@@ -8,6 +8,63 @@
 
 #include "autil_file.hpp"
 #include "autil_file_private.hpp"
+#include "bdsp_logger.hpp"
+
+#include <vector>
+
+#define FRAMES_PER_FILE_BUFFER 30000
+
+static const char * kAudioFileLoggerPrefix = "[AudioFile]";
+
+void file_buffer_worker(AudioFile::pimpl *fileImpl)
+{
+    //BDLog(kAudioFileLoggerPrefix, "Buffer more audio from file");
+    int writeBuffer = (fileImpl->currentBufIndex == 0) ? 1 : 0;
+    sf_seek(fileImpl->sndfile, fileImpl->framesBuffered, SF_SEEK_SET);
+    size_t read = sf_readf_float(fileImpl->sndfile, fileImpl->bufs[writeBuffer], FRAMES_PER_FILE_BUFFER);
+    fileImpl->framesBuffered += read;
+    if (read < FRAMES_PER_FILE_BUFFER)
+    {
+        if (fileImpl->looping)
+        {
+            sf_seek(fileImpl->sndfile, 0, SF_SEEK_SET);
+            size_t samplesDidRead = read * fileImpl->sfInfo.channels;
+            size_t framesToRead = (FRAMES_PER_FILE_BUFFER - read);
+            sf_readf_float(fileImpl->sndfile, &(fileImpl->bufs[writeBuffer][samplesDidRead]), framesToRead);
+            fileImpl->framesBuffered = framesToRead;
+        }
+        else
+        {
+            fileImpl->needsBuffer = false;
+        }
+    }
+    
+    fileImpl->isBuffering = false;
+}
+
+void thread_queue_worker(AudioFile::pimpl *fileImpl)
+{
+    while (!fileImpl->threadQueue.stop)
+    {
+        if (fileImpl->threadQueue.first)
+        {
+            fileImpl->threadQueue.lock.lock();
+            ThreadQueueLink *queueLink = fileImpl->threadQueue.first;
+            fileImpl->threadQueue.first = NULL;
+            fileImpl->threadQueue.last = NULL;
+            fileImpl->threadQueue.lock.unlock();
+            
+            while (queueLink)
+            {
+                ThreadQueueLink *lnk = queueLink;
+                lnk->thread->join();
+                delete lnk->thread;
+                queueLink = lnk->next;
+                delete lnk;
+            }
+        }
+    }
+}
 
 AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
 {
@@ -31,44 +88,90 @@ AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
     _pimpl->sndfile = sf_open(filepath, sfmode, &_pimpl->sfInfo);
     _pimpl->totalSize = _pimpl->sfInfo.channels * _pimpl->sfInfo.frames;
     _pimpl->readIndex = 0;
-    _pimpl->buf = new float[totalSize()];
+    _pimpl->currentBufIndex = 0;
+    _pimpl->threadManagerWorker = new std::thread(thread_queue_worker, _pimpl);
     
-    //TODO: don't read the whole file at once
-    sf_read_float(_pimpl->sndfile, &_pimpl->buf[0], _pimpl->totalSize);
+    size_t framesPerBuffer = FRAMES_PER_FILE_BUFFER;
+    if (framesPerBuffer > numFrames())
+    {
+        framesPerBuffer = numFrames();
+        _pimpl->bufferSize = framesPerBuffer * numChannels();
+        _pimpl->needsBuffer = false;
+        _pimpl->bufs[0] = new float[_pimpl->bufferSize];
+        _pimpl->bufs[1] = NULL;
+    }
+    else
+    {
+        _pimpl->bufferSize = framesPerBuffer * numChannels();
+        _pimpl->bufs[0] = new float[_pimpl->bufferSize];
+        _pimpl->bufs[1] = new float[_pimpl->bufferSize];
+        _pimpl->needsBuffer = (2 * framesPerBuffer) < numFrames();
+    }
+    
+    _pimpl->framesBuffered = sf_read_float(_pimpl->sndfile, &(_pimpl->bufs[0][0]), _pimpl->bufferSize) / numChannels();
+    sf_seek(_pimpl->sndfile, _pimpl->framesBuffered, SF_SEEK_SET);
+    _pimpl->threadQueue.append(new ThreadQueueLink(new std::thread(file_buffer_worker, _pimpl)));
 }
 
 AudioFile::~AudioFile()
 {
+    close();
     delete _pimpl;
 }
 
 void AudioFile::close()
 {
+    _pimpl->threadQueue.stop = true;
+    _pimpl->threadManagerWorker->join();
+    delete _pimpl->threadManagerWorker;
+    
     if (_pimpl->sndfile)
         sf_close(_pimpl->sndfile);
     
     _pimpl->sndfile = 0;
     
-    delete []_pimpl->buf;
-    _pimpl->buf = 0;
+    delete [] _pimpl->bufs[0];
+    if (_pimpl->bufs[1])
+        delete [] _pimpl->bufs[1];
 }
 
 AudioFileBufferStatus AudioFile::nextFrame(float **frame)
 {
-    if (_pimpl->readIndex >= totalSize())
+    if (_pimpl->readIndex >= _pimpl->bufferSize)
         return AudioFileBufferStatusOutOfBounds;
     
-    *frame = &_pimpl->buf[_pimpl->readIndex];
+    *frame = &((_pimpl->bufs[_pimpl->currentBufIndex])[_pimpl->readIndex]);
     _pimpl->readIndex += _pimpl->sfInfo.channels;
+    _pimpl->samplesRead += _pimpl->sfInfo.channels;
     
-    if (_pimpl->readIndex >= _pimpl->totalSize)
+    if (_pimpl->readIndex >= _pimpl->bufferSize)
     {
-        if (isLooping())
+        if (_pimpl->currentBufIndex == 0)
         {
-            _pimpl->readIndex -= _pimpl->totalSize;
+            _pimpl->currentBufIndex = 1;
         }
         else
         {
+            _pimpl->currentBufIndex = 0;
+        }
+        _pimpl->readIndex = 0;
+        
+        if (_pimpl->needsBuffer && !_pimpl->isBuffering)
+        {
+            _pimpl->isBuffering = true;
+            _pimpl->threadQueue.append(new ThreadQueueLink(new std::thread(file_buffer_worker, _pimpl)));
+        }
+    }
+    
+    if (_pimpl->samplesRead >= totalSize())
+    {
+        if (isLooping())
+        {
+            _pimpl->samplesRead = 0;
+        }
+        else
+        {
+            BDLog(kAudioFileLoggerPrefix, "Done reading");
             return AudioFileBufferStatusDoneReading;
         }
     }
@@ -119,6 +222,13 @@ AudioFile::pimpl::~pimpl()
     if (sndfile)
         sf_close(sndfile);
     
-    if (buf)
-        delete []buf;
+    ThreadQueueLink *queueLink = threadQueue.first;
+    while (queueLink)
+    {
+        ThreadQueueLink *lnk = queueLink;
+        lnk->thread->join();
+        delete lnk->thread;
+        queueLink = lnk->next;
+        delete lnk;
+    }
 }

@@ -89,7 +89,7 @@ int main(int argc, const char * argv[]) {
     audioManager.setInputFile(file);
     audioManager.setInputMode(AudioInputModeFile);
     audioManager.setAudioProcessingUnit(apunit);
-    audioManager.setLooping(true);
+    audioManager.setLooping(false);
     
     BDLog("[setup]", "Start Audio");
     
