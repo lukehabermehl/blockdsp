@@ -10,7 +10,7 @@ BlockDSP will allow for the creation of virtually any kind of audio effect witho
 * Dynamically build real-time audio effects and other processing chains
 * Export processing chains as dynamic libraries that can be wrapped with any audio processing framework (AudioUnits, VST, etc.)
 * Built-in playback through PortAudio
-* Built-in file handling through libsndfile, with buffering coming soon! (For now, make sure your files are small)
+* Built-in audio file reading
 
 ## Dependencies
 
