@@ -16,3 +16,13 @@ BlockDSP will allow for the creation of virtually any kind of audio effect witho
 
 * PortAudio
 * libsndfile
+
+## Build
+
+From the repository root, run:
+
+			make
+			make install
+
+This will build libblockdsp and install to /usr/local/lib. The public headers will be installed to /usr/local/include/blockdsp, and a wrapper header that includes all of the public headers will be installed to /usr/local/include/blockdsp.h
+
