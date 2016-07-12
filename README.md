@@ -26,3 +26,9 @@ From the repository root, run:
 
 This will build libblockdsp and install to /usr/local/lib. The public headers will be installed to /usr/local/include/blockdsp, and a wrapper header that includes all of the public headers will be installed to /usr/local/include/blockdsp.h
 
+To run the short biquad test, run
+
+			make test
+
+After you've done the make and make install.
+
