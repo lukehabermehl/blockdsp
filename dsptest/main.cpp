@@ -1,20 +1,24 @@
-//
-//  main.cpp
-//  dsptest
-//
-//  Created by Luke on 5/23/16.
-//  Copyright © 2016 Luke Habermehl. All rights reserved.
-//
+
+/*
+ A simple example program that builds and exports an APU that performs a second order LPF, loads it, and uses it to process an
+ audio file for a few seconds
+*/
 
 #include <iostream>
-#include "dsphelpers.hpp"
+#include <blockdsp/dsphelpers.hpp>
 #include <blockdsp.h>
 
 #define SAFE_DEL(_x) if (_x) delete _x
 
+//Make sure you set these before trying to run the test!!
 static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
+static const char * dylib_path = "/Users/Luke/Desktop/test.dylib"; //Export APU dylib path
+static const char * built_code_path = "/Users/Luke/Desktop/test"; //Destination for generated code
+
+
 static BDAPULoader *apuLoader = 0;
 
+//Load an APU from the .dylib at the specified path
 AudioProcessingUnit * load_apu(const char *filepath)
 {
     if (!apuLoader)
@@ -23,6 +27,7 @@ AudioProcessingUnit * load_apu(const char *filepath)
     return apuLoader->loadAPU(filepath);
 }
 
+//Generate the APU code and build the dylib
 void write_test_system(const char *outputdir)
 {
     BDCodeBuilder cb("test", outputdir);
@@ -71,13 +76,13 @@ void write_test_system(const char *outputdir)
     cb.closeSourceFile();
     
     BDCompiler compiler(&cb);
-    compiler.compileLibrary("/Users/Luke/Desktop/test.dylib");
+    compiler.compileLibrary(dylib_path);
 }
 
 int main(int argc, const char * argv[]) {
-    write_test_system("/Users/Luke/Desktop/test");
+    write_test_system(built_code_path);
     
-    AudioProcessingUnit *apunit = load_apu("/Users/Luke/Desktop/test.dylib");
+    AudioProcessingUnit *apunit = load_apu(dylib_path);
     if (!apunit)
         BDLog("[setup]", "FAILED to load APU");
     
