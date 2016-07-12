@@ -43,17 +43,21 @@ SRC_FILES = ./Audio\ Manager/*.cpp \
 OBJECTS = ./$(OUTPUTDIR)/*.o
 
 all:
-	mkdir -p $(OUTPUTDIR)
+	@mkdir -p $(OUTPUTDIR)
 	$(CC) -c $(CFLAGS) $(INCLUDES) $(SRC_FILES)
-	mv *.o $(OUTPUTDIR)
+	@mv *.o $(OUTPUTDIR)
 
 install:
-	libtool -o $(TARGET).a -static $(OBJECTS) $(LIBS_SEARCH) $(LIBS)
-	mv $(TARGET).a /usr/local/lib
-	mkdir -p /usr/local/include/blockdsp
-	cp -f $(PUBLIC_HEADERS) /usr/local/include/blockdsp
-	cp -f blockdsp.h /usr/local/include/blockdsp.h
+	libtool -o $(TARGET).a -static $(OBJECTS)
+	@mv $(TARGET).a /usr/local/lib
+	@mkdir -p /usr/local/include/blockdsp
+	@cp -f $(PUBLIC_HEADERS) /usr/local/include/blockdsp
+	@cp -f blockdsp.h /usr/local/include/blockdsp.h
 
+test:
+	$(CC) -o "dsptest.out" dsptest/main.cpp -I/usr/local/include $(LIBS_SEARCH) -lblockdsp $(LIBS)
+	@./dsptest.out
+	@rm ./dsptest.out
 clean:
-	rm -r $OUTPUTDIR
+	@rm -r $(OUTPUTDIR)
 

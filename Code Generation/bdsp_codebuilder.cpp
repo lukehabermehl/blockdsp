@@ -259,7 +259,7 @@ void BDCodeBuilder::addCoefficient(const char *name, const char *callback, const
 {
     BD_FILE_CHECK();
     
-    const char *targetParam = target ?: "0";
+    const char *targetParam = target ? target : "0";
     char typeParam[20];
     BDStringForParameterType(typeParam, type);
     if (callback)
