@@ -18,7 +18,7 @@ public:
     BlockDSPInputNode *mainInputNode;
     BlockDSPNode *mainOutputNode;
     
-    static BlockDSPSystem *systemForBiQuad(uint32_t numChannels);
+    static BlockDSPSystem *systemForBiQuad(uint32_t numChannels, unsigned int sampleRate);
     
     void addNode(BlockDSPNode *node);
     void removeNode(BlockDSPNode *node);

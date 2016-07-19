@@ -139,7 +139,7 @@ BlockDSPNode *BlockDSPSystem::nodeWithID(ssize_t id) {
     return it->second;
 }
 
-BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels) {
+BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned int sampleRate) {
     BlockDSPSystem *system = new BlockDSPSystem(numChannels);
     BlockDSPDelayLine *inDelayLine = system->createDelayLine(system->mainInputNode);
     inDelayLine->setSize(2);
@@ -169,7 +169,7 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels) {
     summer->connectInput(b2Node);
     
     BiQuadCoefficients coeffs;
-    coeffs.calculateForLPF(1000, 3.0, 44100);
+    coeffs.calculateForLPF(1000, 3.0, sampleRate);
 
     
     a0Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a0);

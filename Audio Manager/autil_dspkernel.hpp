@@ -65,7 +65,10 @@ public:
         if (useFileInput)
             sampleRate = audioFile->sampleRate();
         else
-            sampleRate = 44100; //TODO change this to inputParameters value
+        {
+            const PaDeviceInfo *inputDevInfo = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
+            sampleRate = inputDevInfo->defaultSampleRate;
+        }
         
         BDLogFormat(kAudioDSPKernelLogPrefix, "Open stream with sample rate: %lu", sampleRate);
         
