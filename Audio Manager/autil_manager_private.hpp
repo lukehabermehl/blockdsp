@@ -21,6 +21,8 @@ public:
     AudioDSPKernel *dspKernel;
     AudioDeviceIndex outputDeviceIndex;
     AudioDeviceInfo *outputDeviceInfo;
+    AudioDeviceIndex inputDeviceIndex;
+    AudioDeviceInfo *inputDeviceInfo;
 };
 
 AudioDeviceInfo *AudioDeviceInfoCreate(AudioDeviceIndex index, const char *name)

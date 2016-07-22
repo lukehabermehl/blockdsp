@@ -20,28 +20,11 @@ AudioManager::AudioManager()
     _pimpl = new pimpl;
     _pimpl->dspKernel = new AudioDSPKernel;
     _pimpl->outputDeviceIndex = 1;
+    _pimpl->inputDeviceInfo = NULL;
+    _pimpl->outputDeviceInfo = NULL;
     
     Pa_Initialize();
-    int devCount = Pa_GetDeviceCount();
-    AudioDeviceInfo *outputDevice = NULL;
-    
-    for (int i=0; i<devCount; i++)
-    {
-        const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
-        if (i==0)
-        {
-            _pimpl->outputDeviceInfo = AudioDeviceInfoCreate(i, info->name);
-            outputDevice = _pimpl->outputDeviceInfo;
-            
-        }
-        else
-        {
-            outputDevice->next = AudioDeviceInfoCreate(i, info->name);
-            outputDevice = outputDevice->next;
-        }
-        
-        BDLogFormat(kAudioManagerLogPrefix, "found device: %s", info->name);
-    }
+    refreshDevices();
 }
 
 AudioManager::~AudioManager()
@@ -67,6 +50,11 @@ void AudioManager::setInputMode(AudioInputMode mode)
     }
 }
 
+AudioDeviceIndex AudioManager::getInputDeviceIndex()
+{
+    return _pimpl->inputDeviceIndex;
+}
+
 AudioDeviceIndex AudioManager::getOutputDeviceIndex()
 {
     return _pimpl->outputDeviceIndex;
@@ -77,9 +65,60 @@ void AudioManager::setOutputDeviceIndex(unsigned int devIndex)
     _pimpl->outputDeviceIndex = devIndex;
 }
 
-AudioDeviceInfo* AudioManager::getOutputDeviceInfo() const
+AudioDeviceInfo* AudioManager::getOutputDeviceInfo()
 {
     return _pimpl->outputDeviceInfo;
+}
+
+void AudioManager::refreshDevices()
+{
+    //Delete existing AudioDeviceInfo * lists
+    AudioDeviceInfo *dev = _pimpl->inputDeviceInfo;
+    while (dev) {
+        AudioDeviceInfo *tmp = dev;
+        dev = dev->next;
+        delete tmp;
+    }
+    
+    dev = _pimpl->outputDeviceInfo;
+    while (dev) {
+        AudioDeviceInfo *tmp = dev;
+        dev = dev->next;
+        delete tmp;
+    }
+    
+    _pimpl->inputDeviceInfo = NULL;
+    _pimpl->outputDeviceInfo = NULL;
+    
+    //Scan for audio devices
+    BDLog(kAudioManagerLogPrefix, "Scan for audio devices");
+    int devCount = Pa_GetDeviceCount();
+    AudioDeviceInfo *outputDevice = NULL;
+    AudioDeviceInfo *inputDevice = NULL;
+    
+    for (int i=0; i<devCount; i++)
+    {
+        const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
+        AudioDeviceInfo *dev = AudioDeviceInfoCreate(i, info->name);
+        if (info->maxInputChannels > 0) {
+            if (inputDevice == NULL) {
+                _pimpl->inputDeviceInfo = dev;
+                inputDevice = dev;
+            } else {
+                inputDevice->next = dev;
+                inputDevice = inputDevice->next;
+            }
+        }
+        if (info->maxOutputChannels > 0) {
+            if (outputDevice == NULL) {
+                _pimpl->outputDeviceInfo = dev;
+                outputDevice = dev;
+            } else {
+                outputDevice->next = dev;
+                outputDevice = outputDevice->next;
+            }
+        }
+    }
 }
 
 void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)

@@ -16,7 +16,7 @@
 enum AudioInputMode
 {
     AudioInputModeFile,
-    AudioInputModeMicrophone
+    AudioInputModeDevice
 };
 
 /** Indicates the current status of the Audio Manager */
@@ -52,6 +52,15 @@ public:
     /** Specify the audio input source */
     void setInputMode(AudioInputMode mode);
     
+    /** Set the input device index (use with AudioInputModeDevice) */
+    void setInputDeviceIndex(AudioDeviceIndex devIndex);
+    
+    /** Get the current input device index */
+    AudioDeviceIndex getInputDeviceIndex();
+    
+    /** Get a linked list of available input device info structs */
+    AudioDeviceInfo *getInputDeviceInfo();
+    
     /** Set the output device */
     void setOutputDeviceIndex(AudioDeviceIndex devIndex);
     
@@ -59,7 +68,10 @@ public:
     AudioDeviceIndex getOutputDeviceIndex();
     
     /** Get a linked list of available output device info structs */
-    AudioDeviceInfo* getOutputDeviceInfo() const;
+    AudioDeviceInfo* getOutputDeviceInfo();
+    
+    /** Refresh the input/output device lists */
+    void refreshDevices();
     
     /** Pass in an instance of AudioProcessingUnit to do the DSP */
     void setAudioProcessingUnit(AudioProcessingUnit *unit);
