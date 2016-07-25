@@ -20,22 +20,21 @@ public:
     ~pimpl();
     AudioDSPKernel *dspKernel;
     AudioDeviceIndex outputDeviceIndex;
-    AudioDeviceInfo *outputDeviceInfo;
     AudioDeviceIndex inputDeviceIndex;
-    AudioDeviceInfo *inputDeviceInfo;
 };
 
-AudioDeviceInfo *AudioDeviceInfoCreate(AudioDeviceIndex index, const char *name)
+AudioDeviceInfoRef AudioDeviceInfoCreate(AudioDeviceIndex index, const char *name)
 {
-    AudioDeviceInfo *info = new AudioDeviceInfo;
-    info->index = index;
-    info->next = NULL;
+    AudioDeviceInfoRef devInfoRef(new AudioDeviceInfo());
+    
+    devInfoRef->index = index;
+    devInfoRef->next = NULL;
     
     char *str = (char *)malloc(strlen(name));
     strcpy(str, name);
-    info->name = str;
+    devInfoRef->name = str;
     
-    return info;
+    return devInfoRef;
 }
 
 #endif /* AudioManager_Private_h */

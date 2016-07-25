@@ -20,11 +20,8 @@ AudioManager::AudioManager()
     _pimpl = new pimpl;
     _pimpl->dspKernel = new AudioDSPKernel;
     _pimpl->outputDeviceIndex = 1;
-    _pimpl->inputDeviceInfo = NULL;
-    _pimpl->outputDeviceInfo = NULL;
     
     Pa_Initialize();
-    refreshDevices();
 }
 
 AudioManager::~AudioManager()
@@ -43,6 +40,7 @@ void AudioManager::setInputMode(AudioInputMode mode)
     {
         case AudioInputModeFile:
             _pimpl->dspKernel->useFileInput = true;
+            _pimpl->inputDeviceIndex = -1;
             break;
         default:
             _pimpl->dspKernel->useFileInput = false;
@@ -60,65 +58,32 @@ AudioDeviceIndex AudioManager::getOutputDeviceIndex()
     return _pimpl->outputDeviceIndex;
 }
 
-void AudioManager::setOutputDeviceIndex(unsigned int devIndex)
+void AudioManager::setOutputDeviceIndex(AudioDeviceIndex devIndex)
 {
     _pimpl->outputDeviceIndex = devIndex;
 }
 
-AudioDeviceInfo* AudioManager::getOutputDeviceInfo()
+AudioDeviceInfoRef AudioManager::getDevices()
 {
-    return _pimpl->outputDeviceInfo;
-}
-
-void AudioManager::refreshDevices()
-{
-    //Delete existing AudioDeviceInfo * lists
-    AudioDeviceInfo *dev = _pimpl->inputDeviceInfo;
-    while (dev) {
-        AudioDeviceInfo *tmp = dev;
-        dev = dev->next;
-        delete tmp;
-    }
-    
-    dev = _pimpl->outputDeviceInfo;
-    while (dev) {
-        AudioDeviceInfo *tmp = dev;
-        dev = dev->next;
-        delete tmp;
-    }
-    
-    _pimpl->inputDeviceInfo = NULL;
-    _pimpl->outputDeviceInfo = NULL;
-    
     //Scan for audio devices
     BDLog(kAudioManagerLogPrefix, "Scan for audio devices");
     int devCount = Pa_GetDeviceCount();
-    AudioDeviceInfo *outputDevice = NULL;
-    AudioDeviceInfo *inputDevice = NULL;
+    AudioDeviceInfoRef devInfoRef;
+    AudioDeviceInfoRef currentRef;
     
     for (int i=0; i<devCount; i++)
     {
         const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
-        AudioDeviceInfo *dev = AudioDeviceInfoCreate(i, info->name);
-        if (info->maxInputChannels > 0) {
-            if (inputDevice == NULL) {
-                _pimpl->inputDeviceInfo = dev;
-                inputDevice = dev;
-            } else {
-                inputDevice->next = dev;
-                inputDevice = inputDevice->next;
-            }
-        }
-        if (info->maxOutputChannels > 0) {
-            if (outputDevice == NULL) {
-                _pimpl->outputDeviceInfo = dev;
-                outputDevice = dev;
-            } else {
-                outputDevice->next = dev;
-                outputDevice = outputDevice->next;
-            }
+        if (!devInfoRef) {
+            devInfoRef = AudioDeviceInfoCreate(i, info->name);
+            currentRef = devInfoRef;
+        } else {
+            currentRef->next = AudioDeviceInfoCreate(i, info->name);
+            currentRef = currentRef->next;
         }
     }
+    
+    return devInfoRef;
 }
 
 void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)

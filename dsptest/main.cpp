@@ -15,7 +15,6 @@ static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
 static const char * dylib_path = "/Users/Luke/Desktop/test.dylib"; //Export APU dylib path
 static const char * built_code_path = "/Users/Luke/Desktop/test"; //Destination for generated code
 
-
 static BDAPULoader *apuLoader = 0;
 
 //Load an APU from the .dylib at the specified path
@@ -90,9 +89,19 @@ int main(int argc, const char * argv[]) {
     AudioManager audioManager;
     BDLog("[setup]", "Start Audio Manager");
     audioManager.setNumOutputChannels(2);
+    
+    //List all audio devices:
+    AudioDeviceInfoRef devInfo = audioManager.getDevices();
+    while (devInfo) {
+        BDLogFormat("[setup]", "Found device: %s", devInfo->name);
+        devInfo = devInfo->next;
+    }
+    
+    
     AudioFile *file = new AudioFile(input_file_path, AudioFileModeReadOnly);
     audioManager.setInputFile(file);
     audioManager.setInputMode(AudioInputModeFile);
+    audioManager.setOutputDeviceIndex(1);
     audioManager.setAudioProcessingUnit(apunit);
     audioManager.setLooping(false);
     
