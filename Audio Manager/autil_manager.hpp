@@ -57,8 +57,10 @@ public:
     /** Specify the audio input source */
     void setInputMode(AudioInputMode mode);
     
-    /** Get a list of the available audio devices */
-    std::shared_ptr<AudioDeviceInfo> getDevices();
+    /** Get a list of the available audio devices
+     @returns a linked list of AudioDeviceInfo 
+     */
+    AudioDeviceInfoRef getDevices();
     
     /** Set the input device index (use with AudioInputModeDevice) */
     void setInputDeviceIndex(AudioDeviceIndex devIndex);
