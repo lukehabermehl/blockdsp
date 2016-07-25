@@ -11,12 +11,15 @@
 
 #include "autil_audioprocessingunit.hpp"
 #include "autil_file.hpp"
+#include <memory>
+
+struct AudioDeviceInfo;
 
 /** Indicates where the Audio Manager will pull input from */
 enum AudioInputMode
 {
     AudioInputModeFile,
-    AudioInputModeMicrophone
+    AudioInputModeDevice
 };
 
 /** Indicates the current status of the Audio Manager */
@@ -26,7 +29,9 @@ enum AudioManagerStatus
     AudioManagerStatusDone
 };
 
-typedef unsigned int AudioDeviceIndex;
+typedef int AudioDeviceIndex;
+
+typedef std::shared_ptr<AudioDeviceInfo> AudioDeviceInfoRef;
 
 /** Contains useful information about an output device */
 struct AudioDeviceInfo
@@ -36,7 +41,7 @@ struct AudioDeviceInfo
     /** Name of the device */
     const char *name;
     /** Next device in the linked list or NULL */
-    AudioDeviceInfo *next;
+    AudioDeviceInfoRef next;
 };
 
 /** Provides an interface for loading and processing audio from a file or input device */
@@ -52,14 +57,24 @@ public:
     /** Specify the audio input source */
     void setInputMode(AudioInputMode mode);
     
+    /** Get a list of the available audio devices
+     @returns a linked list of AudioDeviceInfo 
+     */
+    AudioDeviceInfoRef getDevices();
+    
+    /** Set the input device index (use with AudioInputModeDevice) */
+    void setInputDeviceIndex(AudioDeviceIndex devIndex);
+    
+    /** Get the current input device index.
+     @returns -1 if no input is selected or if using file
+     */
+    AudioDeviceIndex getInputDeviceIndex();
+    
     /** Set the output device */
     void setOutputDeviceIndex(AudioDeviceIndex devIndex);
     
     /** Get the current output device index */
     AudioDeviceIndex getOutputDeviceIndex();
-    
-    /** Get a linked list of available output device info structs */
-    AudioDeviceInfo* getOutputDeviceInfo() const;
     
     /** Pass in an instance of AudioProcessingUnit to do the DSP */
     void setAudioProcessingUnit(AudioProcessingUnit *unit);

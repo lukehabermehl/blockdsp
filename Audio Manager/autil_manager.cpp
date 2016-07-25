@@ -22,26 +22,6 @@ AudioManager::AudioManager()
     _pimpl->outputDeviceIndex = 1;
     
     Pa_Initialize();
-    int devCount = Pa_GetDeviceCount();
-    AudioDeviceInfo *outputDevice = NULL;
-    
-    for (int i=0; i<devCount; i++)
-    {
-        const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
-        if (i==0)
-        {
-            _pimpl->outputDeviceInfo = AudioDeviceInfoCreate(i, info->name);
-            outputDevice = _pimpl->outputDeviceInfo;
-            
-        }
-        else
-        {
-            outputDevice->next = AudioDeviceInfoCreate(i, info->name);
-            outputDevice = outputDevice->next;
-        }
-        
-        BDLogFormat(kAudioManagerLogPrefix, "found device: %s", info->name);
-    }
 }
 
 AudioManager::~AudioManager()
@@ -60,6 +40,7 @@ void AudioManager::setInputMode(AudioInputMode mode)
     {
         case AudioInputModeFile:
             _pimpl->dspKernel->useFileInput = true;
+            _pimpl->inputDeviceIndex = -1;
             break;
         default:
             _pimpl->dspKernel->useFileInput = false;
@@ -67,19 +48,42 @@ void AudioManager::setInputMode(AudioInputMode mode)
     }
 }
 
+AudioDeviceIndex AudioManager::getInputDeviceIndex()
+{
+    return _pimpl->inputDeviceIndex;
+}
+
 AudioDeviceIndex AudioManager::getOutputDeviceIndex()
 {
     return _pimpl->outputDeviceIndex;
 }
 
-void AudioManager::setOutputDeviceIndex(unsigned int devIndex)
+void AudioManager::setOutputDeviceIndex(AudioDeviceIndex devIndex)
 {
     _pimpl->outputDeviceIndex = devIndex;
 }
 
-AudioDeviceInfo* AudioManager::getOutputDeviceInfo() const
+AudioDeviceInfoRef AudioManager::getDevices()
 {
-    return _pimpl->outputDeviceInfo;
+    //Scan for audio devices
+    BDLog(kAudioManagerLogPrefix, "Scan for audio devices");
+    int devCount = Pa_GetDeviceCount();
+    AudioDeviceInfoRef devInfoRef;
+    AudioDeviceInfoRef currentRef;
+    
+    for (int i=0; i<devCount; i++)
+    {
+        const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
+        if (!devInfoRef) {
+            devInfoRef = AudioDeviceInfoCreate(i, info->name);
+            currentRef = devInfoRef;
+        } else {
+            currentRef->next = AudioDeviceInfoCreate(i, info->name);
+            currentRef = currentRef->next;
+        }
+    }
+    
+    return devInfoRef;
 }
 
 void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)
