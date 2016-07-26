@@ -1,10 +1,11 @@
 //
-//  AudioDSPKernel.hpp
 //  libblockdsp
 //
 //  Created by Luke on 5/23/16.
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
+
+/** @file autil_dspkernel.hpp */
 
 #ifndef AudioDSPKernel_hpp
 #define AudioDSPKernel_hpp

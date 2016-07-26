@@ -1,4 +1,5 @@
 *.DS_Store
 */xcuserdata/*
-./bin
-./bin/*
+docs/doxy/*
+bin
+bin/*

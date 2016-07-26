@@ -255,7 +255,7 @@ void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLine
     fprintf(_pimpl->openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu);\n", nodeName, delayLineName, delayIndex);
 }
 
-void BDCodeBuilder::addCoefficient(const char *name, const char *callback, const char *target, BlockDSPParameterType type)
+void BDCodeBuilder::addParameter(const char *name, const char *callback, const char *target, BlockDSPParameterType type)
 {
     BD_FILE_CHECK();
     
