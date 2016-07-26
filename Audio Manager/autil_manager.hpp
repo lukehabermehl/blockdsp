@@ -1,10 +1,11 @@
 //
-//  AudioManager.hpp
 //  libblockdsp
 //
 //  Created by Luke on 5/23/16.
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
+
+/** @file autil_manager.hpp */
 
 #ifndef AudioManager_hpp
 #define AudioManager_hpp
@@ -29,11 +30,13 @@ enum AudioManagerStatus
     AudioManagerStatusDone
 };
 
+/** Use AudioDeviceIndex when referring to the integer index of an audio device */
 typedef int AudioDeviceIndex;
 
+/** AudioDeviceInfoRef as a smart pointer to an AudioDeviceInfo struct */
 typedef std::shared_ptr<AudioDeviceInfo> AudioDeviceInfoRef;
 
-/** Contains useful information about an output device */
+/** Contains useful information about an output device. Generally, functions involving this struct will return values of type *AudioDeviceInfoRef*, which is typedef'd to be a smart pointer to an AudioDeviceInfo struct */
 struct AudioDeviceInfo
 {
     /** Index number of the device */
