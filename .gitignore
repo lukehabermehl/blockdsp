@@ -3,3 +3,5 @@
 docs/doxy/*
 bin
 bin/*
+test/include/*
+test/lib/*
