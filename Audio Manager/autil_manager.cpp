@@ -58,6 +58,11 @@ AudioDeviceIndex AudioManager::getOutputDeviceIndex()
     return _pimpl->outputDeviceIndex;
 }
 
+void AudioManager::setInputDeviceIndex(AudioDeviceIndex devIndex)
+{
+    _pimpl->inputDeviceIndex = devIndex;
+}
+
 void AudioManager::setOutputDeviceIndex(AudioDeviceIndex devIndex)
 {
     _pimpl->outputDeviceIndex = devIndex;
