@@ -9,16 +9,17 @@
 #include "autil_file.hpp"
 #include "autil_file_private.hpp"
 #include "bdsp_logger.hpp"
+#include "autil_thread_manager.hpp"
 
 #include <vector>
 
-#define FRAMES_PER_FILE_BUFFER 30000
+#define FRAMES_PER_FILE_BUFFER 5000
 
 static const char * kAudioFileLoggerPrefix = "[AudioFile]";
 
-void file_buffer_worker(AudioFile::pimpl *fileImpl)
+void file_buffer_worker(void *ctx)
 {
-    //BDLog(kAudioFileLoggerPrefix, "Buffer more audio from file");
+    AudioFile::pimpl *fileImpl = (AudioFile::pimpl *)ctx;
     int writeBuffer = (fileImpl->currentBufIndex == 0) ? 1 : 0;
     sf_seek(fileImpl->sndfile, fileImpl->framesBuffered, SF_SEEK_SET);
     size_t read = sf_readf_float(fileImpl->sndfile, fileImpl->bufs[writeBuffer], FRAMES_PER_FILE_BUFFER);
@@ -40,30 +41,6 @@ void file_buffer_worker(AudioFile::pimpl *fileImpl)
     }
     
     fileImpl->isBuffering = false;
-}
-
-void thread_queue_worker(AudioFile::pimpl *fileImpl)
-{
-    while (!fileImpl->threadQueue.stop)
-    {
-        if (fileImpl->threadQueue.first)
-        {
-            fileImpl->threadQueue.lock.lock();
-            ThreadQueueLink *queueLink = fileImpl->threadQueue.first;
-            fileImpl->threadQueue.first = NULL;
-            fileImpl->threadQueue.last = NULL;
-            fileImpl->threadQueue.lock.unlock();
-            
-            while (queueLink)
-            {
-                ThreadQueueLink *lnk = queueLink;
-                lnk->thread->join();
-                delete lnk->thread;
-                queueLink = lnk->next;
-                delete lnk;
-            }
-        }
-    }
 }
 
 AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
@@ -89,7 +66,7 @@ AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
     _pimpl->totalSize = _pimpl->sfInfo.channels * _pimpl->sfInfo.frames;
     _pimpl->readIndex = 0;
     _pimpl->currentBufIndex = 0;
-    _pimpl->threadManagerWorker = new std::thread(thread_queue_worker, _pimpl);
+    _pimpl->samplesRead = 0;
     
     size_t framesPerBuffer = FRAMES_PER_FILE_BUFFER;
     if (framesPerBuffer > numFrames())
@@ -105,12 +82,12 @@ AudioFile::AudioFile(const char *filepath, AudioFileMode mode)
         _pimpl->bufferSize = framesPerBuffer * numChannels();
         _pimpl->bufs[0] = new float[_pimpl->bufferSize];
         _pimpl->bufs[1] = new float[_pimpl->bufferSize];
-        _pimpl->needsBuffer = (2 * framesPerBuffer) < numFrames();
+        _pimpl->needsBuffer = true;
     }
-    
+    sf_seek(_pimpl->sndfile, 0, SF_SEEK_SET);
     _pimpl->framesBuffered = sf_read_float(_pimpl->sndfile, &(_pimpl->bufs[0][0]), _pimpl->bufferSize) / numChannels();
     sf_seek(_pimpl->sndfile, _pimpl->framesBuffered, SF_SEEK_SET);
-    _pimpl->threadQueue.append(new ThreadQueueLink(new std::thread(file_buffer_worker, _pimpl)));
+    AUtilDispatchThread(file_buffer_worker, _pimpl);
 }
 
 AudioFile::~AudioFile()
@@ -121,18 +98,19 @@ AudioFile::~AudioFile()
 
 void AudioFile::close()
 {
-    _pimpl->threadQueue.stop = true;
-    _pimpl->threadManagerWorker->join();
-    delete _pimpl->threadManagerWorker;
-    
     if (_pimpl->sndfile)
         sf_close(_pimpl->sndfile);
     
     _pimpl->sndfile = 0;
     
-    delete [] _pimpl->bufs[0];
-    if (_pimpl->bufs[1])
+    if (_pimpl->bufs[0]) {
+        delete [] _pimpl->bufs[0];
+        _pimpl->bufs[0] = NULL;
+    }
+    if (_pimpl->bufs[1]) {
         delete [] _pimpl->bufs[1];
+        _pimpl->bufs[1] = 0;
+    }
 }
 
 AudioFileBufferStatus AudioFile::nextFrame(float **frame)
@@ -159,7 +137,7 @@ AudioFileBufferStatus AudioFile::nextFrame(float **frame)
         if (_pimpl->needsBuffer && !_pimpl->isBuffering)
         {
             _pimpl->isBuffering = true;
-            _pimpl->threadQueue.append(new ThreadQueueLink(new std::thread(file_buffer_worker, _pimpl)));
+            AUtilDispatchThread(file_buffer_worker, _pimpl);
         }
     }
     
@@ -221,14 +199,4 @@ AudioFile::pimpl::~pimpl()
 {
     if (sndfile)
         sf_close(sndfile);
-    
-    ThreadQueueLink *queueLink = threadQueue.first;
-    while (queueLink)
-    {
-        ThreadQueueLink *lnk = queueLink;
-        lnk->thread->join();
-        delete lnk->thread;
-        queueLink = lnk->next;
-        delete lnk;
-    }
 }

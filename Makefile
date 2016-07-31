@@ -1,5 +1,5 @@
 #compiler
-CC = g++ -std=c++11
+CC = g++ -std=c++11 -ggdb
 
 TARGET = libblockdsp
 OUTPUTFILE = libblockdsp.a
@@ -17,6 +17,7 @@ PUBLIC_HEADERS = "./Audio Manager/autil_audioprocessingunit.hpp" \
 				"./Audio Manager/autil_dspkernel.hpp" \
 				"./Audio Manager/autil_file.hpp" \
 				"./Audio Manager/autil_manager.hpp" \
+				"./Audio Manager/autil_thread_manager.hpp" \
 				"./BlockDSP/bdsp_apu.hpp" \
 				"./BlockDSP/bdsp_node.hpp" \
 				"./BlockDSP/bdsp_number.hpp" \
