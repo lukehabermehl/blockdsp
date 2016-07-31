@@ -14,38 +14,6 @@
 #include <thread>
 #include <mutex>
 
-struct ThreadQueueLink {
-    std::thread *thread;
-    ThreadQueueLink *next;
-    
-    ThreadQueueLink(std::thread *thr) : thread(thr), next(NULL) {}
-};
-
-struct ThreadQueue {
-    std::mutex lock;
-    ThreadQueueLink *first;
-    ThreadQueueLink *last;
-    bool stop;
-    
-    ThreadQueue() : first(NULL), last(NULL), stop(false) {}
-    
-    void append(ThreadQueueLink *queueLink)
-    {
-        lock.lock();
-        if (first == NULL)
-        {
-            first = queueLink;
-            last = queueLink;
-        }
-        else
-        {
-            last->next = queueLink;
-            last = last->next;
-        }
-        lock.unlock();
-    }
-};
-
 class AudioFile::pimpl
 {
 public:
@@ -64,9 +32,6 @@ public:
     bool looping;
     bool needsBuffer;
     bool isBuffering;
-    
-    std::thread *threadManagerWorker;
-    ThreadQueue threadQueue;
 };
 
 #endif /* AudioFile_Private_h */

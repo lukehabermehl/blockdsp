@@ -11,7 +11,7 @@
 #define SAFE_DEL(_x) if (_x) delete _x
 
 //Make sure you set these before trying to run the test!!
-static const char * input_file_path = "/Users/Luke/Desktop/guitar.wav";
+static const char * input_file_path = "/Users/Luke/Projects/libblockdsp/test/resources/guitar.wav";
 static const char * dylib_path = "/Users/Luke/Desktop/test.dylib"; //Export APU dylib path
 static const char * built_code_path = "/Users/Luke/Desktop/test"; //Destination for generated code
 
