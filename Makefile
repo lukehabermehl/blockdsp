@@ -67,10 +67,11 @@ install: all
 
 dsptest.o: all
 	$(CC) -o "dsptest.out" dsptest/main.cpp -I/usr/local/include $(LIBS_SEARCH) -lblockdsp $(LIBS)
-	@./dsptest.out
-	@rm -rf ./dsptest.out*
 
 dsptest : dsptest.o
+	@./dsptest.out
+	@rm -rf ./dsptest.out*
+	@rm -rf ./test/resources/dsptest.dylib ./test/resources/dsptest_output
 
 test: all
 	cd test/gunit/ && make

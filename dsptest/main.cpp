@@ -10,10 +10,9 @@
 
 #define SAFE_DEL(_x) if (_x) delete _x
 
-//Make sure you set these before trying to run the test!!
-static const char * input_file_path = "/Users/Luke/Projects/libblockdsp/test/resources/guitar.wav";
-static const char * dylib_path = "/Users/Luke/Desktop/test.dylib"; //Export APU dylib path
-static const char * built_code_path = "/Users/Luke/Desktop/test"; //Destination for generated code
+static const char * input_file_path = "./test/resources/guitar.wav";
+static const char * dylib_path = "./test/resources/dsptest.dylib"; //Export APU dylib path
+static const char * built_code_path = "./test/resources/dsptest_output"; //Destination for generated code
 
 static BDAPULoader *apuLoader = 0;
 
