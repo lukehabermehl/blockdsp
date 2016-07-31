@@ -73,7 +73,6 @@ float BlockDSPMultiplierNode::valueForChannel(uint32_t channelNo) {
 }
 
 BlockDSPMultiplierNode::~BlockDSPMultiplierNode() {
-    delete coefficient;
     delete _multiplierNodePimpl;
 }
 
@@ -145,8 +144,6 @@ BlockDSPInputNode::BlockDSPInputNode(uint32_t numChannels) : BlockDSPNode(numCha
 }
 
 BlockDSPInputNode::~BlockDSPInputNode() {
-    if (getChannelCount() > 0)
-        delete []inputBuffer;
 }
 
 void BlockDSPInputNode::connectInput(BlockDSPNode *inputNode) {
