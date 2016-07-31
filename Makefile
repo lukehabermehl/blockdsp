@@ -4,8 +4,11 @@ CC = g++ -std=c++11 -ggdb
 TARGET = libblockdsp
 OUTPUTFILE = libblockdsp.a
 
-# OUTPUTDIR will be DELETED on `make clean`
-OUTPUTDIR = ./bin
+# OBJOUTDIR will be DELETED on `make clean`
+OBJOUTDIR = ./bin
+LIBOUTDIR = ./lib
+INCLUDEOUTDIR = ./include
+
 CFLAGS = -Wall -pedantic
 INCLUDES = -I "./Audio Manager/" \
 		-I "./BlockDSP/" \
@@ -41,24 +44,52 @@ SRC_FILES = ./Audio\ Manager/*.cpp \
 		./Logger/*.cpp
 
 
-OBJECTS = ./$(OUTPUTDIR)/*.o
+OBJECTS = ./$(OBJOUTDIR)/*.o
 
-all:
-	@mkdir -p $(OUTPUTDIR)
-	$(CC) -c $(CFLAGS) $(INCLUDES) $(SRC_FILES)
-	@mv *.o $(OUTPUTDIR)
-
-install:
+all: $(OBJECTS)
+	@mkdir -p $(LIBOUTDIR)
+	@mkdir -p $(INCLUDEOUTDIR)
 	libtool -o $(TARGET).a -static $(OBJECTS)
-	@mv $(TARGET).a /usr/local/lib
+	@mv *.a $(LIBOUTDIR)
+	@cp -f $(PUBLIC_HEADERS) $(INCLUDEOUTDIR)/
+
+$(OBJOUTDIR)/*.o:
+	@mkdir -p $(OBJOUTDIR)
+	$(CC) -c $(CFLAGS) $(LIBS_SEARCH) $(LIBS) $(INCLUDES) $(SRC_FILES)
+	@mv *.o $(OBJOUTDIR)
+
+
+install: all
 	@mkdir -p /usr/local/include/blockdsp
 	@cp -f $(PUBLIC_HEADERS) /usr/local/include/blockdsp
 	@cp -f blockdsp.h /usr/local/include/blockdsp.h
+	@cp -f $(LIBOUTDIR)/*.a /usr/local/lib/
 
-test:
+dsptest.o: all
 	$(CC) -o "dsptest.out" dsptest/main.cpp -I/usr/local/include $(LIBS_SEARCH) -lblockdsp $(LIBS)
 	@./dsptest.out
-	@rm ./dsptest.out
+	@rm -rf ./dsptest.out*
+
+dsptest : dsptest.o
+
+test: all
+	cd test/gunit/ && make
+	cd test/gunit/ && ./test_all
+
+docs:
+	cd docs && doxygen Doxyfile
+	open docs/doxy/html/index.html
+
 clean:
-	@rm -r $(OUTPUTDIR)
+	@rm -rf $(OBJOUTDIR)
+	@rm -rf $(LIBOUTDIR)/*
+	@rm -rf $(INCLUDEOUTDIR)/*
+	@cd test/gunit && make clean
+
+.PHONY: clean
+.PHONY: install
+.PHONY: all
+.PHONY: dsptest
+.PHONY: test
+.PHONY: docs
 

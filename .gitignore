@@ -5,3 +5,5 @@ bin
 bin/*
 test/include/*
 test/lib/*
+lib/*
+include/*
