@@ -41,18 +41,16 @@ void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType typ
     }
 }
 
-void BDStringForParameterType(char *str, BlockDSPParameterType type)
+void BDStringForParameterType(char *str, BlockDSPNumberType type)
 {
     switch (type)
     {
-        case BlockDSPParameterTypeFloat:
-            strcpy(str, "BlockDSPParameterTypeFloat");
-        case BlockDSPParameterTypeBoolean:
-            strcpy(str, "BlockDSPParameterTypeBoolean");
-        case BlockDSPParameterTypeInteger:
-            strcpy(str, "BlockDSPParameterTypeInteger");
-        case BlockDSPParameterTypeUnsignedInt:
-            strcpy(str, "BlockDSPParameterTypeUnsignedInt");
+        case BlockDSPNumberType::FLOAT:
+            strcpy(str, "BlockDSPNumberType::FLOAT");
+        case BlockDSPNumberType::BOOLEAN:
+            strcpy(str, "BlockDSPNumberType::BOOLEAN");
+        case BlockDSPNumberType::INTEGER:
+            strcpy(str, "BlockDSPNumberType::INTEGER");
     }
 }
 
@@ -255,7 +253,7 @@ void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLine
     fprintf(_pimpl->openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu);\n", nodeName, delayLineName, delayIndex);
 }
 
-void BDCodeBuilder::addParameter(const char *name, const char *callback, const char *target, BlockDSPParameterType type)
+void BDCodeBuilder::addParameter(const char *name, const char *callback, const char *target, BlockDSPNumberType type)
 {
     BD_FILE_CHECK();
     
@@ -291,7 +289,7 @@ void BDCodeBuilder::addNumber(const char *name)
     fprintf(_pimpl->openFile, "system->addNumber(\"%s\", %s);\n", name, name);
 }
 
-void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPParameterType valueType, void *value)
+void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPNumberType valueType, void *value)
 {
     BD_FILE_CHECK();
     
@@ -304,27 +302,21 @@ void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPParame
     
     switch (valueType)
     {
-        case BlockDSPParameterTypeFloat:
+        case BlockDSPNumberType::FLOAT:
         {
             fprintf(_pimpl->openFile, "%s->setFloatValue(%f);\n", numberName, *((float *)value));
             break;
         }
             
-        case BlockDSPParameterTypeBoolean:
+        case BlockDSPNumberType::BOOLEAN:
         {
             fprintf(_pimpl->openFile, "%s->setBoolValue(%s);\n", numberName, *((bool *)value) ? "true" : "false");
             break;
         }
             
-        case BlockDSPParameterTypeInteger:
+        case BlockDSPNumberType::INTEGER:
         {
             fprintf(_pimpl->openFile, "%s->setIntegerValue(%d);\n", numberName, *((int *)value));
-            break;
-        }
-            
-        case BlockDSPParameterTypeUnsignedInt:
-        {
-            fprintf(_pimpl->openFile, "%s->setIntegerValue(%ud);\n", numberName, *((unsigned int *)value));
             break;
         }
     }

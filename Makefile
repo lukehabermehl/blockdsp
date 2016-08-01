@@ -49,9 +49,11 @@ OBJECTS = ./$(OBJOUTDIR)/*.o
 all: $(OBJECTS)
 	@mkdir -p $(LIBOUTDIR)
 	@mkdir -p $(INCLUDEOUTDIR)
+	@mkdir -p $(INCLUDEOUTDIR)/blockdsp
 	libtool -o $(TARGET).a -static $(OBJECTS)
 	@mv *.a $(LIBOUTDIR)
-	@cp -f $(PUBLIC_HEADERS) $(INCLUDEOUTDIR)/
+	@cp -f $(PUBLIC_HEADERS) $(INCLUDEOUTDIR)/blockdsp
+	@cp -f blockdsp.h $(INCLUDEOUTDIR)
 
 $(OBJOUTDIR)/*.o:
 	@mkdir -p $(OBJOUTDIR)

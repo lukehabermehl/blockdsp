@@ -10,24 +10,15 @@
 #ifndef BlockDSPParameter_hpp
 #define BlockDSPParameter_hpp
 
-class BlockDSPNumber;
+#include "bdsp_number.hpp"
 
 #define BDSP_MAX_PARAMLEN 256
 
 class BlockDSPSystem;
 class BlockDSPParameter;
 
-/** Value types for parameters and numbers */
-enum BlockDSPParameterType
-{
-    BlockDSPParameterTypeInteger,
-    BlockDSPParameterTypeUnsignedInt,
-    BlockDSPParameterTypeFloat,
-    BlockDSPParameterTypeBoolean
-};
-
 /** typedef for callback function pointer for parameters. The callback is an optional function that will be called when the parameter changes. The parameters are the BlockDSPSystem instance, a pointer to the parameter that changed, and a pointer to the new value of the parameter. Use the *type()* method of the parameter to get the type to which to cast the value pointer */
-typedef void (* BlockDSPParameterCallback)(const BlockDSPSystem *, const BlockDSPParameter *, void *value);
+typedef void (* BlockDSPParameterCallback)(BlockDSPSystem *, BlockDSPParameter *, void *value);
 
 /** A parameter that can be used to change a number and/or trigger a callback */
 class BlockDSPParameter {
@@ -38,7 +29,7 @@ public:
       * @param target a pointer to the number to change when the parameter is modified. Can be NULL
       * @param system the containing system 
       */
-    BlockDSPParameter(BlockDSPParameterType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system);
+    BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system);
     ~BlockDSPParameter();
     /** Set the name of the parameter */
     void setName(const char *name);
@@ -55,7 +46,7 @@ public:
     bool setValue(int val);
     
     /** Get the value type of the parameter */
-    BlockDSPParameterType type();
+    BlockDSPNumberType type();
     /** Holds the callback function pointer or NULL if none exists */
     BlockDSPParameterCallback callback;
     
