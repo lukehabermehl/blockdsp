@@ -8,18 +8,14 @@
 
 #include "bdsp_number.hpp"
 #include "bdsp_number_private.hpp"
-#include <stdlib.h>
-#include <string.h>
+#include "bdsp_parameter.hpp"
 #include <cmath>
-
-static const size_t INT_SIZE = sizeof(int);
-static const size_t FLOAT_SIZE = sizeof(float);
-static const size_t BOOL_SIZE = sizeof(bool);
 
 BlockDSPNumber::BlockDSPNumber()
 {
     _pimpl = new pimpl;
-    memset(_pimpl->data, 0, pimpl::dataSize);
+    _pimpl->paramType = BlockDSPNumberType::INTEGER;
+    _pimpl->intValue = 0;
 }
 
 BlockDSPNumber::~BlockDSPNumber()
@@ -29,34 +25,48 @@ BlockDSPNumber::~BlockDSPNumber()
 
 void BlockDSPNumber::setIntegerValue(int i)
 {
-    memset(_pimpl->data, 0, pimpl::dataSize);
-    memcpy(_pimpl->data, &i, INT_SIZE);
+    _pimpl->intValue = i;
+    _pimpl->paramType = BlockDSPNumberType::INTEGER;
 }
 
 void BlockDSPNumber::setFloatValue(float f)
 {
-    memset(_pimpl->data, 0, pimpl::dataSize);
-    memcpy(&_pimpl->data[pimpl::dataSize - FLOAT_SIZE], &f, FLOAT_SIZE);
+    _pimpl->floatValue = f;
+    _pimpl->paramType = BlockDSPNumberType::FLOAT;
 }
 
 void BlockDSPNumber::setBoolValue(bool b)
 {
-    memset(_pimpl->data, 0, pimpl::dataSize);
-    memcpy(&_pimpl->data[pimpl::dataSize - BOOL_SIZE], &b, BOOL_SIZE);
+    _pimpl->boolValue = b;
+    _pimpl->paramType = BlockDSPNumberType::BOOLEAN;
 }
 
 int BlockDSPNumber::integerValue()
 {
-    float f;
-    memcpy(&f, &_pimpl->data[pimpl::dataSize - FLOAT_SIZE], FLOAT_SIZE);
-    return (int)f;
+    switch (_pimpl->paramType) {
+        case BlockDSPNumberType::INTEGER:
+            return _pimpl->intValue;
+        case BlockDSPNumberType::FLOAT:
+            return (int)floorf(_pimpl->floatValue);
+        case BlockDSPNumberType::BOOLEAN:
+            return _pimpl->boolValue ? 1 : 0;
+        default:
+            return 0;
+    }
 }
 
 float BlockDSPNumber::floatValue()
 {
-    float f;
-    memcpy(&f, &_pimpl->data[pimpl::dataSize - FLOAT_SIZE], FLOAT_SIZE);
-    return f;
+    switch (_pimpl->paramType) {
+        case BlockDSPNumberType::INTEGER:
+            return (float)(_pimpl->intValue);
+        case BlockDSPNumberType::FLOAT:
+            return _pimpl->floatValue;
+        case BlockDSPNumberType::BOOLEAN:
+            return _pimpl->boolValue ? 1.f : 0.f;
+        default:
+            return 0;
+    }
 }
 
 bool BlockDSPNumber::boolValue()

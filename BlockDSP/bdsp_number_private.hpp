@@ -14,8 +14,11 @@
 class BlockDSPNumber::pimpl
 {
 public:
-    static const int dataSize = 8;
-    unsigned char data[dataSize];
+    int intValue;
+    bool boolValue;
+    float floatValue;
+    
+    BlockDSPNumberType paramType;
 };
 
 #endif /* BlockDSPNumber_Private_h */

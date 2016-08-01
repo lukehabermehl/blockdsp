@@ -11,7 +11,7 @@
 #include "bdsp_number.hpp"
 #include <string.h>
 
-BlockDSPParameter::BlockDSPParameter(BlockDSPParameterType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system)
+BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system)
 {
     _pimpl = new pimpl;
     _pimpl->type = type;
@@ -43,7 +43,7 @@ void BlockDSPParameter::setTarget(BlockDSPNumber *target)
 
 bool BlockDSPParameter::setValue(float val)
 {
-    if (_pimpl->type != BlockDSPParameterTypeFloat)
+    if (_pimpl->type != BlockDSPNumberType::FLOAT)
         return false;
     
     if (_pimpl->target)
@@ -58,7 +58,7 @@ bool BlockDSPParameter::setValue(float val)
 
 bool BlockDSPParameter::setValue(bool b)
 {
-    if (_pimpl->type != BlockDSPParameterTypeBoolean)
+    if (_pimpl->type != BlockDSPNumberType::BOOLEAN)
         return false;
         
     if (_pimpl->target)
@@ -72,7 +72,7 @@ bool BlockDSPParameter::setValue(bool b)
 
 bool BlockDSPParameter::setValue(int val)
 {
-    if (_pimpl->type != BlockDSPParameterTypeInteger)
+    if (_pimpl->type != BlockDSPNumberType::INTEGER)
         return false;
     
     if (_pimpl->target)

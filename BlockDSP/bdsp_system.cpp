@@ -104,7 +104,7 @@ void BlockDSPSystem::addParameter(BlockDSPParameter *param) {
     _pimpl->parameterMap[param->name()] = param;
 }
 
-BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPParameterType type, BlockDSPNumber *target)
+BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target)
 {
     BlockDSPParameter *param = new BlockDSPParameter(type, name, target, this);
     addParameter(param);
@@ -137,6 +137,14 @@ BlockDSPNode *BlockDSPSystem::nodeWithID(ssize_t id) {
         return nullptr;
     
     return it->second;
+}
+
+BlockDSPNumber * BlockDSPSystem::numberWithName(const char *name) {
+    auto it = _pimpl->numberMap.find(name);
+    if (it != _pimpl->numberMap.end()) {
+        return it->second;
+    }
+    return nullptr;
 }
 
 BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned int sampleRate) {
@@ -178,11 +186,11 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned i
     b1Node->coefficient = BlockDSPNumber::numberForFloat(-1 * coeffs.b1);
     b2Node->coefficient = BlockDSPNumber::numberForFloat(-1 * coeffs.b2);
     
-    system->createParameter("a0", BlockDSPParameterTypeFloat, a0Node->coefficient);
-    system->createParameter("a1", BlockDSPParameterTypeFloat, a1Node->coefficient);
-    system->createParameter("a2", BlockDSPParameterTypeFloat, a2Node->coefficient);
-    system->createParameter("b1", BlockDSPParameterTypeFloat, b1Node->coefficient);
-    system->createParameter("b2", BlockDSPParameterTypeFloat, b2Node->coefficient);
+    system->createParameter("a0", BlockDSPNumberType::FLOAT, a0Node->coefficient);
+    system->createParameter("a1", BlockDSPNumberType::FLOAT, a1Node->coefficient);
+    system->createParameter("a2", BlockDSPNumberType::FLOAT, a2Node->coefficient);
+    system->createParameter("b1", BlockDSPNumberType::FLOAT, b1Node->coefficient);
+    system->createParameter("b2", BlockDSPNumberType::FLOAT, b2Node->coefficient);
     
     system->mainOutputNode = outGainNode;
     outGainNode->coefficient = BlockDSPNumber::numberForFloat(2.0);

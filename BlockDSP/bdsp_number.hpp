@@ -10,6 +10,13 @@
 #ifndef BlockDSPNumber_hpp
 #define BlockDSPNumber_hpp
 
+/** Underlying types for numbers */
+enum BlockDSPNumberType {
+    INTEGER,
+    FLOAT,
+    BOOLEAN
+};
+
 /** An object that represents common numeric types */
 class BlockDSPNumber
 {

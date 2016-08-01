@@ -50,6 +50,10 @@ public:
       * @returns a pointer to the node or NULL if it is not found
       */
     BlockDSPNode *nodeWithID(BlockDSPNodeID id);
+    /** Get the number with the given name
+      * @param name the name of the number
+      */
+    BlockDSPNumber *numberWithName(const char *name);
     /** Create a new delay line and add it to the system 
       * @param inputNode the input to the delay line
       */
@@ -65,7 +69,7 @@ public:
       * @param type the value type
       * @param target optional target number for the parameter. See the documentation for BlockDSPParameter
       */
-    BlockDSPParameter *createParameter(const char *name, BlockDSPParameterType type, BlockDSPNumber *target);
+    BlockDSPParameter *createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target);
     
     BlockDSPSystem(uint32_t numChannels);
     ~BlockDSPSystem();

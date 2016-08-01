@@ -18,7 +18,7 @@ public:
     
     char name[BDSP_MAX_PARAMLEN];
     BlockDSPNumber *target;
-    BlockDSPParameterType type;
+    BlockDSPNumberType type;
     BlockDSPSystem *system;
 };
 
