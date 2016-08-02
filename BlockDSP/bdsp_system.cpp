@@ -38,8 +38,8 @@ BlockDSPSystem::~BlockDSPSystem() {
         delete num;
     }
     
-    for (size_t i=0; i<_pimpl->delayLines.size(); i++) {
-        delete _pimpl->delayLines[i];
+    for (auto it = _pimpl->delayLineMap.begin(); it != _pimpl->delayLineMap.end(); it++) {
+        delete it->second;
     }
     
     delete _pimpl;
@@ -60,13 +60,12 @@ void BlockDSPSystem::removeNode(BlockDSPNode *node) {
 
 void BlockDSPSystem::addDelayLine(BlockDSPDelayLine *dl) {
     dl->id = _pimpl->counter++;
-    _pimpl->delayLines.push_back(dl);
+    _pimpl->delayLineMap[dl->id] = dl;
 }
 
 void BlockDSPSystem::next() {
-    for (size_t i=0; i<_pimpl->delayLines.size(); i++) {
-        BlockDSPDelayLine *dl = _pimpl->delayLines[i];
-        dl->shuffle();
+    for (auto it = _pimpl->delayLineMap.begin(); it != _pimpl->delayLineMap.end(); it++) {
+        it->second->shuffle();
     }
 }
 
@@ -147,6 +146,15 @@ BlockDSPNumber * BlockDSPSystem::numberWithName(const char *name) {
     return nullptr;
 }
 
+BlockDSPDelayLine * BlockDSPSystem::delayLineWithID(BlockDSPNodeID id) {
+    auto it = _pimpl->delayLineMap.find(id);
+    if (it != _pimpl->delayLineMap.end()) {
+        return it->second;
+    } else {
+        return NULL;
+    }
+}
+
 BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned int sampleRate) {
     BlockDSPSystem *system = new BlockDSPSystem(numChannels);
     BlockDSPDelayLine *inDelayLine = system->createDelayLine(system->mainInputNode);
@@ -199,8 +207,8 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned i
 }
 
 void BlockDSPSystem::reset() {
-    for (size_t i=0; i<_pimpl->delayLines.size(); i++) {
-        _pimpl->delayLines[i]->reset();
+    for (auto it = _pimpl->delayLineMap.begin(); it != _pimpl->delayLineMap.end(); it++) {
+        it->second->reset();
     }
     
     memset(mainInputNode->inputBuffer, 0, sizeof(float) * _pimpl->numChannels);

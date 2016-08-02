@@ -52,8 +52,13 @@ public:
     BlockDSPNode *nodeWithID(BlockDSPNodeID id);
     /** Get the number with the given name
       * @param name the name of the number
+      * @returns the number or NULL if not found
       */
     BlockDSPNumber *numberWithName(const char *name);
+    /** Get the delay line with the given ID
+      * @returns the delay line or NULL if not found
+      */
+    BlockDSPDelayLine *delayLineWithID(BlockDSPNodeID id);
     /** Create a new delay line and add it to the system 
       * @param inputNode the input to the delay line
       */
