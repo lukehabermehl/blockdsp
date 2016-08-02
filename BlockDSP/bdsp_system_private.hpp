@@ -19,7 +19,7 @@ class BlockDSPSystem::pimpl
 {
 public:
     std::unordered_map<BlockDSPNodeID, BlockDSPNode *> nodeMap;
-    std::vector<BlockDSPDelayLine *>delayLines;
+    std::unordered_map<BlockDSPNodeID, BlockDSPDelayLine *> delayLineMap;
     std::unordered_map<std::string, BlockDSPParameter *> parameterMap;
     std::unordered_map<std::string, BlockDSPNumber *> numberMap;
     
