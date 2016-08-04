@@ -98,6 +98,8 @@ int main(int argc, const char * argv[]) {
     
     
     AudioFile *file = new AudioFile(input_file_path, AudioFileModeReadOnly);
+    apunit->setMaxInputChannels(file->numChannels());
+    apunit->setMaxOutputChannels(file->numChannels());
     audioManager.setInputFile(file);
     audioManager.setInputMode(AudioInputModeFile);
     audioManager.setOutputDeviceIndex(1);
