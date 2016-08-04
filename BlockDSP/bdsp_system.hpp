@@ -17,6 +17,15 @@
 /** The container for all the objects associated with the audio processing chain */
 class BlockDSPSystem {
 public:
+    /** Get the number of input channels in use in the system */
+    uint32_t getNumInputChannels();
+    /** Set the number of input channels in use in the system. Make sure that this is not more than the
+        maximum input channel count for the input source */
+    void setNumInputChannels(uint32_t num);
+    /** Get the number of output channels in use in the system */
+    uint32_t getNumOutputChannels();
+    /** Set the number of output channels in use in the system. Make sure that this is not more than the maximum output channel count of the output device */
+    void setNumOutputChannels(uint32_t num);
     /** Entry point for audio from a file or input device */
     BlockDSPInputNode *mainInputNode;
     /** Output node to the output device */
@@ -24,6 +33,7 @@ public:
     
     /** TEST FUNCTION -- create a prepackaged system for a BiQuad filter */
     static BlockDSPSystem *systemForBiQuad(uint32_t numChannels, unsigned int sampleRate);
+    
     /** Add a node to the system. Once added, the node's memory will be managed and automatically deleted by the system */
     void addNode(BlockDSPNode *node);
     /** Remove a node from the system. Removing the node will give you back control of the node's memory so be careful */
@@ -76,7 +86,7 @@ public:
       */
     BlockDSPParameter *createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target);
     
-    BlockDSPSystem(uint32_t numChannels);
+    BlockDSPSystem();
     ~BlockDSPSystem();
     
 private:

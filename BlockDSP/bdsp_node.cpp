@@ -12,9 +12,10 @@
 #include "bdsp_number.hpp"
 
 #pragma mark - BlockDSPNode
-BlockDSPNode::BlockDSPNode(uint32_t numChannels) {
+BlockDSPNode::BlockDSPNode(uint32_t numInputChannels, uint32_t numOutputChannels) {
     _pimpl = new pimpl;
-    _pimpl->numChannels = numChannels;
+    _pimpl->numInputChannels = numInputChannels;
+    _pimpl->numOutputChannels = numOutputChannels;
     nodeID = -1;
 }
 
@@ -22,12 +23,28 @@ BlockDSPNode::~BlockDSPNode() {
     delete _pimpl;
 }
 
-uint32_t BlockDSPNode::getChannelCount() {
-    return _pimpl->numChannels;
+uint32_t BlockDSPNode::getNumOutputChannels()
+{
+    return _pimpl->numOutputChannels;
+}
+
+uint32_t BlockDSPNode::getNumInputChannels()
+{
+    return _pimpl->numInputChannels;
+}
+
+void BlockDSPNode::setNumInputChannels(uint32_t num)
+{
+    _pimpl->numInputChannels = num;
+}
+
+void BlockDSPNode::setNumOutputChannels(uint32_t num)
+{
+    _pimpl->numOutputChannels = num;
 }
 
 void BlockDSPNode::connectInput(BlockDSPNode *inputNode) {
-    return;
+    setNumInputChannels(inputNode->getNumOutputChannels());
 }
 
 float BlockDSPNode::valueForChannel(uint32_t channelNo) {
@@ -36,7 +53,9 @@ float BlockDSPNode::valueForChannel(uint32_t channelNo) {
 
 #pragma mark - BlockDSPSummerNode
 
-BlockDSPSummerNode::BlockDSPSummerNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
+BlockDSPSummerNode::BlockDSPSummerNode(uint32_t numInputChannels, uint32_t numOutputChannels)
+: BlockDSPNode(numInputChannels, numOutputChannels)
+{
     _summerNodePimpl = new summerNodePimpl;
 }
 
@@ -47,6 +66,9 @@ BlockDSPSummerNode::~BlockDSPSummerNode()
 
 void BlockDSPSummerNode::connectInput(BlockDSPNode *inputNode) {
     _summerNodePimpl->inputNodes.push_back(inputNode);
+    if (inputNode->getNumOutputChannels() > getNumInputChannels()) {
+        setNumInputChannels(inputNode->getNumOutputChannels());
+    }
 }
 
 float BlockDSPSummerNode::valueForChannel(uint32_t channelNo) {
@@ -59,13 +81,16 @@ float BlockDSPSummerNode::valueForChannel(uint32_t channelNo) {
 }
 
 #pragma mark - BlockDSPMultiplierNode
-BlockDSPMultiplierNode::BlockDSPMultiplierNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
+BlockDSPMultiplierNode::BlockDSPMultiplierNode(uint32_t numInputChannels, uint32_t numOutputChannels)
+: BlockDSPNode(numInputChannels, numOutputChannels)
+{
     coefficient = BlockDSPNumber::numberForFloat(1.0);
     _multiplierNodePimpl = new multiplierNodePimpl;
 }
 
 void BlockDSPMultiplierNode::connectInput(BlockDSPNode *inputNode) {
     _multiplierNodePimpl->inputNode = inputNode;
+    setNumInputChannels(inputNode->getNumOutputChannels());
 }
 
 float BlockDSPMultiplierNode::valueForChannel(uint32_t channelNo) {
@@ -83,8 +108,8 @@ BlockDSPDelayLineNode::BlockDSPDelayLineNode(uint32_t numChannels) : BlockDSPNod
     delayLine = 0;
 }
 
-void BlockDSPDelayLineNode::connectInput(BlockDSPNode *inputNode) {
-    return;
+void BlockDSPDelayLineNode::connectInput(BlockDSPNode *inputNode)
+{
 }
 
 float BlockDSPDelayLineNode::valueForChannel(uint32_t channelNo) {
@@ -138,16 +163,16 @@ void BlockDSPDelayLine::reset() {
 }
 
 #pragma mark - BlockDSPInputNode
-BlockDSPInputNode::BlockDSPInputNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
-    inputBuffer = new float[getChannelCount()];
-    memset(inputBuffer, 0, sizeof(float) * getChannelCount());
+BlockDSPInputNode::BlockDSPInputNode(uint32_t numInputChannels)
+: BlockDSPNode(numInputChannels, numInputChannels)
+{
 }
 
 BlockDSPInputNode::~BlockDSPInputNode() {
 }
 
-void BlockDSPInputNode::connectInput(BlockDSPNode *inputNode) {
-    return;
+void BlockDSPInputNode::connectInput(BlockDSPNode *inputNode)
+{
 }
 
 float BlockDSPInputNode::valueForChannel(uint32_t channelNo) {

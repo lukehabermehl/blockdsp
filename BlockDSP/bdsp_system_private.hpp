@@ -24,7 +24,8 @@ public:
     std::unordered_map<std::string, BlockDSPNumber *> numberMap;
     
     uint32_t counter;
-    uint32_t numChannels;
+    uint32_t inputChannelCount;
+    uint32_t outputChannelCount;
 };
 
 #endif /* BlockDSPSystem_Private_h */

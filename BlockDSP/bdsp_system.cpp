@@ -11,12 +11,14 @@
 #include "dsphelpers.hpp"
 #include "bdsp_number.hpp"
 
-BlockDSPSystem::BlockDSPSystem(uint32_t numChannels) {
+BlockDSPSystem::BlockDSPSystem() {
     _pimpl = new pimpl;
-    _pimpl->numChannels = numChannels;
+    //Default channels to MONO -> MONO
+    _pimpl->outputChannelCount = 1;
+    _pimpl->inputChannelCount = 1;
     _pimpl->counter = 0;
     
-    mainInputNode = new BlockDSPInputNode(numChannels);
+    mainInputNode = new BlockDSPInputNode(getNumInputChannels());
     mainOutputNode = mainInputNode;
 }
 
@@ -45,6 +47,26 @@ BlockDSPSystem::~BlockDSPSystem() {
     delete _pimpl;
 }
 
+uint32_t BlockDSPSystem::getNumInputChannels()
+{
+    return _pimpl->inputChannelCount;
+}
+
+void BlockDSPSystem::setNumInputChannels(uint32_t num)
+{
+    _pimpl->inputChannelCount = num;
+}
+
+uint32_t BlockDSPSystem::getNumOutputChannels()
+{
+    return _pimpl->outputChannelCount;
+}
+
+void BlockDSPSystem::setNumOutputChannels(uint32_t num)
+{
+    _pimpl->outputChannelCount = num;
+}
+
 void BlockDSPSystem::addNode(BlockDSPNode *node) {
     if (node->nodeID < 0)
         node->nodeID = _pimpl->counter++;
@@ -70,14 +92,14 @@ void BlockDSPSystem::next() {
 }
 
 BlockDSPSummerNode *BlockDSPSystem::createSummerNode() {
-    BlockDSPSummerNode *summerNode = new BlockDSPSummerNode(_pimpl->numChannels);
+    BlockDSPSummerNode *summerNode = new BlockDSPSummerNode(getNumInputChannels(), getNumOutputChannels());
     addNode(summerNode);
     
     return summerNode;
 }
 
 BlockDSPDelayLine *BlockDSPSystem::createDelayLine(BlockDSPNode *inputNode) {
-    BlockDSPDelayLine *delayLine = new BlockDSPDelayLine(_pimpl->numChannels);
+    BlockDSPDelayLine *delayLine = new BlockDSPDelayLine(getNumInputChannels());
     delayLine->inputNode = inputNode;
     addDelayLine(delayLine);
     
@@ -85,7 +107,7 @@ BlockDSPDelayLine *BlockDSPSystem::createDelayLine(BlockDSPNode *inputNode) {
 }
 
 BlockDSPMultiplierNode *BlockDSPSystem::createMultiplierNode() {
-    BlockDSPMultiplierNode *node = new BlockDSPMultiplierNode(_pimpl->numChannels);
+    BlockDSPMultiplierNode *node = new BlockDSPMultiplierNode(getNumInputChannels(), getNumOutputChannels());
     addNode(node);
     
     return node;
@@ -93,7 +115,7 @@ BlockDSPMultiplierNode *BlockDSPSystem::createMultiplierNode() {
 
 BlockDSPInputNode *BlockDSPSystem::createInputNode()
 {
-    BlockDSPInputNode *node = new BlockDSPInputNode(_pimpl->numChannels);
+    BlockDSPInputNode *node = new BlockDSPInputNode(getNumInputChannels());
     addNode(node);
     
     return node;
@@ -156,7 +178,10 @@ BlockDSPDelayLine * BlockDSPSystem::delayLineWithID(BlockDSPNodeID id) {
 }
 
 BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned int sampleRate) {
-    BlockDSPSystem *system = new BlockDSPSystem(numChannels);
+    BlockDSPSystem *system = new BlockDSPSystem();
+    system->setNumInputChannels(numChannels);
+    system->setNumOutputChannels(numChannels);
+    
     BlockDSPDelayLine *inDelayLine = system->createDelayLine(system->mainInputNode);
     inDelayLine->setSize(2);
     BlockDSPSummerNode *summer = system->createSummerNode();
@@ -211,5 +236,5 @@ void BlockDSPSystem::reset() {
         it->second->reset();
     }
     
-    memset(mainInputNode->inputBuffer, 0, sizeof(float) * _pimpl->numChannels);
+    memset(mainInputNode->inputBuffer, 0, sizeof(float) * getNumInputChannels());
 }

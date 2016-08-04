@@ -27,7 +27,7 @@ public:
     /** Constructor
       * @param numChannels Number of output channels
       */
-    BlockDSPNode(uint32_t numChannels);
+    BlockDSPNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     /** Connect a node to this node's input
       * @param inputNode node to connect
       */
@@ -35,7 +35,13 @@ public:
     /** Get the output value for the given channel */
     virtual float valueForChannel(uint32_t channelNo);
     /** Get the number of output channels */
-    uint32_t getChannelCount();
+    uint32_t getNumOutputChannels();
+    /** Get the number of input channels */
+    uint32_t getNumInputChannels();
+    /** Get the number of output channels */
+    void setNumOutputChannels(uint32_t num);
+    /** Get the number of input channels */
+    void setNumInputChannels(uint32_t num);
     
     virtual ~BlockDSPNode();
     
@@ -47,7 +53,7 @@ private:
 /** Performs a summing operation. Supports virtually any number of input nodes */
 class BlockDSPSummerNode : public BlockDSPNode {
 public:
-    BlockDSPSummerNode(uint32_t numChannels);
+    BlockDSPSummerNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     virtual ~BlockDSPSummerNode();
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
@@ -63,7 +69,7 @@ public:
     /** The coefficient number */
     BlockDSPNumber *coefficient;
     
-    BlockDSPMultiplierNode(uint32_t numChannels);
+    BlockDSPMultiplierNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
     virtual ~BlockDSPMultiplierNode();
@@ -83,6 +89,7 @@ public:
     /** The index of the delay node */
     size_t delayIndex;
     
+    /** Constructor. For delay line nodes, the input and output channel count should be equal */
     BlockDSPDelayLineNode(uint32_t numChannels);
     /** Is no-op for delay line nodes */
     virtual void connectInput(BlockDSPNode *inputNode);
@@ -120,9 +127,10 @@ private:
 /** Allows custom input. Does not support input nodes */
 class BlockDSPInputNode : public BlockDSPNode {
 public:
-    BlockDSPInputNode(uint32_t numChannels);
+    /** Constructor. Since input is manual, only the output channel count is relevant */
+    BlockDSPInputNode(uint32_t numOutputChannels);
     ~BlockDSPInputNode();
-    /** This can be set to a custom array of floating point samples. The array should represent one frame of audio */
+    /** This must be set to a custom array of floating point samples with a length equal to the number of output channels. The array should represent one frame of audio */
     float *inputBuffer;
     /** Is no-op for input nodes */
     virtual void connectInput(BlockDSPNode *inputNode);
