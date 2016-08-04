@@ -15,7 +15,8 @@
 class BlockDSPNode::pimpl
 {
 public:
-    uint32_t numChannels;
+    uint32_t numInputChannels;
+    uint32_t numOutputChannels;
 };
 
 class BlockDSPSummerNode::summerNodePimpl

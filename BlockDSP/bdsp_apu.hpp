@@ -21,6 +21,9 @@ public:
     BlockDSPSystem *system;
     /** Process a frame of audio. See AudioProcessingUnit */
     virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels);
+    
+    virtual void setMaxInputChannels(uint32_t num);
+    virtual void setMaxOutputChannels(uint32_t num);
 };
 
 

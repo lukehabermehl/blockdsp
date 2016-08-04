@@ -7,7 +7,7 @@ protected:
 	BlockDSPSystem *system;
 
 	void SetUp() {
-		system = new BlockDSPSystem(2);
+		system = new BlockDSPSystem();
 	}
 
 	void TearDown() {

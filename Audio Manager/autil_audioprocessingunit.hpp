@@ -10,12 +10,20 @@
 #ifndef AudioProcessingUnit_hpp
 #define AudioProcessingUnit_hpp
 
+#include <stdlib.h>
+
 /** Abstract class */
 class AudioProcessingUnit
 {
 public:
     /** Override this method to do audio processing */
     virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels);
+    
+    /** Set the maximum number of input channels usable */
+    virtual void setMaxInputChannels(uint32_t num);
+    /** Set the maximum number of output channels usable */
+    virtual void setMaxOutputChannels(uint32_t num);
+    
     virtual ~AudioProcessingUnit() {};
     
     static AudioProcessingUnit * createPassthroughUnit();

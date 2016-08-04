@@ -27,3 +27,11 @@ AudioProcessingUnit * AudioProcessingUnit::createPassthroughUnit()
 {
     return new AudioProcessingUnit;
 }
+
+void AudioProcessingUnit::setMaxInputChannels(uint32_t num)
+{
+}
+
+void AudioProcessingUnit::setMaxOutputChannels(uint32_t num)
+{
+}

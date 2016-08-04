@@ -165,7 +165,7 @@ void BDCodeBuilder::openSourceFile()
     _pimpl->nodeSet["MAIN_OUTPUT_NODE"] = true;
     
     fprintf(f, "\nBlockDSPSystem * BlockDSPFactoryCreateSystem() {\n");
-    fprintf(f, "BlockDSPSystem *system = new BlockDSPSystem(2);\n");
+    fprintf(f, "BlockDSPSystem *system = new BlockDSPSystem();\n");
     fprintf(f, "BlockDSPInputNode *MAIN_INPUT_NODE = system->mainInputNode;\n");
     fprintf(f, "BlockDSPMultiplierNode *MAIN_OUTPUT_NODE = system->createMultiplierNode();\n");
     fprintf(f, "system->mainOutputNode = MAIN_OUTPUT_NODE;\n");

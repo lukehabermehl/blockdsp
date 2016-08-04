@@ -21,3 +21,13 @@ void BlockDSPAPU::processAudio(float *inputBuffer, float *outputBuffer, int numI
     
     system->next();
 }
+
+void BlockDSPAPU::setMaxInputChannels(uint32_t num)
+{
+    system->setNumInputChannels(num);
+}
+
+void BlockDSPAPU::setMaxOutputChannels(uint32_t num)
+{
+    system->setNumOutputChannels(num);
+}
