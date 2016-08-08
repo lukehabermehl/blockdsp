@@ -235,6 +235,4 @@ void BlockDSPSystem::reset() {
     for (auto it = _pimpl->delayLineMap.begin(); it != _pimpl->delayLineMap.end(); it++) {
         it->second->reset();
     }
-    
-    memset(mainInputNode->inputBuffer, 0, sizeof(float) * getNumInputChannels());
 }
