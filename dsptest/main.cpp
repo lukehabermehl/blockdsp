@@ -5,8 +5,8 @@
 */
 
 #include <iostream>
-#include <blockdsp/dsphelpers.hpp>
-#include <blockdsp.h>
+#include "blockdsp/dsphelpers.hpp"
+#include "blockdsp.h"
 
 #define SAFE_DEL(_x) if (_x) delete _x
 

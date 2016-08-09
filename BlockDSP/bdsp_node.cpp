@@ -16,11 +16,21 @@ BlockDSPNode::BlockDSPNode(uint32_t numInputChannels, uint32_t numOutputChannels
     _pimpl = new pimpl;
     _pimpl->numInputChannels = numInputChannels;
     _pimpl->numOutputChannels = numOutputChannels;
-    nodeID = -1;
+    setID(kInvalidNodeID);
 }
 
 BlockDSPNode::~BlockDSPNode() {
     delete _pimpl;
+}
+
+BlockDSPNodeID BlockDSPNode::getID()
+{
+    return _pimpl->nodeID;
+}
+
+void BlockDSPNode::setID(BlockDSPNodeID nId)
+{
+    _pimpl->nodeID = nId;
 }
 
 uint32_t BlockDSPNode::getNumOutputChannels()
@@ -118,10 +128,10 @@ float BlockDSPDelayLineNode::valueForChannel(uint32_t channelNo) {
 
 #pragma mark - BlockDSPDelayLine
 BlockDSPDelayLine::BlockDSPDelayLine(uint32_t numChannels) {
-    id = -1;
     _delayLinePimpl = new delayLinePimpl;
     _delayLinePimpl->numChannels = numChannels;
     _delayLinePimpl->delayBuffers = new DelayBuffer[numChannels];
+    setID(kInvalidNodeID);
 }
 
 BlockDSPDelayLine::~BlockDSPDelayLine() {
@@ -130,6 +140,16 @@ BlockDSPDelayLine::~BlockDSPDelayLine() {
     }
     
     delete _delayLinePimpl;
+}
+
+BlockDSPNodeID BlockDSPDelayLine::getID()
+{
+    return _delayLinePimpl->dlID;
+}
+
+void BlockDSPDelayLine::setID(BlockDSPNodeID nID)
+{
+    _delayLinePimpl->dlID = nID;
 }
 
 BlockDSPDelayLineNode *BlockDSPDelayLine::nodeForDelayIndex(size_t index) {
@@ -165,6 +185,7 @@ void BlockDSPDelayLine::reset() {
 #pragma mark - BlockDSPInputNode
 BlockDSPInputNode::BlockDSPInputNode(uint32_t numInputChannels)
 : BlockDSPNode(numInputChannels, numInputChannels)
+, inputBuffer(NULL)
 {
 }
 

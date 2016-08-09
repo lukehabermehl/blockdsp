@@ -28,8 +28,8 @@ protected:
 	}
 
 	void SetInputFrame(float left, float right) {
-		inputFrame[0] = left;
-		inputFrame[1] = right;
+		testInputNode->inputBuffer[0] = left;
+		testInputNode->inputBuffer[1] = right;
 	}
 };
 
