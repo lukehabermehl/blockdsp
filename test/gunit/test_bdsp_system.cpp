@@ -33,7 +33,7 @@ TEST_F(BDSPSystemTestFixture, test_system_delay_line)
 {
 	BlockDSPDelayLine * dl = system->createDelayLine(system->mainInputNode);
 	ASSERT_TRUE((dl != NULL));
-	BlockDSPDelayLine *lookup = system->delayLineWithID(dl->id);
+	BlockDSPDelayLine *lookup = system->delayLineWithID(dl->getID());
 	EXPECT_EQ(dl, lookup);
 }
 
@@ -41,16 +41,16 @@ TEST_F(BDSPSystemTestFixture, test_system_node)
 {
 	BlockDSPInputNode *node = system->createInputNode();
 	ASSERT_TRUE((node != NULL));
-	BlockDSPNode * lookup = system->nodeWithID(node->nodeID);
+	BlockDSPNode * lookup = system->nodeWithID(node->getID());
 	EXPECT_EQ(node, lookup);
 
 	system->removeNode(node);
 	ASSERT_TRUE((node != NULL));
-	lookup = system->nodeWithID(node->nodeID);
+	lookup = system->nodeWithID(node->getID());
 	EXPECT_EQ(NULL, lookup);
 
 	system->addNode(node);
-	lookup = system->nodeWithID(node->nodeID);
+	lookup = system->nodeWithID(node->getID());
 	EXPECT_EQ(node, lookup);
 }
 

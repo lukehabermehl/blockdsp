@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
+#define kInvalidNodeID -1
+
 class BlockDSPNumber;
 class DelayBuffer;
 
@@ -21,9 +23,11 @@ typedef ssize_t BlockDSPNodeID;
 
 /** A single processing block that can be connected to other nodes to form a processing chain */
 class BlockDSPNode {
+    //Allow BlockDSPSystem instances to call setID()
+    friend class BlockDSPSystem;
 public:
     /** The node's identifier. This is just an incrementing number and is only associated with the node for the lifespan of the containing system */
-    BlockDSPNodeID nodeID;
+    BlockDSPNodeID getID();
     /** Constructor
       * @param numChannels Number of output channels
       */
@@ -48,6 +52,8 @@ public:
 private:
     class pimpl;
     pimpl *_pimpl;
+    
+    void setID(BlockDSPNodeID nId);
 };
 
 /** Performs a summing operation. Supports virtually any number of input nodes */
@@ -98,9 +104,10 @@ public:
 
 /** A delay line implementation */
 class BlockDSPDelayLine {
+    friend class BlockDSPSystem;
 public:
     /** Like a block ID, only for delay lines */
-    ssize_t id;
+    BlockDSPNodeID getID();
     /** Constructor
       * @param numChannels number of output channels */
     BlockDSPDelayLine(uint32_t numChannels);
@@ -122,6 +129,8 @@ public:
 private:
     class delayLinePimpl;
     delayLinePimpl *_delayLinePimpl;
+    
+    void setID(BlockDSPNodeID nID);
 };
 
 /** Allows custom input. Does not support input nodes */

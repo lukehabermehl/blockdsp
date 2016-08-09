@@ -68,21 +68,21 @@ void BlockDSPSystem::setNumOutputChannels(uint32_t num)
 }
 
 void BlockDSPSystem::addNode(BlockDSPNode *node) {
-    if (node->nodeID < 0)
-        node->nodeID = _pimpl->counter++;
+    if (node->getID() == kInvalidNodeID)
+        node->setID(_pimpl->counter++);
     
-    _pimpl->nodeMap[node->nodeID] = node;
+    _pimpl->nodeMap[node->getID()] = node;
 }
 
 void BlockDSPSystem::removeNode(BlockDSPNode *node) {
-    auto it = _pimpl->nodeMap.find(node->nodeID);
+    auto it = _pimpl->nodeMap.find(node->getID());
     if (it != _pimpl->nodeMap.end())
         _pimpl->nodeMap.erase(it);
 }
 
 void BlockDSPSystem::addDelayLine(BlockDSPDelayLine *dl) {
-    dl->id = _pimpl->counter++;
-    _pimpl->delayLineMap[dl->id] = dl;
+    dl->setID(_pimpl->counter++);
+    _pimpl->delayLineMap[dl->getID()] = dl;
 }
 
 void BlockDSPSystem::next() {

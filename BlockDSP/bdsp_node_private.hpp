@@ -17,6 +17,7 @@ class BlockDSPNode::pimpl
 public:
     uint32_t numInputChannels;
     uint32_t numOutputChannels;
+    BlockDSPNodeID nodeID;
 };
 
 class BlockDSPSummerNode::summerNodePimpl
@@ -36,6 +37,7 @@ class BlockDSPDelayLine::delayLinePimpl
 public:
     DelayBuffer *delayBuffers;
     uint32_t numChannels;
+    BlockDSPNodeID dlID;
 };
 
 
