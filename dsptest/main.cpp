@@ -81,8 +81,10 @@ int main(int argc, const char * argv[]) {
     write_test_system(built_code_path);
     
     AudioProcessingUnit *apunit = load_apu(dylib_path);
-    if (!apunit)
+    if (!apunit) {
         BDLog("[setup]", "FAILED to load APU");
+        abort();
+    }
     
     BDLog("[setup]", "Start");
     AudioManager audioManager;

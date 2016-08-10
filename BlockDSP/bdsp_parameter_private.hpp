@@ -19,7 +19,7 @@ public:
     char name[BDSP_MAX_PARAMLEN];
     BlockDSPNumber *target;
     BlockDSPNumberType type;
-    BlockDSPSystem *system;
+    BlockDSPAPU *contextAPU;
 };
 
 

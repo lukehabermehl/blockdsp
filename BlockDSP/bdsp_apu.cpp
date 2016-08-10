@@ -31,3 +31,7 @@ void BlockDSPAPU::setMaxOutputChannels(uint32_t num)
 {
     system->setNumOutputChannels(num);
 }
+
+void BlockDSPAPU::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *value)
+{
+}

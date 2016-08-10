@@ -11,14 +11,14 @@
 #include "bdsp_number.hpp"
 #include <string.h>
 
-BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumber *target, BlockDSPSystem *system)
+BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumber *target, BlockDSPAPU *contextAPU)
 {
     _pimpl = new pimpl;
     _pimpl->type = type;
     setTarget(target);
     setName(name);
     callback = 0;
-    _pimpl->system = system;
+    _pimpl->contextAPU = contextAPU;
 }
 
 BlockDSPParameter::~BlockDSPParameter()
@@ -49,8 +49,13 @@ bool BlockDSPParameter::setValue(float val)
     if (_pimpl->target)
         _pimpl->target->setFloatValue(val);
     
-    if (callback)
-        (*callback)(_pimpl->system, this, &val);
+    BlockDSPNumber *num = BlockDSPNumber::numberForFloat(val);
+    
+    if (callback) {
+        (*callback)(_pimpl->contextAPU, this, num);
+    }
+    _pimpl->contextAPU->onParameterChanged(this, num);
+    delete num;
     
     return true;
     
@@ -64,8 +69,14 @@ bool BlockDSPParameter::setValue(bool b)
     if (_pimpl->target)
         _pimpl->target->setBoolValue(b);
     
-    if (callback)
-        (*callback)(_pimpl->system, this, &b);
+    BlockDSPNumber *num = BlockDSPNumber::numberForBool(b);
+    
+    if (callback) {
+        (*callback)(_pimpl->contextAPU, this, num);
+    }
+    
+    _pimpl->contextAPU->onParameterChanged(this, num);
+    delete num;
     
     return true;
 }
@@ -78,8 +89,13 @@ bool BlockDSPParameter::setValue(int val)
     if (_pimpl->target)
         _pimpl->target->setIntegerValue(val);
     
-    if (callback)
-        (*callback)(_pimpl->system, this, &val);
+    BlockDSPNumber *num = BlockDSPNumber::numberForInteger(val);
+    
+    if (callback) {
+        (*callback)(_pimpl->contextAPU, this, num);
+    }
+    _pimpl->contextAPU->onParameterChanged(this, num);
+    delete num;
     
     return true;
 }

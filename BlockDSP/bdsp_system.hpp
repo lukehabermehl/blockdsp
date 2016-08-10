@@ -11,8 +11,10 @@
 #define BlockDSPSystem_hpp
 
 #include "bdsp_node.hpp"
-#include "bdsp_parameter.hpp"
 #include "bdsp_number.hpp"
+
+class BlockDSPParameter;
+class BlockDSPAPU;
 
 /** The container for all the objects associated with the audio processing chain */
 class BlockDSPSystem {
@@ -83,8 +85,9 @@ public:
       * @param name the name of the parameter
       * @param type the value type
       * @param target optional target number for the parameter. See the documentation for BlockDSPParameter
+      * @param contextAPU the Audio Processing Unit that the parameter will call back to
       */
-    BlockDSPParameter *createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target);
+    BlockDSPParameter *createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target, BlockDSPAPU *contextAPU);
     
     BlockDSPSystem();
     ~BlockDSPSystem();
