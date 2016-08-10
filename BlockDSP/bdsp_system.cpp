@@ -8,6 +8,7 @@
 
 #include "bdsp_system.hpp"
 #include "bdsp_system_private.hpp"
+#include "bdsp_parameter.hpp"
 #include "dsphelpers.hpp"
 #include "bdsp_number.hpp"
 
@@ -125,9 +126,9 @@ void BlockDSPSystem::addParameter(BlockDSPParameter *param) {
     _pimpl->parameterMap[param->name()] = param;
 }
 
-BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target)
+BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target, BlockDSPAPU *contextAPU)
 {
-    BlockDSPParameter *param = new BlockDSPParameter(type, name, target, this);
+    BlockDSPParameter *param = new BlockDSPParameter(type, name, target, contextAPU);
     addParameter(param);
     
     return param;
@@ -211,19 +212,12 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned i
     
     BiQuadCoefficients coeffs;
     coeffs.calculateForLPF(1000, 3.0, sampleRate);
-
     
     a0Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a0);
     a1Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a1);
     a2Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a2);
     b1Node->coefficient = BlockDSPNumber::numberForFloat(-1 * coeffs.b1);
     b2Node->coefficient = BlockDSPNumber::numberForFloat(-1 * coeffs.b2);
-    
-    system->createParameter("a0", BlockDSPNumberType::FLOAT, a0Node->coefficient);
-    system->createParameter("a1", BlockDSPNumberType::FLOAT, a1Node->coefficient);
-    system->createParameter("a2", BlockDSPNumberType::FLOAT, a2Node->coefficient);
-    system->createParameter("b1", BlockDSPNumberType::FLOAT, b1Node->coefficient);
-    system->createParameter("b2", BlockDSPNumberType::FLOAT, b2Node->coefficient);
     
     system->mainOutputNode = outGainNode;
     outGainNode->coefficient = BlockDSPNumber::numberForFloat(2.0);

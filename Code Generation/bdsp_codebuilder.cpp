@@ -127,7 +127,7 @@ void BDCodeBuilder::writeHeaderFile()
     
     fprintf(f, "\n//This file was automatically generated.\n\n#ifndef BlockDSP_Factory_HPP\n#define BlockDSP_Factory_HPP\n");
     fprintf(f, "\n#include <blockdsp.h>");
-    fprintf(f, "\nextern \"C\" BlockDSPSystem * BlockDSPFactoryCreateSystem();\n");
+    fprintf(f, "\nextern \"C\" BlockDSPSystem * BlockDSPFactoryCreateSystem(BlockDSPAPU *apu);\n");
     fprintf(f, "\nextern \"C\" AudioProcessingUnit *AudioProcessingUnitFactoryCreate();\n");
     fprintf(f, "\n#endif\n");
     
@@ -164,7 +164,7 @@ void BDCodeBuilder::openSourceFile()
     _pimpl->nodeSet["MAIN_INPUT_NODE"] = true;
     _pimpl->nodeSet["MAIN_OUTPUT_NODE"] = true;
     
-    fprintf(f, "\nBlockDSPSystem * BlockDSPFactoryCreateSystem() {\n");
+    fprintf(f, "\nBlockDSPSystem * BlockDSPFactoryCreateSystem(BlockDSPAPU *_CONTEXT_APU) {\n");
     fprintf(f, "BlockDSPSystem *system = new BlockDSPSystem();\n");
     fprintf(f, "BlockDSPInputNode *MAIN_INPUT_NODE = system->mainInputNode;\n");
     fprintf(f, "BlockDSPMultiplierNode *MAIN_OUTPUT_NODE = system->createMultiplierNode();\n");
@@ -183,7 +183,7 @@ void BDCodeBuilder::closeSourceFile()
     fprintf(_pimpl->openFile, "\nreturn system;\n");
     fprintf(_pimpl->openFile, "\n}\n");
     fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() {\n");
-    fprintf(_pimpl->openFile, "BlockDSPAPU *unit = new BlockDSPAPU(BlockDSPFactoryCreateSystem());\nreturn unit;\n}\n");
+    fprintf(_pimpl->openFile, "BlockDSPAPU *unit = new BlockDSPAPU(BlockDSPFactoryCreateSystem);\nreturn unit;\n}\n");
     fclose(_pimpl->openFile);
     _pimpl->openFile = 0;
 }
@@ -266,7 +266,7 @@ void BDCodeBuilder::addParameter(const char *name, const char *callback, const c
             return;
     }
     
-    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = system->createParameter(\"%s\", %s, %s);\n", name, name, typeParam, targetParam);
+    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = system->createParameter(\"%s\", %s, %s, _CONTEXT_APU);\n", name, name, typeParam, targetParam);
     if (callback)
         fprintf(_pimpl->openFile, "%s->callback = %s;\n", name, callback);
 }

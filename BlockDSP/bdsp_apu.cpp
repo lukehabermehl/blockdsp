@@ -12,6 +12,16 @@ BlockDSPAPU::BlockDSPAPU(BlockDSPSystem *system) : system_(system)
 {
 }
 
+BlockDSPAPU::BlockDSPAPU(BlockDSPSystemFactoryFunc systemFactoryFunc)
+{
+    system_ = systemFactoryFunc(this);
+}
+
+BlockDSPSystem * BlockDSPAPU::getSystem()
+{
+    return system_;
+}
+
 void BlockDSPAPU::processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels)
 {
     system_->mainInputNode->inputBuffer = inputBuffer;
@@ -34,4 +44,8 @@ void BlockDSPAPU::setMaxInputChannels(uint32_t num)
 void BlockDSPAPU::setMaxOutputChannels(uint32_t num)
 {
     system_->setNumOutputChannels(num);
+}
+
+void BlockDSPAPU::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *value)
+{
 }

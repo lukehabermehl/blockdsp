@@ -4,8 +4,10 @@
 class BDSPSystemTestFixture : public testing::Test {
 protected:
 	BlockDSPSystem * system;
+	BlockDSPAPU *contextAPU;
 	void SetUp() {
 		system = new BlockDSPSystem();
+		contextAPU = new BlockDSPAPU(system);
 	}
 	void TearDown() {
 		delete system;
@@ -14,7 +16,7 @@ protected:
 
 TEST_F(BDSPSystemTestFixture, test_system_parameter)
 {
-	BlockDSPParameter *param = system->createParameter("param", BlockDSPNumberType::FLOAT, NULL);
+	BlockDSPParameter *param = system->createParameter("param", BlockDSPNumberType::FLOAT, NULL, contextAPU);
 	ASSERT_TRUE((param != NULL));
 	BlockDSPParameter *lookup = system->parameterWithName("param");
 	EXPECT_EQ(param, lookup);
