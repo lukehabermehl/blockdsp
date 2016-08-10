@@ -183,7 +183,7 @@ void BDCodeBuilder::closeSourceFile()
     fprintf(_pimpl->openFile, "\nreturn system;\n");
     fprintf(_pimpl->openFile, "\n}\n");
     fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() {\n");
-    fprintf(_pimpl->openFile, "BlockDSPAPU *unit = new BlockDSPAPU();\nunit->system = BlockDSPFactoryCreateSystem();\nreturn unit;\n}\n");
+    fprintf(_pimpl->openFile, "BlockDSPAPU *unit = new BlockDSPAPU(BlockDSPFactoryCreateSystem());\nreturn unit;\n}\n");
     fclose(_pimpl->openFile);
     _pimpl->openFile = 0;
 }

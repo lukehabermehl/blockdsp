@@ -17,13 +17,17 @@
 class BlockDSPAPU : public AudioProcessingUnit
 {
 public:
+    BlockDSPAPU(BlockDSPSystem *system);
     /** The system that drives the audio processing */
-    BlockDSPSystem *system;
+    virtual BlockDSPSystem *getSystem();
     /** Process a frame of audio. See AudioProcessingUnit */
     virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels);
     
     virtual void setMaxInputChannels(uint32_t num);
     virtual void setMaxOutputChannels(uint32_t num);
+    
+private:
+    BlockDSPSystem *system_;
 };
 
 
