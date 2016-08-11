@@ -18,6 +18,13 @@ BlockDSPAPU::BlockDSPAPU(BlockDSPSystemFactoryFunc systemFactoryFunc)
     system_ = systemFactoryFunc(this);
 }
 
+BlockDSPAPU::~BlockDSPAPU()
+{
+    for (size_t i=0; i<paramList_.size(); i++) {
+        delete paramList_[i];
+    }
+}
+
 BlockDSPSystem * BlockDSPAPU::getSystem()
 {
     return system_;

@@ -22,6 +22,9 @@ class BlockDSPAPU : public AudioProcessingUnit
 public:
     BlockDSPAPU(BlockDSPSystem *system);
     BlockDSPAPU(BlockDSPSystemFactoryFunc systemFactoryFunc);
+    
+    virtual ~BlockDSPAPU();
+    
     /** The system that drives the audio processing */
     virtual BlockDSPSystem *getSystem();
     /** Process a frame of audio. See AudioProcessingUnit */
