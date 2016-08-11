@@ -79,9 +79,9 @@ void write_test_system(const char *outputdir)
 }
 
 int main(int argc, const char * argv[]) {
-    //write_test_system(built_code_path);
+    write_test_system(built_code_path);
     
-    AudioProcessingUnit *apunit = new SimpleDelayEffect();/*load_apu(dylib_path); */
+    AudioProcessingUnit *apunit = load_apu(dylib_path);
     if (!apunit) {
         BDLog("[setup]", "FAILED to load APU");
         abort();

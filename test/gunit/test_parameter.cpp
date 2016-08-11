@@ -1,15 +1,25 @@
 #include "gtest/gtest.h"
 #include "blockdsp.h"
 
+class TestAPU : public BlockDSPAPU {
+public:
+	BlockDSPParameter *param1;
+	BlockDSPParameter *param2;
+	TestAPU(BlockDSPSystem *system) : BlockDSPAPU(system) {
+		param1 = createParameter("param1", BlockDSPNumberType::FLOAT, NULL);
+		param2 = createParameter("param2", BlockDSPNumberType::BOOLEAN, NULL);
+	}
+};
+
 class ParameterTestFixture : public testing::Test
 {
 protected:
 	BlockDSPSystem *system;
-	BlockDSPAPU *contextAPU;
+	TestAPU *contextAPU;
 
 	void SetUp() {
 		system = new BlockDSPSystem();
-		contextAPU = new BlockDSPAPU(system);
+		contextAPU = new TestAPU(system);
 	}
 
 	void TearDown() {
@@ -79,4 +89,14 @@ TEST_F(ParameterTestFixture, test_callback_and_param)
 
 	EXPECT_EQ(3.f, number->floatValue());
 	EXPECT_EQ(3.f, number2->floatValue());
+}
+
+TEST_F(ParameterTestFixture, test_parameter_list)
+{
+	BlockDSPParameterList& paramList = contextAPU->getParameterList();
+	EXPECT_EQ(2, paramList.size());
+	EXPECT_EQ(contextAPU->param1, paramList.getAt(0));
+	EXPECT_EQ(contextAPU->param1, paramList[0]);
+	EXPECT_EQ(contextAPU->param2, paramList.getAt(1));
+	EXPECT_EQ(contextAPU->param2, paramList[1]);
 }

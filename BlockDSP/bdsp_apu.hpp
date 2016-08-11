@@ -12,8 +12,7 @@
 
 #include "autil_audioprocessingunit.hpp"
 #include "bdsp_system.hpp"
-
-class BlockDSPParameter;
+#include "bdsp_parameter.hpp"
 
 typedef BlockDSPSystem* (*BlockDSPSystemFactoryFunc)(BlockDSPAPU *);
 
@@ -38,9 +37,20 @@ public:
       * @param value a number representing the new value. *NOTE* do not keep a reference to this value; its memory will be freed after the callback returns.
       */
     virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *value);
+    /** @return the list of available parameters for the APU */
+    BlockDSPParameterList& getParameterList();
+    
+protected:
+    /** Use this method to create parameters.
+     * @param the name of the parameter
+     * @param numberType the value type
+     * @param target optional target number or NULL
+     */
+    BlockDSPParameter * createParameter(const char *name, BlockDSPNumberType numberType, BlockDSPNumber *target);
     
 private:
     BlockDSPSystem *system_;
+    BlockDSPParameterList paramList_;
 };
 
 

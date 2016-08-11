@@ -9,6 +9,7 @@
 #include "bdsp_parameter.hpp"
 #include "bdsp_parameter_private.hpp"
 #include "bdsp_number.hpp"
+#include "bdsp_apu.hpp"
 #include <string.h>
 
 BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumber *target, BlockDSPAPU *contextAPU)
@@ -103,5 +104,28 @@ bool BlockDSPParameter::setValue(int val)
 BlockDSPParameter::pimpl::~pimpl()
 {
     
+}
+
+void BlockDSPParameterList::append(BlockDSPParameter *param)
+{
+    items_.push_back(param);
+}
+
+size_t BlockDSPParameterList::size()
+{
+    return items_.size();
+}
+
+BlockDSPParameter * BlockDSPParameterList::getAt(size_t index)
+{
+    if (index >= size()) {
+        return NULL;
+    }
+    return items_[index];
+}
+
+BlockDSPParameter * BlockDSPParameterList::operator[](size_t index)
+{
+    return getAt(index);
 }
 

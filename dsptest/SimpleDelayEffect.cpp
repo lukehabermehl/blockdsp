@@ -52,8 +52,8 @@ void SimpleDelayEffect::configureSystem()
     
     system->mainOutputNode = outputSummer;
     
-    wetDryParam = system->createParameter("Mix", BlockDSPNumberType::FLOAT, NULL, this);
-    delayTimeParam = system->createParameter("Delay Time", BlockDSPNumberType::FLOAT, NULL, this);
+    wetDryParam = createParameter("Mix", BlockDSPNumberType::FLOAT, NULL);
+    delayTimeParam = createParameter("Delay Time", BlockDSPNumberType::FLOAT, NULL);
 }
 
 void SimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *value)

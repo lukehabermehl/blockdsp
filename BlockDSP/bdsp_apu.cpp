@@ -7,6 +7,7 @@
 //
 
 #include "bdsp_apu.hpp"
+#include "bdsp_parameter.hpp"
 
 BlockDSPAPU::BlockDSPAPU(BlockDSPSystem *system) : system_(system)
 {
@@ -48,4 +49,17 @@ void BlockDSPAPU::setMaxOutputChannels(uint32_t num)
 
 void BlockDSPAPU::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *value)
 {
+}
+
+BlockDSPParameter * BlockDSPAPU::createParameter(const char *name, BlockDSPNumberType numberType, BlockDSPNumber *target)
+{
+    BlockDSPParameter * param = new BlockDSPParameter(numberType, name, target, this);
+    paramList_.append(param);
+    
+    return param;
+}
+
+BlockDSPParameterList& BlockDSPAPU::getParameterList()
+{
+    return paramList_;
 }

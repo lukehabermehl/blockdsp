@@ -11,7 +11,9 @@
 #define BlockDSPParameter_hpp
 
 #include "bdsp_number.hpp"
-#include "bdsp_apu.hpp"
+#include <vector>
+
+class BlockDSPAPU;
 
 #define BDSP_MAX_PARAMLEN 256
 
@@ -53,6 +55,21 @@ public:
 private:
     class pimpl;
     pimpl *_pimpl;
+};
+
+class BlockDSPParameterList {
+    friend class BlockDSPAPU;
+public:
+    size_t size();
+    BlockDSPParameter *getAt(size_t index);
+    
+    BlockDSPParameter * operator[](size_t index);
+    
+protected:
+    void append(BlockDSPParameter *param);
+    
+private:
+    std::vector<BlockDSPParameter *> items_;
 };
 
 #endif /* BlockDSPParameter_hpp */
