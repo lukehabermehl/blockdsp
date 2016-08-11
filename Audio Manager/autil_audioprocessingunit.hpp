@@ -26,7 +26,15 @@ public:
     
     virtual ~AudioProcessingUnit() {};
     
+    /** Set the sample rate */
+    void setSampleRate(unsigned long sampleRate);
+    /** Get the sample rate */
+    unsigned long getSampleRate();
+    
     static AudioProcessingUnit * createPassthroughUnit();
+    
+private:
+    unsigned long sampleRate_;
 };
 
 
