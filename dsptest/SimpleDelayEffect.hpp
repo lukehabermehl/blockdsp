@@ -20,17 +20,22 @@ public:
     virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *number);
     
 protected:
-    static void onWetDryMixParamChanged(BlockDSPSystem *system, BlockDSPParameter *param, void *value);
+    virtual void onSampleRateChanged();
     
 private:
     void configureSystem();
-    unsigned long maxDelaySamples;\
+    size_t calculateDelayIndexForMilisec(float ms);
+    void updateDelay();
+    unsigned long maxDelaySamples;
+    float msDelay;
     
     BlockDSPParameter *wetDryParam;
     BlockDSPParameter *delayTimeParam;
     BlockDSPMultiplierNode *wetMultiplier;
     BlockDSPMultiplierNode *dryMultiplier;
     BlockDSPSummerNode *outputSummer;
+    BlockDSPDelayLine *delayLine;
+    BlockDSPDelayLineNode *delayLineNode;
 };
 
 #endif /* SimpleDelayEffect_hpp */
