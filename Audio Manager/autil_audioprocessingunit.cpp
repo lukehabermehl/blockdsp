@@ -35,3 +35,13 @@ void AudioProcessingUnit::setMaxInputChannels(uint32_t num)
 void AudioProcessingUnit::setMaxOutputChannels(uint32_t num)
 {
 }
+
+void AudioProcessingUnit::setSampleRate(unsigned long sampleRate)
+{
+    sampleRate_ = sampleRate;
+}
+
+unsigned long AudioProcessingUnit::getSampleRate()
+{
+    return sampleRate_;
+}

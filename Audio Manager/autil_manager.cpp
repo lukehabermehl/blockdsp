@@ -94,6 +94,7 @@ AudioDeviceInfoRef AudioManager::getDevices()
 void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)
 {
     _pimpl->dspKernel->audioProcessingUnit = unit;
+    unit->setSampleRate(_pimpl->dspKernel->sampleRate);
 }
 
 bool AudioManager::open()
