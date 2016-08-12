@@ -56,7 +56,7 @@ void SimpleDelayEffect::configureSystem()
     delayTimeParam = createParameter("Delay Time", BlockDSPNumberType::FLOAT, NULL);
 }
 
-void SimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *value)
+void SimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef value)
 {
     if (parameter == wetDryParam) {
         wetMultiplier->coefficient->setFloatValue(value->floatValue());

@@ -12,7 +12,7 @@
 #include "bdsp_apu.hpp"
 #include <string.h>
 
-BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumber *target, BlockDSPAPU *contextAPU)
+BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumberRef target, BlockDSPAPU *contextAPU)
 {
     _pimpl = new pimpl;
     _pimpl->type = type;
@@ -20,6 +20,19 @@ BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, 
     setName(name);
     callback = 0;
     _pimpl->contextAPU = contextAPU;
+    
+    switch (type) {
+        case INTEGER:
+            _pimpl->minValue = BlockDSPNumber::numberForInteger(INT_MIN);
+            _pimpl->maxValue = BlockDSPNumber::numberForInteger(INT_MAX);
+            break;
+        case FLOAT:
+            _pimpl->minValue = BlockDSPNumber::numberForFloat(INT_MIN);
+            _pimpl->maxValue = BlockDSPNumber::numberForFloat(INT_MAX);
+            break;
+        default:
+            break;
+    }
 }
 
 BlockDSPParameter::~BlockDSPParameter()
@@ -37,73 +50,109 @@ const char *BlockDSPParameter::name()
     return _pimpl->name;
 }
 
-void BlockDSPParameter::setTarget(BlockDSPNumber *target)
+void BlockDSPParameter::setTarget(BlockDSPNumberRef target)
 {
     _pimpl->target = target;
 }
 
-bool BlockDSPParameter::setValue(float val)
+void BlockDSPParameter::setValue(BlockDSPNumberRef value)
 {
-    if (_pimpl->type != BlockDSPNumberType::FLOAT)
-        return false;
-    
-    if (_pimpl->target)
-        _pimpl->target->setFloatValue(val);
-    
-    BlockDSPNumber *num = BlockDSPNumber::numberForFloat(val);
-    
-    if (callback) {
-        (*callback)(_pimpl->contextAPU, this, num);
+    switch (type()) {
+        case INTEGER:
+        {
+            int minVal = getMinValue()->integerValue();
+            int maxVal = getMaxValue()->integerValue();
+            int nVal = value->integerValue();
+            if (nVal < minVal) {
+                value->setIntegerValue(minVal);
+            } else if (nVal > maxVal) {
+                value->setIntegerValue(maxVal);
+            }
+            
+            if (_pimpl->target) {
+                _pimpl->target->setFloatValue(value->floatValue());
+            }
+            
+            break;
+        }
+        case FLOAT:
+        {
+            float maxVal = getMaxValue()->floatValue();
+            float minVal = getMinValue()->floatValue();
+            float fVal = value->floatValue();
+            if (fVal < minVal) {
+                value->setFloatValue(minVal);
+            } else if (fVal > maxVal) {
+                value->setFloatValue(maxVal);
+            }
+            
+            if (_pimpl->target) {
+                _pimpl->target->setFloatValue(value->floatValue());
+            }
+            break;
+        }
+        case BOOLEAN:
+        {
+            if (_pimpl->target) {
+                _pimpl->target->setBoolValue(value->boolValue());
+            }
+        }
     }
-    _pimpl->contextAPU->onParameterChanged(this, num);
-    delete num;
+
+    if (callback) {
+        callback(_pimpl->contextAPU, this, value);
+    }
     
-    return true;
-    
+    if (_pimpl->contextAPU) {
+        _pimpl->contextAPU->onParameterChanged(this, value);
+    }
 }
 
-bool BlockDSPParameter::setValue(bool b)
+BlockDSPNumberType BlockDSPParameter::type()
 {
-    if (_pimpl->type != BlockDSPNumberType::BOOLEAN)
-        return false;
-        
-    if (_pimpl->target)
-        _pimpl->target->setBoolValue(b);
-    
-    BlockDSPNumber *num = BlockDSPNumber::numberForBool(b);
-    
-    if (callback) {
-        (*callback)(_pimpl->contextAPU, this, num);
-    }
-    
-    _pimpl->contextAPU->onParameterChanged(this, num);
-    delete num;
-    
-    return true;
+    return _pimpl->type;
 }
 
-bool BlockDSPParameter::setValue(int val)
+void BlockDSPParameter::setMinValue(BlockDSPNumberRef minVal)
 {
-    if (_pimpl->type != BlockDSPNumberType::INTEGER)
-        return false;
-    
-    if (_pimpl->target)
-        _pimpl->target->setIntegerValue(val);
-    
-    BlockDSPNumber *num = BlockDSPNumber::numberForInteger(val);
-    
-    if (callback) {
-        (*callback)(_pimpl->contextAPU, this, num);
+    switch (type()) {
+        case INTEGER:
+            _pimpl->minValue->setIntegerValue(minVal->integerValue());
+            break;
+        case FLOAT:
+            _pimpl->minValue->setFloatValue(minVal->floatValue());
+            break;
+        default:
+            break;
     }
-    _pimpl->contextAPU->onParameterChanged(this, num);
-    delete num;
-    
-    return true;
+}
+
+void BlockDSPParameter::setMaxValue(BlockDSPNumberRef maxVal)
+{
+    switch (type()) {
+        case INTEGER:
+            _pimpl->maxValue->setIntegerValue(maxVal->integerValue());
+            break;
+        case FLOAT:
+            _pimpl->maxValue->setFloatValue(maxVal->floatValue());
+            break;
+        default:
+            break;
+    }
+}
+
+BlockDSPNumberRef BlockDSPParameter::getMaxValue()
+{
+    return _pimpl->maxValue;
+}
+
+BlockDSPNumberRef BlockDSPParameter::getMinValue()
+{
+    return _pimpl->minValue;
 }
 
 BlockDSPParameter::pimpl::~pimpl()
 {
-    
 }
 
 void BlockDSPParameterList::append(BlockDSPParameter *param)

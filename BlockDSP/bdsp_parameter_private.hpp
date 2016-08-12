@@ -17,9 +17,12 @@ public:
     ~pimpl();
     
     char name[BDSP_MAX_PARAMLEN];
-    BlockDSPNumber *target;
+    BlockDSPNumberRef target;
+    BlockDSPNumberRef minValue;
+    BlockDSPNumberRef maxValue;
     BlockDSPNumberType type;
     BlockDSPAPU *contextAPU;
+    
 };
 
 

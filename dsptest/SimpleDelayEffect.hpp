@@ -17,7 +17,7 @@ public:
     SimpleDelayEffect();
     
     unsigned long getMaxDelaySamples();
-    virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *number);
+    virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef number);
     
 protected:
     virtual void onSampleRateChanged();

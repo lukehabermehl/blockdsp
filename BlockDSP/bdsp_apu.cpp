@@ -54,11 +54,11 @@ void BlockDSPAPU::setMaxOutputChannels(uint32_t num)
     system_->setNumOutputChannels(num);
 }
 
-void BlockDSPAPU::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *value)
+void BlockDSPAPU::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef value)
 {
 }
 
-BlockDSPParameter * BlockDSPAPU::createParameter(const char *name, BlockDSPNumberType numberType, BlockDSPNumber *target)
+BlockDSPParameter * BlockDSPAPU::createParameter(const char *name, BlockDSPNumberType numberType, BlockDSPNumberRef target)
 {
     BlockDSPParameter * param = new BlockDSPParameter(numberType, name, target, this);
     paramList_.append(param);

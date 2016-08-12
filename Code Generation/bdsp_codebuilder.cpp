@@ -285,7 +285,7 @@ void BDCodeBuilder::addNumber(const char *name)
     
     _pimpl->numSet[numName] = true;
     
-    fprintf(_pimpl->openFile, "BlockDSPNumber *%s = new BlockDSPNumber();\n", name);
+    fprintf(_pimpl->openFile, "BlockDSPNumberRef %s(new BlockDSPNumber());\n", name);
     fprintf(_pimpl->openFile, "system->addNumber(\"%s\", %s);\n", name, name);
 }
 

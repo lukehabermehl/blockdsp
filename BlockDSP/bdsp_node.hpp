@@ -10,12 +10,13 @@
 #ifndef BlockDSPNode_h
 #define BlockDSPNode_h
 
+#include "bdsp_number.hpp"
+
 #include <stdlib.h>
 #include <sys/types.h>
 
 #define kInvalidNodeID -1
 
-class BlockDSPNumber;
 class DelayBuffer;
 
 /** typedef for BlockDSP node identifiers */
@@ -73,7 +74,7 @@ private:
 class BlockDSPMultiplierNode : public BlockDSPNode {
 public:
     /** The coefficient number */
-    BlockDSPNumber *coefficient;
+    BlockDSPNumberRef coefficient;
     
     BlockDSPMultiplierNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     virtual void connectInput(BlockDSPNode *inputNode);

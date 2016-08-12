@@ -75,25 +75,25 @@ bool BlockDSPNumber::boolValue()
     return (i != 0);
 }
 
-BlockDSPNumber * BlockDSPNumber::numberForInteger(int i)
+BlockDSPNumberRef  BlockDSPNumber::numberForInteger(int i)
 {
-    BlockDSPNumber *num = new BlockDSPNumber;
+    BlockDSPNumberRef num(new BlockDSPNumber());
     num->setIntegerValue(i);
     
     return num;
 }
 
-BlockDSPNumber * BlockDSPNumber::numberForFloat(float f)
+BlockDSPNumberRef BlockDSPNumber::numberForFloat(float f)
 {
-    BlockDSPNumber *num = new BlockDSPNumber;
+    BlockDSPNumberRef num(new BlockDSPNumber());
     num->setFloatValue(f);
     
     return num;
 }
 
-BlockDSPNumber * BlockDSPNumber::numberForBool(bool b)
+BlockDSPNumberRef BlockDSPNumber::numberForBool(bool b)
 {
-    BlockDSPNumber *num = new BlockDSPNumber;
+    BlockDSPNumberRef num(new BlockDSPNumber());
     num->setBoolValue(b);
     
     return num;
