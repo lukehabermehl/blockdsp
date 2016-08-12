@@ -42,6 +42,9 @@ public:
     /** Create a new number for a bool value */
     static BlockDSPNumberRef numberForBool(bool b);
     
+    /** Create a new number ref with the same value */
+    BlockDSPNumberRef copy();
+    
     /** Get the float value of the number */
     float floatValue();
     /** Get the integer value of the number. If the true value is a float, the value will be floored. */

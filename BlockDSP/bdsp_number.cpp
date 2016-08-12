@@ -75,7 +75,20 @@ bool BlockDSPNumber::boolValue()
     return (i != 0);
 }
 
-BlockDSPNumberRef  BlockDSPNumber::numberForInteger(int i)
+BlockDSPNumberRef BlockDSPNumber::copy()
+{
+    switch(_pimpl->paramType)
+    {
+        case INTEGER:
+            return BlockDSPNumber::numberForInteger(integerValue());
+        case FLOAT:
+            return BlockDSPNumber::numberForFloat(floatValue());
+        case BOOLEAN:
+            return BlockDSPNumber::numberForBool(boolValue());
+    }
+}
+
+BlockDSPNumberRef BlockDSPNumber::numberForInteger(int i)
 {
     BlockDSPNumberRef num(new BlockDSPNumber());
     num->setIntegerValue(i);
