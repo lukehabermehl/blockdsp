@@ -6,9 +6,8 @@ protected:
 	BlockDSPSystem * system;
 	BlockDSPAPU *contextAPU;
 	void SetUp() {
-		contextAPU = new BlockDSPAPU();
 		system = new BlockDSPSystem();
-		contextAPU->system = system;
+		contextAPU = new BlockDSPAPU(system);
 	}
 	void TearDown() {
 		delete system;
@@ -25,11 +24,11 @@ TEST_F(BDSPSystemTestFixture, test_system_parameter)
 
 TEST_F(BDSPSystemTestFixture, test_system_number)
 {
-	BlockDSPNumber *num = new BlockDSPNumber();
+	BlockDSPNumberRef num(new BlockDSPNumber());
 	ASSERT_TRUE((num != NULL));
 	system->addNumber("num", num);
-	BlockDSPNumber *lookup = system->numberWithName("num");
-	EXPECT_EQ(num, lookup);
+	BlockDSPNumberRef lookup = system->numberWithName("num");
+	EXPECT_EQ(num.get(), lookup.get());
 }
 
 TEST_F(BDSPSystemTestFixture, test_system_delay_line)

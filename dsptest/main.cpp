@@ -7,6 +7,7 @@
 #include <iostream>
 #include "blockdsp/dsphelpers.hpp"
 #include "blockdsp.h"
+#include "SimpleDelayEffect.hpp"
 
 #define SAFE_DEL(_x) if (_x) delete _x
 
@@ -105,7 +106,6 @@ int main(int argc, const char * argv[]) {
     audioManager.setInputFile(file);
     audioManager.setInputMode(AudioInputModeFile);
     audioManager.setOutputDeviceIndex(1);
-    audioManager.setAudioProcessingUnit(apunit);
     audioManager.setLooping(false);
     
     BDLog("[setup]", "Start Audio");
@@ -115,6 +115,8 @@ int main(int argc, const char * argv[]) {
         BDLogError("[ERROR]", "Audio Manager failed to open");
         exit(1);
     }
+    audioManager.setAudioProcessingUnit(apunit);
+    
     if (!audioManager.start())
     {
         BDLogError("[ERROR]", "Audio Manager failed to start");

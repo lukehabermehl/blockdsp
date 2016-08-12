@@ -48,7 +48,7 @@ public:
       * @param name a name for the number (ex. "a1")
       * @param number the number to add
       */
-    void addNumber(const char *name, BlockDSPNumber *number);
+    void addNumber(const char *name, BlockDSPNumberRef number);
     /** Pull the next sample from the input node and push it into the system */
     void next();
     /** Zero out the system. This will call reset() on any delay lines */
@@ -66,7 +66,7 @@ public:
       * @param name the name of the number
       * @returns the number or NULL if not found
       */
-    BlockDSPNumber *numberWithName(const char *name);
+    BlockDSPNumberRef numberWithName(const char *name);
     /** Get the delay line with the given ID
       * @returns the delay line or NULL if not found
       */
@@ -87,7 +87,7 @@ public:
       * @param target optional target number for the parameter. See the documentation for BlockDSPParameter
       * @param contextAPU the Audio Processing Unit that the parameter will call back to
       */
-    BlockDSPParameter *createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target, BlockDSPAPU *contextAPU);
+    BlockDSPParameter *createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumberRef target, BlockDSPAPU *contextAPU);
     
     BlockDSPSystem();
     ~BlockDSPSystem();

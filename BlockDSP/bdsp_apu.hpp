@@ -12,15 +12,21 @@
 
 #include "autil_audioprocessingunit.hpp"
 #include "bdsp_system.hpp"
+#include "bdsp_parameter.hpp"
 
-class BlockDSPParameter;
+typedef BlockDSPSystem* (*BlockDSPSystemFactoryFunc)(BlockDSPAPU *);
 
 /** An AudioProcessingUnit built with a BlockDSP system */
 class BlockDSPAPU : public AudioProcessingUnit
 {
 public:
+    BlockDSPAPU(BlockDSPSystem *system);
+    BlockDSPAPU(BlockDSPSystemFactoryFunc systemFactoryFunc);
+    
+    virtual ~BlockDSPAPU();
+    
     /** The system that drives the audio processing */
-    BlockDSPSystem *system;
+    virtual BlockDSPSystem *getSystem();
     /** Process a frame of audio. See AudioProcessingUnit */
     virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels);
     
@@ -33,7 +39,21 @@ public:
       * @param parameter the BlockDSPParameter instance whose value was modified
       * @param value a number representing the new value. *NOTE* do not keep a reference to this value; its memory will be freed after the callback returns.
       */
-    virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumber *value);
+    virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef value);
+    /** @return the list of available parameters for the APU */
+    BlockDSPParameterList& getParameterList();
+    
+protected:
+    /** Use this method to create parameters.
+     * @param the name of the parameter
+     * @param numberType the value type
+     * @param target optional target number or NULL
+     */
+    BlockDSPParameter * createParameter(const char *name, BlockDSPNumberType numberType, BlockDSPNumberRef target);
+    
+private:
+    BlockDSPSystem *system_;
+    BlockDSPParameterList paramList_;
 };
 
 

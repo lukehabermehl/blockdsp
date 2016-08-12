@@ -44,12 +44,12 @@ TEST_F(DSPBlockTestFixture, test_multiplier_node)
 {
 	SetInputFrame(0.5, -0.5);
 
-	BlockDSPNumber coeff;
-	coeff.setFloatValue(0.5);
+	BlockDSPNumberRef coeff(new BlockDSPNumber());
+	coeff->setFloatValue(0.5);
 
 	BlockDSPMultiplierNode multiplierNode(2);
 	multiplierNode.connectInput(testInputNode);
-	multiplierNode.coefficient = &coeff;
+	multiplierNode.coefficient = coeff;
 
 	EXPECT_EQ(0.5 * inputFrame[0], multiplierNode.valueForChannel(0));
 	EXPECT_EQ(0.5 * inputFrame[1], multiplierNode.valueForChannel(1));

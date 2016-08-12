@@ -183,7 +183,7 @@ void BDCodeBuilder::closeSourceFile()
     fprintf(_pimpl->openFile, "\nreturn system;\n");
     fprintf(_pimpl->openFile, "\n}\n");
     fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() {\n");
-    fprintf(_pimpl->openFile, "BlockDSPAPU *unit = new BlockDSPAPU();\nunit->system = BlockDSPFactoryCreateSystem(unit);\nreturn unit;\n}\n");
+    fprintf(_pimpl->openFile, "BlockDSPAPU *unit = new BlockDSPAPU(BlockDSPFactoryCreateSystem);\nreturn unit;\n}\n");
     fclose(_pimpl->openFile);
     _pimpl->openFile = 0;
 }
@@ -285,7 +285,7 @@ void BDCodeBuilder::addNumber(const char *name)
     
     _pimpl->numSet[numName] = true;
     
-    fprintf(_pimpl->openFile, "BlockDSPNumber *%s = new BlockDSPNumber();\n", name);
+    fprintf(_pimpl->openFile, "BlockDSPNumberRef %s(new BlockDSPNumber());\n", name);
     fprintf(_pimpl->openFile, "system->addNumber(\"%s\", %s);\n", name, name);
 }
 

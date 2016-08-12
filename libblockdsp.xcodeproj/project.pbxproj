@@ -26,6 +26,7 @@
 		A3CCF9B51D26027300B521E3 /* bdsp_logger_private.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3CCF9B41D26027300B521E3 /* bdsp_logger_private.hpp */; };
 		A3D16D3B1CFB231600B99903 /* bdsp_apuloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3D16D391CFB231600B99903 /* bdsp_apuloader.cpp */; };
 		A3D16D3C1CFB231600B99903 /* bdsp_apuloader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3D16D3A1CFB231600B99903 /* bdsp_apuloader.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		A3EBCD3E1D5A03AB00E60165 /* SimpleDelayEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3EBCD3C1D5A03AB00E60165 /* SimpleDelayEffect.cpp */; };
 		A3F744561CF653C10004C79A /* autil_dspkernel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F7444E1CF653C10004C79A /* autil_dspkernel.cpp */; };
 		A3F744571CF653C10004C79A /* autil_dspkernel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3F7444F1CF653C10004C79A /* autil_dspkernel.hpp */; };
 		A3F744581CF653C10004C79A /* autil_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F744501CF653C10004C79A /* autil_file.cpp */; };
@@ -86,6 +87,8 @@
 		A3D020F31CF35CC800EC7C0D /* libblockdsp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblockdsp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3D16D391CFB231600B99903 /* bdsp_apuloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bdsp_apuloader.cpp; path = "Code Generation/bdsp_apuloader.cpp"; sourceTree = "<group>"; };
 		A3D16D3A1CFB231600B99903 /* bdsp_apuloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = bdsp_apuloader.hpp; path = "Code Generation/bdsp_apuloader.hpp"; sourceTree = "<group>"; };
+		A3EBCD3C1D5A03AB00E60165 /* SimpleDelayEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SimpleDelayEffect.cpp; sourceTree = "<group>"; };
+		A3EBCD3D1D5A03AB00E60165 /* SimpleDelayEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SimpleDelayEffect.hpp; sourceTree = "<group>"; };
 		A3F7444E1CF653C10004C79A /* autil_dspkernel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = autil_dspkernel.cpp; path = "Audio Manager/autil_dspkernel.cpp"; sourceTree = "<group>"; };
 		A3F7444F1CF653C10004C79A /* autil_dspkernel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = autil_dspkernel.hpp; path = "Audio Manager/autil_dspkernel.hpp"; sourceTree = "<group>"; };
 		A3F744501CF653C10004C79A /* autil_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = autil_file.cpp; path = "Audio Manager/autil_file.cpp"; sourceTree = "<group>"; };
@@ -161,6 +164,8 @@
 			isa = PBXGroup;
 			children = (
 				A342C6C81CF3ED9E000E354E /* main.cpp */,
+				A3EBCD3C1D5A03AB00E60165 /* SimpleDelayEffect.cpp */,
+				A3EBCD3D1D5A03AB00E60165 /* SimpleDelayEffect.hpp */,
 			);
 			path = dsptest;
 			sourceTree = "<group>";
@@ -398,6 +403,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3EBCD3E1D5A03AB00E60165 /* SimpleDelayEffect.cpp in Sources */,
 				A342C6C91CF3ED9E000E354E /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

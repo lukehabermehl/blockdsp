@@ -10,12 +10,23 @@
 #ifndef BlockDSPNumber_hpp
 #define BlockDSPNumber_hpp
 
+#include <memory>
+
+#define BDSP_FLOAT(_f) BlockDSPNumber::numberForFloat(_f)
+#define BDSP_INT(_i) BlockDSPNumber::numberForInteger(_i)
+#define BDSP_BOOL(_b) BlockDSPNumber::numberForBool(_b)
+
 /** Underlying types for numbers */
 enum BlockDSPNumberType {
     INTEGER,
     FLOAT,
     BOOLEAN
 };
+
+class BlockDSPNumber;
+
+/** typedef reference counted pointer to BlockDSPNumber. You should pretty much always use this instead of raw pointers */
+typedef std::shared_ptr<BlockDSPNumber> BlockDSPNumberRef;
 
 /** An object that represents common numeric types */
 class BlockDSPNumber
@@ -25,11 +36,14 @@ public:
     ~BlockDSPNumber();
     
     /** Create a new number for a float value */
-    static BlockDSPNumber * numberForFloat(float f);
+    static BlockDSPNumberRef numberForFloat(float f);
     /** Create a new number for an integer value */
-    static BlockDSPNumber * numberForInteger(int i);
+    static BlockDSPNumberRef numberForInteger(int i);
     /** Create a new number for a bool value */
-    static BlockDSPNumber * numberForBool(bool b);
+    static BlockDSPNumberRef numberForBool(bool b);
+    
+    /** Create a new number ref with the same value */
+    BlockDSPNumberRef copy();
     
     /** Get the float value of the number */
     float floatValue();
@@ -47,7 +61,7 @@ public:
     
 private:
     class pimpl;
-    pimpl *_pimpl;
+    pimpl * _pimpl;
 };
 
 #endif /* BlockDSPNumber_hpp */

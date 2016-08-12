@@ -33,6 +33,10 @@ public:
     
     static AudioProcessingUnit * createPassthroughUnit();
     
+protected:
+    /** This method will be called when the sample rate is set. Override this in subclasses to be handle sample rate changes */
+    virtual void onSampleRateChanged();
+    
 private:
     unsigned long sampleRate_;
 };

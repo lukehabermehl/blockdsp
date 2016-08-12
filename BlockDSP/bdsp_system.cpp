@@ -35,12 +35,6 @@ BlockDSPSystem::~BlockDSPSystem() {
         delete param;
     }
     
-    for (auto it3=_pimpl->numberMap.begin(); it3 != _pimpl->numberMap.end(); it3++)
-    {
-        BlockDSPNumber *num = (*it3).second;
-        delete num;
-    }
-    
     for (auto it = _pimpl->delayLineMap.begin(); it != _pimpl->delayLineMap.end(); it++) {
         delete it->second;
     }
@@ -126,7 +120,7 @@ void BlockDSPSystem::addParameter(BlockDSPParameter *param) {
     _pimpl->parameterMap[param->name()] = param;
 }
 
-BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumber *target, BlockDSPAPU *contextAPU)
+BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumberRef target, BlockDSPAPU *contextAPU)
 {
     BlockDSPParameter *param = new BlockDSPParameter(type, name, target, contextAPU);
     addParameter(param);
@@ -134,7 +128,7 @@ BlockDSPParameter * BlockDSPSystem::createParameter(const char *name, BlockDSPNu
     return param;
 }
 
-void BlockDSPSystem::addNumber(const char *name, BlockDSPNumber *number)
+void BlockDSPSystem::addNumber(const char *name, BlockDSPNumberRef number)
 {
     std::string numName = std::string(name);
     auto it = _pimpl->numberMap.find(numName);
@@ -161,7 +155,7 @@ BlockDSPNode *BlockDSPSystem::nodeWithID(ssize_t id) {
     return it->second;
 }
 
-BlockDSPNumber * BlockDSPSystem::numberWithName(const char *name) {
+BlockDSPNumberRef BlockDSPSystem::numberWithName(const char *name) {
     auto it = _pimpl->numberMap.find(name);
     if (it != _pimpl->numberMap.end()) {
         return it->second;
