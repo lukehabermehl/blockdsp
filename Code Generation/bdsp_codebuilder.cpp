@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sstream>
 
 #define BD_FILE_CHECK() if (!_pimpl->openFile) { _pimpl->error = BDCodeBuilderErrorFileNotOpen; return; }
 
@@ -66,6 +67,7 @@ BDCodeBuilder::BDCodeBuilder(const char *name, const char *dirpath)
     
     strcpy(_pimpl->name, name);
     strcpy(_pimpl->dirpath, dirpath);
+    _pimpl->makeClassName();
     
     struct stat st;
     if (stat(_pimpl->dirpath, &st) == -1)
@@ -76,6 +78,7 @@ BDCodeBuilder::BDCodeBuilder(const char *name, const char *dirpath)
 BDCodeBuilder::~BDCodeBuilder()
 {
     free(_pimpl->name);
+    free(_pimpl->className);
     free(_pimpl->dirpath);
     
     delete _pimpl;
@@ -127,8 +130,13 @@ void BDCodeBuilder::writeHeaderFile()
     
     fprintf(f, "\n//This file was automatically generated.\n\n#ifndef BlockDSP_Factory_HPP\n#define BlockDSP_Factory_HPP\n");
     fprintf(f, "\n#include <blockdsp.h>");
-    fprintf(f, "\nextern \"C\" BlockDSPSystem * BlockDSPFactoryCreateSystem(BlockDSPAPU *apu);\n");
     fprintf(f, "\nextern \"C\" AudioProcessingUnit *AudioProcessingUnitFactoryCreate();\n");
+    fprintf(f, "\nclass %s : public BlockDSPAPU {", className());
+    fprintf(f, "\npublic:");
+    fprintf(f, "\n\t%s();", className());
+    fprintf(f, "\nprotected:");
+    fprintf(f, "\n\tvirtual void configureSystem();");
+    fprintf(f, "\n};");
     fprintf(f, "\n#endif\n");
     
     fclose(f);
@@ -157,15 +165,17 @@ void BDCodeBuilder::openSourceFile()
     
     for (auto it = _pimpl->callbackMap.begin(); it != _pimpl->callbackMap.end(); it++)
     {
-        fprintf(f, "\nvoid %s(BlockDSPSystem *system, BlockDSPParameter *parameter, void *value) {", it->first.c_str());
+        fprintf(f, "\nvoid %s(BlockDSPAPU *contextAPU, BlockDSPParameter *parameter, BlockDSPNumber *value) {", it->first.c_str());
         fprintf(f, "\n\t%s\n}\n", it->second.c_str());
     }
     
     _pimpl->nodeSet["MAIN_INPUT_NODE"] = true;
     _pimpl->nodeSet["MAIN_OUTPUT_NODE"] = true;
     
-    fprintf(f, "\nBlockDSPSystem * BlockDSPFactoryCreateSystem(BlockDSPAPU *_CONTEXT_APU) {\n");
-    fprintf(f, "BlockDSPSystem *system = new BlockDSPSystem();\n");
+    fprintf(f, "\n%s::%s() : BlockDSPAPU(new BlockDSPSystem()) {\n", className(), className());
+    fprintf(f, "\tconfigureSystem();\n}\n");
+    fprintf(f, "\nvoid %s::configureSystem() {\n", className());
+    fprintf(f, "BlockDSPSystem *system = getSystem();\n");
     fprintf(f, "BlockDSPInputNode *MAIN_INPUT_NODE = system->mainInputNode;\n");
     fprintf(f, "BlockDSPMultiplierNode *MAIN_OUTPUT_NODE = system->createMultiplierNode();\n");
     fprintf(f, "system->mainOutputNode = MAIN_OUTPUT_NODE;\n");
@@ -180,10 +190,8 @@ void BDCodeBuilder::closeSourceFile()
 {
     BD_FILE_CHECK();
     
-    fprintf(_pimpl->openFile, "\nreturn system;\n");
     fprintf(_pimpl->openFile, "\n}\n");
-    fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() {\n");
-    fprintf(_pimpl->openFile, "BlockDSPAPU *unit = new BlockDSPAPU(BlockDSPFactoryCreateSystem);\nreturn unit;\n}\n");
+    fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() { return new %s(); }", className());
     fclose(_pimpl->openFile);
     _pimpl->openFile = 0;
 }
@@ -340,6 +348,11 @@ const char *BDCodeBuilder::name()
     return _pimpl->name;
 }
 
+const char * BDCodeBuilder::className()
+{
+    return _pimpl->className;
+}
+
 const char *BDCodeBuilder::dirpath()
 {
     return _pimpl->dirpath;
@@ -351,5 +364,19 @@ BDCodeBuilderError BDCodeBuilder::error()
     _pimpl->error = BDCodeBuilderErrorNoError;
     
     return rv;
+}
+
+void BDCodeBuilder::pimpl::makeClassName()
+{
+    size_t len = strlen(name) + 9;
+    className = (char *)malloc(len); //allocate new string with length of name + null terminator + "BDSP_APU_"
+    memset(className, '\0', len);
+    sprintf(className, "%s", "BDSP_APU_");
+    sprintf(&className[9], "%s", name);
+    for (size_t i=0; i<len; i++) {
+        if (!isalnum(className[i]) && className[i] != '_') {
+            className[i] = '_';
+        }
+    }
 }
 
