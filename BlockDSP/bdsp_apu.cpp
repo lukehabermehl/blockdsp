@@ -8,6 +8,7 @@
 
 #include "bdsp_apu.hpp"
 #include "bdsp_parameter.hpp"
+#include "bdsp_logger.hpp"
 
 BlockDSPAPU::BlockDSPAPU(BlockDSPSystem *system) : system_(system)
 {
@@ -23,6 +24,7 @@ BlockDSPAPU::~BlockDSPAPU()
     for (size_t i=0; i<paramList_.size(); i++) {
         delete paramList_[i];
     }
+    delete system_;
 }
 
 BlockDSPSystem * BlockDSPAPU::getSystem()

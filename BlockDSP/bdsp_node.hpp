@@ -5,7 +5,9 @@
 //
 //
 
-/** @file bdsp_node.hpp */
+/** @file bdsp_node.hpp 
+  * This file defines the basic BlockDSP processing blocks
+  */
 
 #ifndef BlockDSPNode_h
 #define BlockDSPNode_h
@@ -47,6 +49,9 @@ public:
     void setNumOutputChannels(uint32_t num);
     /** Get the number of input channels */
     void setNumInputChannels(uint32_t num);
+    
+    /** Called when the system advances to the next frame. Override this if you need to handle the event */
+    virtual void onNext();
     
     virtual ~BlockDSPNode();
     

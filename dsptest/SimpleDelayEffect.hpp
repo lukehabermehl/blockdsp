@@ -19,6 +19,8 @@ public:
     unsigned long getMaxDelaySamples();
     virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef number);
     
+    static void generateWithCodeBuilder(const char *outputDir);
+    
 protected:
     virtual void onSampleRateChanged();
     

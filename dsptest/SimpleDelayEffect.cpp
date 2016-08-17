@@ -100,3 +100,26 @@ size_t SimpleDelayEffect::calculateDelayIndexForMilisec(float ms)
     BDLogFormat(kLogPrefix, "fNumSamples = %f", fNumSamples);
     return floorf(fNumSamples);
 }
+
+void SimpleDelayEffect::generateWithCodeBuilder(const char *outputDir)
+{
+    BDCodeBuilder cb("SimpleDelayEffect", outputDir);
+    cb.writeHeaderFile();
+    cb.openSourceFile();
+    
+    cb.addBlockNode("wetMultiplier", BDBlockTypeMultiplier);
+    float wetMultiplierInitialVal = 0.3;
+    cb.setNumberDefaultValue("wetMultiplier->coefficient", BlockDSPNumberType::FLOAT, &wetMultiplierInitialVal);
+    cb.addBlockNode("dryMultiplier", BDBlockTypeMultiplier);
+    float dryMultiplierInitialVal = 0.7;
+    cb.setNumberDefaultValue("dryMultiplier->coefficient", BlockDSPNumberType::FLOAT, &dryMultiplierInitialVal);
+    cb.addDelayLine("delayLine", "MAIN_INPUT_NODE", 132300);
+    
+    cb.addBlockNode("outputSummer", BDBlockTypeSummer);
+    
+    cb.connect("dryMultiplier", "outputSummer");
+    cb.connect("wetMultiplier", "outputSummer");
+    
+    cb.getDelayLineNode("delayOut", "delayLine", 15000);
+}
+

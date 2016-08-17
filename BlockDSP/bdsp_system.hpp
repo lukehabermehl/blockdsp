@@ -42,8 +42,6 @@ public:
     void removeNode(BlockDSPNode *node);
     /** Add a delay line */
     void addDelayLine(BlockDSPDelayLine *dl);
-    /** Add a parameter */
-    void addParameter(BlockDSPParameter *param);
     /** Add a number
       * @param name a name for the number (ex. "a1")
       * @param number the number to add
@@ -54,10 +52,6 @@ public:
     /** Zero out the system. This will call reset() on any delay lines */
     void reset();
     
-    /** Get the parameter with the given name
-      * @returns a pointer to the parameter or NULL if it is not found 
-      */
-    BlockDSPParameter *parameterWithName(const char *name);
     /** Get the node with the given ID
       * @returns a pointer to the node or NULL if it is not found
       */
@@ -81,13 +75,6 @@ public:
     BlockDSPMultiplierNode *createMultiplierNode();
     /** Create a new input node and add it to the system */
     BlockDSPInputNode *createInputNode();
-    /** Create a new parameter and add it to the system
-      * @param name the name of the parameter
-      * @param type the value type
-      * @param target optional target number for the parameter. See the documentation for BlockDSPParameter
-      * @param contextAPU the Audio Processing Unit that the parameter will call back to
-      */
-    BlockDSPParameter *createParameter(const char *name, BlockDSPNumberType type, BlockDSPNumberRef target, BlockDSPAPU *contextAPU);
     
     BlockDSPSystem();
     ~BlockDSPSystem();

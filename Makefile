@@ -26,6 +26,7 @@ PUBLIC_HEADERS = "./Audio Manager/autil_audioprocessingunit.hpp" \
 				"./BlockDSP/bdsp_number.hpp" \
 				"./BlockDSP/bdsp_parameter.hpp" \
 				"./BlockDSP/bdsp_system.hpp" \
+				"./BlockDSP/bdsp_node_apu.hpp" \
 				"./BlockDSP/dsphelpers.hpp" \
 				"./BlockDSP/dsputil_delaybuffer.hpp" \
 				"./Code Generation/bdsp_apuloader.hpp" \

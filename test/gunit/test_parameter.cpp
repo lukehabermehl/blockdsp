@@ -43,7 +43,7 @@ void callback_fn1(BlockDSPAPU *contextAPU,
 
 TEST_F(ParameterTestFixture, test_target_number)
 {
-	BlockDSPNumberRef num(new BlockDSPNumber());
+	BlockDSPNumberRef num = BDSP_FLOAT(0);
 
 	num->setFloatValue(1);
 	BlockDSPParameter floatParam(BlockDSPNumberType::FLOAT, "floatParam", num, contextAPU);

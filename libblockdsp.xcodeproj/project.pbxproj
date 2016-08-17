@@ -21,6 +21,8 @@
 		A31E34411CFCBD8F0051A6FB /* bdsp_logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A31E343F1CFCBD8F0051A6FB /* bdsp_logger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A329C6301D15997000D8D7CF /* blockdsp.h in Headers */ = {isa = PBXBuildFile; fileRef = A329C62F1D1596B800D8D7CF /* blockdsp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A342C6C91CF3ED9E000E354E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342C6C81CF3ED9E000E354E /* main.cpp */; };
+		A35AD08C1D633E5000875A78 /* bdsp_node_apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A35AD08A1D633E5000875A78 /* bdsp_node_apu.cpp */; };
+		A35AD08D1D633E5000875A78 /* bdsp_node_apu.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A35AD08B1D633E5000875A78 /* bdsp_node_apu.hpp */; };
 		A379CF801D4D4770008A6961 /* autil_thread_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A379CF7F1D4D4770008A6961 /* autil_thread_manager.cpp */; };
 		A3A02BAB1D40F83500AF8825 /* bdsp_compiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3A02BAA1D40F83500AF8825 /* bdsp_compiler.cpp */; };
 		A3CCF9B51D26027300B521E3 /* bdsp_logger_private.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A3CCF9B41D26027300B521E3 /* bdsp_logger_private.hpp */; };
@@ -80,6 +82,8 @@
 		A329C62F1D1596B800D8D7CF /* blockdsp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blockdsp.h; sourceTree = "<group>"; };
 		A342C6C61CF3ED9E000E354E /* dsptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dsptest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		A35AD08A1D633E5000875A78 /* bdsp_node_apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bdsp_node_apu.cpp; path = BlockDSP/bdsp_node_apu.cpp; sourceTree = "<group>"; };
+		A35AD08B1D633E5000875A78 /* bdsp_node_apu.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = bdsp_node_apu.hpp; path = BlockDSP/bdsp_node_apu.hpp; sourceTree = "<group>"; };
 		A379CF7E1D4D45DF008A6961 /* autil_thread_manager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = autil_thread_manager.hpp; path = "Audio Manager/autil_thread_manager.hpp"; sourceTree = "<group>"; };
 		A379CF7F1D4D4770008A6961 /* autil_thread_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = autil_thread_manager.cpp; path = "Audio Manager/autil_thread_manager.cpp"; sourceTree = "<group>"; };
 		A3A02BAA1D40F83500AF8825 /* bdsp_compiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bdsp_compiler.cpp; path = "Code Generation/bdsp_compiler.cpp"; sourceTree = "<group>"; };
@@ -205,6 +209,8 @@
 				A3F744681CF653F70004C79A /* dsputil_delaybuffer.cpp */,
 				A3F744691CF653F70004C79A /* dsputil_delaybuffer.hpp */,
 				A3F7446A1CF653F70004C79A /* dsphelpers.hpp */,
+				A35AD08A1D633E5000875A78 /* bdsp_node_apu.cpp */,
+				A35AD08B1D633E5000875A78 /* bdsp_node_apu.hpp */,
 			);
 			name = BlockDSP;
 			sourceTree = "<group>";
@@ -284,6 +290,7 @@
 				A31E34301CFCBC920051A6FB /* bdsp_compiler_private.hpp in Headers */,
 				A31E342F1CFCBC920051A6FB /* bdsp_codebuilder_private.hpp in Headers */,
 				A3CCF9B51D26027300B521E3 /* bdsp_logger_private.hpp in Headers */,
+				A35AD08D1D633E5000875A78 /* bdsp_node_apu.hpp in Headers */,
 				A3F744741CF653F70004C79A /* bdsp_system.hpp in Headers */,
 				A3F7446C1CF653F70004C79A /* bdsp_apu.hpp in Headers */,
 				A31E34411CFCBD8F0051A6FB /* bdsp_logger.hpp in Headers */,
@@ -417,6 +424,7 @@
 				A3F744711CF653F70004C79A /* bdsp_parameter.cpp in Sources */,
 				A3F7446D1CF653F70004C79A /* bdsp_node.cpp in Sources */,
 				A3F744581CF653C10004C79A /* autil_file.cpp in Sources */,
+				A35AD08C1D633E5000875A78 /* bdsp_node_apu.cpp in Sources */,
 				A3A02BAB1D40F83500AF8825 /* bdsp_compiler.cpp in Sources */,
 				A3F744561CF653C10004C79A /* autil_dspkernel.cpp in Sources */,
 				A379CF801D4D4770008A6961 /* autil_thread_manager.cpp in Sources */,

@@ -61,6 +61,10 @@ float BlockDSPNode::valueForChannel(uint32_t channelNo) {
     return 0.0;
 }
 
+void BlockDSPNode::onNext()
+{
+}
+
 #pragma mark - BlockDSPSummerNode
 
 BlockDSPSummerNode::BlockDSPSummerNode(uint32_t numInputChannels, uint32_t numOutputChannels)
