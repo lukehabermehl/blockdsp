@@ -30,6 +30,8 @@ public:
     void setSampleRate(unsigned long sampleRate);
     /** Get the sample rate */
     unsigned long getSampleRate();
+    /** Get the name of the APU */
+    virtual const char * getName();
     
     static AudioProcessingUnit * createPassthroughUnit();
     

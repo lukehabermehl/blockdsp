@@ -134,6 +134,7 @@ void BDCodeBuilder::writeHeaderFile()
     fprintf(f, "\nclass %s : public BlockDSPAPU {", className());
     fprintf(f, "\npublic:");
     fprintf(f, "\n\t%s();", className());
+    fprintf(f, "\n\tconst char * getName();");
     fprintf(f, "\nprotected:");
     fprintf(f, "\n\tvirtual void configureSystem();");
     fprintf(f, "\n};");
@@ -174,6 +175,7 @@ void BDCodeBuilder::openSourceFile()
     
     fprintf(f, "\n%s::%s() : BlockDSPAPU(new BlockDSPSystem()) {\n", className(), className());
     fprintf(f, "\tconfigureSystem();\n}\n");
+    fprintf(f, "\nconst char * %s::getName() { return \"%s\"; }", className(), name());
     fprintf(f, "\nvoid %s::configureSystem() {\n", className());
     fprintf(f, "BlockDSPSystem *system = getSystem();\n");
     fprintf(f, "BlockDSPInputNode *MAIN_INPUT_NODE = system->mainInputNode;\n");

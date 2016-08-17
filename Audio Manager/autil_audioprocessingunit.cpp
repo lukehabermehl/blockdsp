@@ -50,3 +50,8 @@ unsigned long AudioProcessingUnit::getSampleRate()
 {
     return sampleRate_;
 }
+
+const char * AudioProcessingUnit::getName()
+{
+    return "Default APU";
+}

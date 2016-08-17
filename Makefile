@@ -70,7 +70,7 @@ install: all
 	@cp -f $(LIBOUTDIR)/*.a /usr/local/lib/
 
 dsptest.o: all
-	$(CC) -o "dsptest.out" dsptest/main.cpp dsptest/SimpleDelayEffect.cpp -I/usr/local/include $(LIBS_SEARCH) -lblockdsp $(LIBS)
+	$(CC) -o "dsptest.out" dsptest/main.cpp -I/usr/local/include $(LIBS_SEARCH) -lblockdsp $(LIBS)
 
 dsptest : dsptest.o
 	@./dsptest.out
