@@ -1,23 +1,25 @@
 //
-//  SimpleDelayEffect.hpp
+//  bdsp_builtin_delay.hpp
 //  libblockdsp
 //
 //  Created by Luke on 8/9/16.
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#ifndef SimpleDelayEffect_hpp
-#define SimpleDelayEffect_hpp
+#ifndef bdsp_builtin_delay.hpp
+#define bdsp_builtin_delay.hpp
 
 #include "blockdsp.h"
 
-class SimpleDelayEffect : public BlockDSPAPU
+class BDSPSimpleDelayEffect : public BlockDSPAPU
 {
 public:
-    SimpleDelayEffect();
+    BDSPSimpleDelayEffect();
     
     unsigned long getMaxDelaySamples();
     virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef number);
+    
+    static void generateWithCodeBuilder(const char *outputDir);
     
 protected:
     virtual void onSampleRateChanged();
@@ -38,4 +40,4 @@ private:
     BlockDSPDelayLineNode *delayLineNode;
 };
 
-#endif /* SimpleDelayEffect_hpp */
+#endif /* bdsp_builtin_delay.hpp */

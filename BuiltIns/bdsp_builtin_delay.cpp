@@ -1,17 +1,17 @@
 //
-//  SimpleDelayEffect.cpp
+//  bdsp_builtin_delay.cpp
 //  libblockdsp
 //
 //  Created by Luke on 8/9/16.
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#include "SimpleDelayEffect.hpp"
+#include "bdsp_builtin_delay.hpp"
 #include <cmath>
 
-static const char * kLogPrefix = "[SimpleDelayEffect]";
+static const char * kLogPrefix = "[BDSPSimpleDelayEffect]";
 
-SimpleDelayEffect::SimpleDelayEffect()
+BDSPSimpleDelayEffect::BDSPSimpleDelayEffect()
 : BlockDSPAPU(new BlockDSPSystem())
 {
     maxDelaySamples = 132300; // 3 seconds at 44.1 kHz
@@ -25,12 +25,12 @@ SimpleDelayEffect::SimpleDelayEffect()
     configureSystem();
 }
 
-unsigned long SimpleDelayEffect::getMaxDelaySamples()
+unsigned long BDSPSimpleDelayEffect::getMaxDelaySamples()
 {
     return maxDelaySamples;
 }
 
-void SimpleDelayEffect::configureSystem()
+void BDSPSimpleDelayEffect::configureSystem()
 {
     BlockDSPSystem *system = getSystem();
     
@@ -56,7 +56,7 @@ void SimpleDelayEffect::configureSystem()
     delayTimeParam = createParameter("Delay Time", BlockDSPNumberType::FLOAT, NULL);
 }
 
-void SimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef value)
+void BDSPSimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef value)
 {
     if (parameter == wetDryParam) {
         wetMultiplier->coefficient->setFloatValue(value->floatValue());
@@ -69,13 +69,13 @@ void SimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, BlockDS
     }
 }
 
-void SimpleDelayEffect::onSampleRateChanged()
+void BDSPSimpleDelayEffect::onSampleRateChanged()
 {
     BDLogFormat(kLogPrefix, "onSampleRateChanged(): %lu", getSampleRate());
     updateDelay();
 }
 
-void SimpleDelayEffect::updateDelay()
+void BDSPSimpleDelayEffect::updateDelay()
 {
     size_t samples = calculateDelayIndexForMilisec(msDelay);
     BDLogFormat(kLogPrefix, "updateDelay(): samples = %lu", samples);
@@ -90,7 +90,7 @@ void SimpleDelayEffect::updateDelay()
     delayLineNode = newDLNode;
 }
 
-size_t SimpleDelayEffect::calculateDelayIndexForMilisec(float ms)
+size_t BDSPSimpleDelayEffect::calculateDelayIndexForMilisec(float ms)
 {
     float fSampleRate = (float)getSampleRate();
     float fNumSamples = (ms * fSampleRate) / 1000.f;

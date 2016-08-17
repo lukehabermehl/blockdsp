@@ -16,8 +16,10 @@
 class BDCodeBuilder::pimpl
 {
 public:
+    void makeClassName();
     char *name;
     char *dirpath;
+    char *className;
     FILE *openFile;
     BDCodeBuilderError error;
     std::unordered_map<std::string, std::string> callbackMap;

@@ -107,6 +107,8 @@ public:
     const char *name();
     /** Get the output directory path set in the constructor */
     const char *dirpath();
+    /** Get the generated BlockDSPAPU subclass name for the project. This name is based on the name set in the constructor */
+    const char * className();
     
     /** Get the last error that occurred, if one exists */
     BDCodeBuilderError error();
