@@ -100,3 +100,8 @@ size_t BDSPSimpleDelayEffect::calculateDelayIndexForMilisec(float ms)
     BDLogFormat(kLogPrefix, "fNumSamples = %f", fNumSamples);
     return floorf(fNumSamples);
 }
+
+const char * BDSPSimpleDelayEffect::getName()
+{
+    return "SimpleDelay";
+}

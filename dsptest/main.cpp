@@ -7,7 +7,6 @@
 #include <iostream>
 #include "blockdsp/dsphelpers.hpp"
 #include "blockdsp.h"
-#include "SimpleDelayEffect.hpp"
 
 #define SAFE_DEL(_x) if (_x) delete _x
 
@@ -87,7 +86,7 @@ int main(int argc, const char * argv[]) {
         abort();
     }
     
-    BDLog("[setup]", "Start");
+    BDLogFormat("[setup]", "Loaded APU: %s", apunit->getName());
     AudioManager audioManager;
     BDLog("[setup]", "Start Audio Manager");
     audioManager.setNumOutputChannels(2);

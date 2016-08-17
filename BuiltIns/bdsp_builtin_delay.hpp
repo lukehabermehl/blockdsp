@@ -6,8 +6,8 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-#ifndef bdsp_builtin_delay.hpp
-#define bdsp_builtin_delay.hpp
+#ifndef BDSP_BUILTIN_DELAY_HPP_
+#define BDSP_BUILTIN_DELAY_HPP_
 
 #include "blockdsp.h"
 
@@ -20,6 +20,8 @@ public:
     virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef number);
     
     static void generateWithCodeBuilder(const char *outputDir);
+    
+    virtual const char * getName();
     
 protected:
     virtual void onSampleRateChanged();
@@ -40,4 +42,4 @@ private:
     BlockDSPDelayLineNode *delayLineNode;
 };
 
-#endif /* bdsp_builtin_delay.hpp */
+#endif /* BDSP_BUILTIN_DELAY_HPP_ */
