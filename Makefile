@@ -32,7 +32,8 @@ PUBLIC_HEADERS = "./Audio Manager/autil_audioprocessingunit.hpp" \
 				"./Code Generation/bdsp_apuloader.hpp" \
 				"./Code Generation/bdsp_codebuilder.hpp" \
 				"./Code Generation/bdsp_compiler.hpp" \
-				"./Logger/bdsp_logger.hpp"
+				"./Logger/bdsp_logger.hpp" \
+				"./BuiltIns/bdsp_builtin_delay.hpp"
 
 LIBS_SEARCH = -L/usr/local/lib
 
