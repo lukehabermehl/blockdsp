@@ -13,6 +13,10 @@ public:
 		param1 = createParameter("param1", BlockDSPNumberType::FLOAT, num1);
 		param2 = createParameter("param2", BlockDSPNumberType::BOOLEAN, num2);
 	}
+
+	BlockDSPParameter * testCreateParameter(const char *name, BlockDSPNumberType type, BlockDSPNumberRef target) {
+		return createParameter(name, type, target);
+	}
 };
 
 class ParameterTestFixture : public testing::Test
@@ -27,7 +31,6 @@ protected:
 	}
 
 	void TearDown() {
-		delete system;
 		delete contextAPU;
 	}
 };
@@ -70,7 +73,7 @@ TEST_F(ParameterTestFixture, test_callback)
 	number->setFloatValue(0);
 	system->addNumber("number", number);
 
-	BlockDSPParameter *param = system->createParameter("param", BlockDSPNumberType::FLOAT, NULL, contextAPU);
+	BlockDSPParameter *param = contextAPU->testCreateParameter("param", BlockDSPNumberType::FLOAT, NULL);
 	param->callback = callback_fn1;
 	param->setValue(BlockDSPNumber::numberForFloat(3));
 
@@ -86,7 +89,7 @@ TEST_F(ParameterTestFixture, test_callback_and_param)
 
 	system->addNumber("number", number);
 
-	BlockDSPParameter *param = system->createParameter("param", BlockDSPNumberType::FLOAT, number2, contextAPU);
+	BlockDSPParameter *param = contextAPU->testCreateParameter("param", BlockDSPNumberType::FLOAT, number2);
 	param->callback = callback_fn1;
 
 	param->setValue(BlockDSPNumber::numberForFloat(3));

@@ -25,7 +25,7 @@ BlockDSPSystem::BlockDSPSystem() {
 
 BlockDSPSystem::~BlockDSPSystem() {
     for (auto it=_pimpl->nodeMap.begin(); it != _pimpl->nodeMap.end(); it++) {
-        BlockDSPNode *node = (*it).second;
+        BlockDSPNode *node = it->second;
         delete node;
     }
     
