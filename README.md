@@ -23,7 +23,7 @@ BlockDSP will allow for the creation of virtually any kind of audio effect witho
 
 To build the library, create a directory in the root repo directory called `build`.cd to the build directory and run `cmake ..` to generate the Makefile and then run `make`. Alternatively, you can run the build script from the repo root directory by running:
 
-		scripts/build.sh
+	scripts/build.sh
 
 Building the library will also automatically build and run the unit tests so make sure you have configured the test environment. See the README in the `test` directory for more info on how to do that.
 
@@ -31,7 +31,7 @@ Building the library will also automatically build and run the unit tests so mak
 
 The documentation for the library is built using Doxygen. From the root directory of the repo run the following command
 
-		scripts/docs.sh
+	scripts/docs.sh
 
 The script will build the latest documentation and automatically open the index html page in your default web browser.
 
