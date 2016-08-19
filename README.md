@@ -16,31 +16,16 @@ BlockDSP will allow for the creation of virtually any kind of audio effect witho
 
 * PortAudio
 * libsndfile
+* cmake
 * Doxygen (to build html documentation)
 
 ## Build
 
-From the repository root, run:
+To build the library, create a directory in the root repo directory called `build`.cd to the build directory and run `cmake ..` to generate the Makefile and then run `make`. Alternatively, you can run the build script from the repo root directory by running:
 
-			make
+		scripts/build.sh
 
-This will install the static library to `$(REPO)/lib`, the public headers to `$(ROOT)/include` and the objects to `$(REPO)/bin`
-
-To install the built library and headers to /usr/local/lib and /usr/local/include, run
-
-			make install
-
-To run the short biquad test, run
-
-			make dsptest
-
-To build and run the unit tests, run
-
-			make test
-
-And to build the Doxygen documentation, run
-
-			make docs
+Building the library will also automatically build and run the unit tests so make sure you have configured the test environment. See the README in the `test` directory for more info on how to do that.
 
 
 

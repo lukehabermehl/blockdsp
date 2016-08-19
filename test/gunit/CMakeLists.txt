@@ -29,3 +29,7 @@ target_link_libraries(test_all
 						${CMAKE_CURRENT_SOURCE_DIR}/../lib/libgtest.a
 						${CMAKE_CURRENT_SOURCE_DIR}/../lib/libgtest_main.a
 						libpthread.a)
+
+add_custom_command(TARGET test_all
+					POST_BUILD
+					COMMAND ${CMAKE_CURRENT_BINARY_DIR}/test_all)
