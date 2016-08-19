@@ -21,7 +21,15 @@ BlockDSP will allow for the creation of virtually any kind of audio effect witho
 
 ## Build
 
-To build the library, create a directory in the root repo directory called `build`.cd to the build directory and run `cmake ..` to generate the Makefile and then run `make`. Alternatively, you can run the build script from the repo root directory by running:
+To build the library, create a directory in the root repo directory called `build`.cd to the build directory and run
+
+	cmake ..
+
+to generate the Makefile and then run
+
+	make
+
+Alternatively, you can run the build script from the repo root directory by running:
 
 	scripts/build.sh
 
