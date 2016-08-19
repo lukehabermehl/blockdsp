@@ -2,27 +2,14 @@
 
 ## Setup
 
-1. Clone the [googletest](https://github.com/google/googletest) repository to this directory (ROOT/test/) or anywhere else.
-
-2. Build googletest and copy the *include* directory to this directory
-
-3. Create a directory called *lib* within this directory and copy the **libgtest.a** and **libgtest_main.a** library files to it.
-
-4. Your directory structure should look like this:
-
-		test
-			gunit
-			include
-				gtest
-					-> gtest.h
-						...
-			lib
-				-> libgtest.a
-				-> libgtest_main.a
+From this directory (`/test`), run the `setup_test_env.sh script`. This will clone and install a local copy of the googletest framework needed to run the unit tests. You will only have to do this once.
 
 ## Build and run unit tests
 
 Run the following commands from this directory
-
+	
+	cd build
+	cmake ..
 	make
-	./test_all
+
+Or you can run the unit tests as part of building the main library

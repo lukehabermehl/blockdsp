@@ -7,3 +7,7 @@ test/include/*
 test/lib/*
 lib/*
 include/*
+build/*
+test/gunit/build*
+test/googletest/*
+
