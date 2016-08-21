@@ -11,6 +11,7 @@
 #include "bdsp_number.hpp"
 #include "bdsp_apu.hpp"
 #include <string.h>
+#include <limits.h>
 
 BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumberRef target, BlockDSPAPU *contextAPU)
 {
@@ -155,26 +156,37 @@ BlockDSPParameter::pimpl::~pimpl()
 {
 }
 
-void BlockDSPParameterList::append(BlockDSPParameter *param)
+void BlockDSPParameterMap::append(BlockDSPParameter *param)
 {
-    items_.push_back(param);
+    items_[param->name()] = param;
 }
 
-size_t BlockDSPParameterList::size()
+size_t BlockDSPParameterMap::size()
 {
     return items_.size();
 }
 
-BlockDSPParameter * BlockDSPParameterList::getAt(size_t index)
+BlockDSPParameterMap::iterator BlockDSPParameterMap::begin()
 {
-    if (index >= size()) {
-        return NULL;
-    }
-    return items_[index];
+    return items_.begin();
 }
 
-BlockDSPParameter * BlockDSPParameterList::operator[](size_t index)
+BlockDSPParameterMap::iterator BlockDSPParameterMap::end()
 {
-    return getAt(index);
+    return items_.end();
+}
+
+BlockDSPParameter * BlockDSPParameterMap::parameterWithName(const char *name)
+{
+    auto it = items_.find(name);
+    if (it != items_.end()) {
+        return it->second;
+    }
+    return NULL;
+}
+
+BlockDSPParameter * BlockDSPParameterMap::operator[](const char *name)
+{
+    return parameterWithName(name);
 }
 

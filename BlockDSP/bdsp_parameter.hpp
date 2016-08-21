@@ -11,13 +11,13 @@
 #define BlockDSPParameter_hpp
 
 #include "bdsp_number.hpp"
-#include <vector>
-
-class BlockDSPAPU;
+#include <unordered_map>
+#include <string>
 
 #define BDSP_MAX_PARAMLEN 256
 
 class BlockDSPParameter;
+class BlockDSPAPU;
 
 /** typedef for callback function pointer for parameters. The callback is an optional function that will be called when the parameter changes. The parameters are the BlockDSPAPU instance, a pointer to the parameter that changed, and a pointer to a BlockDSPNumber instance representing the new value. *NOTE* the BlockDSPNumber instance is only guaranteed to be valid for the lifespan of the callback. *DO NOT* keep a reference to this value */
 typedef void (* BlockDSPParameterCallback)(BlockDSPAPU *, BlockDSPParameter *, BlockDSPNumberRef value);
@@ -63,21 +63,25 @@ private:
 };
 
 /** Iterable container for parameters */
-class BlockDSPParameterList {
+class BlockDSPParameterMap {
     friend class BlockDSPAPU;
 public:
+    typedef std::unordered_map<std::string, BlockDSPParameter *>::iterator iterator;
+    iterator begin();
+    iterator end();
+    
     /** Get the number of parameters in the list */
     size_t size();
-    /** Get the parameter at the given index. Returns NULL if the index is invalid */
-    BlockDSPParameter *getAt(size_t index);
-    /** Identical to `getAt()` */
-    BlockDSPParameter * operator[](size_t index);
+    /** Lookup a parameter given its name */
+    BlockDSPParameter *parameterWithName(const char *name);
+    /** Identical to `parameterWithName()` */
+    BlockDSPParameter * operator[](const char *name);
     
 protected:
     void append(BlockDSPParameter *param);
     
 private:
-    std::vector<BlockDSPParameter *> items_;
+    std::unordered_map<std::string, BlockDSPParameter *> items_;
 };
 
 #endif /* BlockDSPParameter_hpp */

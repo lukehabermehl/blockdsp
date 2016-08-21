@@ -41,7 +41,7 @@ public:
       */
     virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef value);
     /** @return the list of available parameters for the APU */
-    BlockDSPParameterList& getParameterList();
+    BlockDSPParameterMap& getParameterMap();
     
 protected:
     /** Use this method to create parameters.
@@ -53,7 +53,7 @@ protected:
     
 private:
     BlockDSPSystem *system_;
-    BlockDSPParameterList paramList_;
+    BlockDSPParameterMap paramMap_;
 };
 
 
