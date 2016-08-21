@@ -25,5 +25,6 @@
 #include <blockdsp/bdsp_parameter.hpp>
 #include <blockdsp/bdsp_system.hpp>
 #include <blockdsp/bdsp_logger.hpp>
+#include <blockdsp/bdsp_apu.hpp>
 
 #endif /* blockdsp_h */

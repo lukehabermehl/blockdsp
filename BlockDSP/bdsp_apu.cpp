@@ -21,8 +21,8 @@ BlockDSPAPU::BlockDSPAPU(BlockDSPSystemFactoryFunc systemFactoryFunc)
 
 BlockDSPAPU::~BlockDSPAPU()
 {
-    for (size_t i=0; i<paramList_.size(); i++) {
-        delete paramList_[i];
+    for (auto it = paramMap_.begin(); it != paramMap_.end(); it++) {
+        delete it->second;
     }
     delete system_;
 }
@@ -63,12 +63,12 @@ void BlockDSPAPU::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumbe
 BlockDSPParameter * BlockDSPAPU::createParameter(const char *name, BlockDSPNumberType numberType, BlockDSPNumberRef target)
 {
     BlockDSPParameter * param = new BlockDSPParameter(numberType, name, target, this);
-    paramList_.append(param);
+    paramMap_.append(param);
     
     return param;
 }
 
-BlockDSPParameterList& BlockDSPAPU::getParameterList()
+BlockDSPParameterMap& BlockDSPAPU::getParameterMap()
 {
-    return paramList_;
+    return paramMap_;
 }

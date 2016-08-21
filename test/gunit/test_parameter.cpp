@@ -100,12 +100,12 @@ TEST_F(ParameterTestFixture, test_callback_and_param)
 
 TEST_F(ParameterTestFixture, test_parameter_list)
 {
-	BlockDSPParameterList& paramList = contextAPU->getParameterList();
+	BlockDSPParameterMap& paramList = contextAPU->getParameterMap();
 	EXPECT_EQ(2, paramList.size());
-	EXPECT_EQ(contextAPU->param1, paramList.getAt(0));
-	EXPECT_EQ(contextAPU->param1, paramList[0]);
-	EXPECT_EQ(contextAPU->param2, paramList.getAt(1));
-	EXPECT_EQ(contextAPU->param2, paramList[1]);
+	EXPECT_EQ(contextAPU->param1, paramList.parameterWithName("param1"));
+	EXPECT_EQ(contextAPU->param1, paramList["param1"]);
+	EXPECT_EQ(contextAPU->param2, paramList.parameterWithName("param2"));
+	EXPECT_EQ(contextAPU->param2, paramList["param2"]);
 }
 
 TEST_F(ParameterTestFixture, test_value_constraints)

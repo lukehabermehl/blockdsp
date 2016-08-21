@@ -24,7 +24,7 @@ public:
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual void onNext();
     
-    virtual BlockDSPParameterList& getParameters();
+    virtual BlockDSPParameterMap& getParameters();
     
 private:
     BlockDSPAPU *apu_;
