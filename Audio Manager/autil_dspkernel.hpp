@@ -21,6 +21,7 @@ static const char *kAudioDSPKernelLogPrefix = "[AudioDSPKernel]";
 
 class AudioDSPKernel {
 public:
+    typedef void (*StreamStatusChangeCallback)(void *);
     AudioDSPKernel()
     {
         audioProcessingUnit = NULL;
@@ -31,17 +32,14 @@ public:
         useFileInput = false;
         audioFile = 0;
         status = AudioManagerStatusDone;
+        streamStatusChangeCallback = NULL;
+        streamStatusChangeCallbackCtx = NULL;
     }
     
     ~AudioDSPKernel()
     {
         if (stream)
             close();
-        
-        if (audioFile)
-        {
-            audioFile->close();
-        }
         
         delete passthroughUnit;
     }
@@ -117,6 +115,9 @@ public:
         
         PaError err = Pa_StartStream(stream);
         status = AudioManagerStatusRunning;
+        if (streamStatusChangeCallback) {
+            streamStatusChangeCallback(streamStatusChangeCallbackCtx);
+        }
         return (err == paNoError);
     }
     
@@ -133,6 +134,9 @@ public:
     void paStreamFinishedMethod()
     {
         status = AudioManagerStatusDone;
+        if (streamStatusChangeCallback) {
+            streamStatusChangeCallback(streamStatusChangeCallbackCtx);
+        }
     }
     
     int paCallbackMethod(const void *inputBuffer, void *outputBuffer,
@@ -203,6 +207,8 @@ public:
     AudioFile *audioFile;
     AudioProcessingUnit *audioProcessingUnit;
     AudioManagerStatus status;
+    StreamStatusChangeCallback streamStatusChangeCallback;
+    void *streamStatusChangeCallbackCtx;
     
 private:
     AudioProcessingUnit *passthroughUnit;
