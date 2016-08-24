@@ -31,6 +31,8 @@ public:
     AudioProcessingUnit *loadAPU(const char *filepath);
     /** Close the dylib */
     void close();
+    /** Get the error if one exists */
+    BDAPULoaderError error();
     
     
 private:

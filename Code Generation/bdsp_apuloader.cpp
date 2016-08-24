@@ -62,3 +62,8 @@ void BDAPULoader::close()
         _pimpl->handle = 0;
     }
 }
+
+BDAPULoaderError BDAPULoader::error()
+{
+    return _pimpl->error;
+}
