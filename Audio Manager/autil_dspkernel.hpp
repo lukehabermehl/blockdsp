@@ -21,6 +21,7 @@ static const char *kAudioDSPKernelLogPrefix = "[AudioDSPKernel]";
 
 class AudioDSPKernel {
 public:
+    typedef void (*StreamFinishedCallback)(void *);
     AudioDSPKernel()
     {
         audioProcessingUnit = NULL;
@@ -31,6 +32,8 @@ public:
         useFileInput = false;
         audioFile = 0;
         status = AudioManagerStatusDone;
+        streamFinishedCallback = NULL;
+        streamFinishedCallbackCtx = NULL;
     }
     
     ~AudioDSPKernel()
@@ -133,6 +136,9 @@ public:
     void paStreamFinishedMethod()
     {
         status = AudioManagerStatusDone;
+        if (streamFinishedCallback) {
+            streamFinishedCallback(streamFinishedCallbackCtx);
+        }
     }
     
     int paCallbackMethod(const void *inputBuffer, void *outputBuffer,
@@ -203,6 +209,8 @@ public:
     AudioFile *audioFile;
     AudioProcessingUnit *audioProcessingUnit;
     AudioManagerStatus status;
+    StreamFinishedCallback streamFinishedCallback;
+    void *streamFinishedCallbackCtx;
     
 private:
     AudioProcessingUnit *passthroughUnit;

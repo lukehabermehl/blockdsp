@@ -21,6 +21,7 @@ public:
     AudioDSPKernel *dspKernel;
     AudioDeviceIndex outputDeviceIndex;
     AudioDeviceIndex inputDeviceIndex;
+    AudioManagerStatusChangedCallback *statusChangedCallback;
 };
 
 AudioDeviceInfoRef AudioDeviceInfoCreate(AudioDeviceIndex index, const char *name)

@@ -47,6 +47,17 @@ struct AudioDeviceInfo
     AudioDeviceInfoRef next;
 };
 
+class AudioManager;
+
+/** Abstract callback class */
+class AudioManagerStatusChangedCallback
+{
+public:
+    /** Called when the audio manager's status changes.
+      * @param audioManager a pointer to the audioManager instance that sent the notification */
+    virtual void onStatusChanged(AudioManager *audioManager) = 0;
+};
+
 /** Provides an interface for loading and processing audio from a file or input device */
 class AudioManager
 {
@@ -106,9 +117,14 @@ public:
     /** Get the current status of the Audio Manager */
     AudioManagerStatus status();
     
+    /** Set the callback object to be used when the status changes (optional) */
+    void setOnStatusChangedCallback(AudioManagerStatusChangedCallback *cb);
+    
 private:
     class pimpl;
     pimpl *_pimpl;
+    
+    static void streamFinishedCallback(void *ctx);
 };
 
 

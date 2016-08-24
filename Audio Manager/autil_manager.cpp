@@ -19,7 +19,10 @@ AudioManager::AudioManager()
 {
     _pimpl = new pimpl;
     _pimpl->dspKernel = new AudioDSPKernel;
+    _pimpl->dspKernel->streamFinishedCallback = AudioManager::streamFinishedCallback;
+    _pimpl->dspKernel->streamFinishedCallbackCtx = this;
     _pimpl->outputDeviceIndex = 1;
+    _pimpl->statusChangedCallback = NULL;
     
     Pa_Initialize();
 }
@@ -153,8 +156,20 @@ void AudioManager::setLooping(bool looping)
     _pimpl->dspKernel->audioFile->setLooping(looping);
 }
 
+void AudioManager::setOnStatusChangedCallback(AudioManagerStatusChangedCallback *cb)
+{
+    _pimpl->statusChangedCallback = cb;
+}
+
+void AudioManager::streamFinishedCallback(void *ctx)
+{
+    AudioManager *audioManager = (AudioManager *)ctx;
+    if (audioManager->_pimpl->statusChangedCallback) {
+        audioManager->_pimpl->statusChangedCallback->onStatusChanged(audioManager);
+    }
+}
+
 AudioManager::pimpl::~pimpl()
 {
     delete dspKernel;
 }
-
