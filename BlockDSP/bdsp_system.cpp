@@ -24,6 +24,9 @@ BlockDSPSystem::BlockDSPSystem() {
 }
 
 BlockDSPSystem::~BlockDSPSystem() {
+    delete mainInputNode;
+    //Don't ever delete mainOutputNode here
+    
     for (auto it=_pimpl->nodeMap.begin(); it != _pimpl->nodeMap.end(); it++) {
         BlockDSPNode *node = it->second;
         delete node;
