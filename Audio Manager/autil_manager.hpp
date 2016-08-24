@@ -124,7 +124,7 @@ private:
     class pimpl;
     pimpl *_pimpl;
     
-    static void streamFinishedCallback(void *ctx);
+    static void streamStatusChangeCallback(void *ctx);
 };
 
 
