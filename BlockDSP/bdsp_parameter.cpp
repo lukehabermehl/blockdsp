@@ -144,12 +144,12 @@ void BlockDSPParameter::setMaxValue(BlockDSPNumberRef maxVal)
 
 BlockDSPNumberRef BlockDSPParameter::getMaxValue()
 {
-    return _pimpl->maxValue;
+    return _pimpl->maxValue->copy();
 }
 
 BlockDSPNumberRef BlockDSPParameter::getMinValue()
 {
-    return _pimpl->minValue;
+    return _pimpl->minValue->copy();
 }
 
 BlockDSPParameter::pimpl::~pimpl()

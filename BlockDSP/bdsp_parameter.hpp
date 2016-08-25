@@ -48,8 +48,10 @@ public:
     void setMinValue(BlockDSPNumberRef minVal);
     /** Set the maximum permissible value */
     void setMaxValue(BlockDSPNumberRef maxVal);
-    
+
+    /** Get the minimum allowed value for the parameter */
     BlockDSPNumberRef getMinValue();
+    /** Get the maximum allowed value for the parameter */
     BlockDSPNumberRef getMaxValue();
     
     /** Get the value type of the parameter */
