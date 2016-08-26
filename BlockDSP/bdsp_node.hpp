@@ -12,7 +12,7 @@
 #ifndef BlockDSPNode_h
 #define BlockDSPNode_h
 
-#include "bdsp_number.hpp"
+#include "autil_number.hpp"
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -79,7 +79,7 @@ private:
 class BlockDSPMultiplierNode : public BlockDSPNode {
 public:
     /** The coefficient number */
-    BlockDSPNumberRef coefficient;
+    APUNumber coefficient;
     
     BlockDSPMultiplierNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     virtual void connectInput(BlockDSPNode *inputNode);

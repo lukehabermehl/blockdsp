@@ -13,7 +13,7 @@
 #include <string.h>
 #include <limits.h>
 
-BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, BlockDSPNumberRef target, BlockDSPAPU *contextAPU)
+BlockDSPParameter::BlockDSPParameter(APUNumberType type, const char *name, APUNumber target, BlockDSPAPU *contextAPU)
 {
     _pimpl = new pimpl;
     _pimpl->type = type;
@@ -23,13 +23,13 @@ BlockDSPParameter::BlockDSPParameter(BlockDSPNumberType type, const char *name, 
     _pimpl->contextAPU = contextAPU;
     
     switch (type) {
-        case INTEGER:
-            _pimpl->minValue = BlockDSPNumber::numberForInteger(INT_MIN);
-            _pimpl->maxValue = BlockDSPNumber::numberForInteger(INT_MAX);
+        case APUNUM_INTEGER:
+            _pimpl->minValue.setIntegerValue(INT_MIN);
+            _pimpl->maxValue.setIntegerValue(INT_MAX);
             break;
-        case FLOAT:
-            _pimpl->minValue = BlockDSPNumber::numberForFloat(INT_MIN);
-            _pimpl->maxValue = BlockDSPNumber::numberForFloat(INT_MAX);
+        case APUNUM_FLOAT:
+            _pimpl->minValue.setFloatValue(INT_MIN);
+            _pimpl->maxValue.setFloatValue(INT_MAX);
             break;
         default:
             break;
@@ -51,52 +51,45 @@ const char *BlockDSPParameter::name()
     return _pimpl->name;
 }
 
-void BlockDSPParameter::setTarget(BlockDSPNumberRef target)
+void BlockDSPParameter::setTarget(APUNumber target)
 {
     _pimpl->target = target;
 }
 
-void BlockDSPParameter::setValue(BlockDSPNumberRef value)
+void BlockDSPParameter::setValue(APUNumber value)
 {
     switch (type()) {
-        case INTEGER:
+        case APUNUM_INTEGER:
         {
-            int minVal = getMinValue()->integerValue();
-            int maxVal = getMaxValue()->integerValue();
-            int nVal = value->integerValue();
+            int minVal = getMinValue().integerValue();
+            int maxVal = getMaxValue().integerValue();
+            int nVal = value.integerValue();
             if (nVal < minVal) {
-                value->setIntegerValue(minVal);
+                value.setIntegerValue(minVal);
             } else if (nVal > maxVal) {
-                value->setIntegerValue(maxVal);
+                value.setIntegerValue(maxVal);
             }
-            
-            if (_pimpl->target) {
-                _pimpl->target->setFloatValue(value->floatValue());
-            }
+                _pimpl->target.setFloatValue(value.floatValue());
             
             break;
         }
-        case FLOAT:
+        case APUNUM_FLOAT:
         {
-            float maxVal = getMaxValue()->floatValue();
-            float minVal = getMinValue()->floatValue();
-            float fVal = value->floatValue();
+            float maxVal = getMaxValue().floatValue();
+            float minVal = getMinValue().floatValue();
+            float fVal = value.floatValue();
             if (fVal < minVal) {
-                value->setFloatValue(minVal);
+                value.setFloatValue(minVal);
             } else if (fVal > maxVal) {
-                value->setFloatValue(maxVal);
+                value.setFloatValue(maxVal);
             }
-            
-            if (_pimpl->target) {
-                _pimpl->target->setFloatValue(value->floatValue());
-            }
+            _pimpl->target.setFloatValue(value.floatValue());
+
             break;
         }
-        case BOOLEAN:
+        case APUNUM_BOOLEAN:
         {
-            if (_pimpl->target) {
-                _pimpl->target->setBoolValue(value->boolValue());
-            }
+            _pimpl->target.setBoolValue(value.boolValue());
         }
     }
 
@@ -109,47 +102,52 @@ void BlockDSPParameter::setValue(BlockDSPNumberRef value)
     }
 }
 
-BlockDSPNumberType BlockDSPParameter::type()
+APUNumberType BlockDSPParameter::type()
 {
     return _pimpl->type;
 }
 
-void BlockDSPParameter::setMinValue(BlockDSPNumberRef minVal)
+void BlockDSPParameter::setMinValue(APUNumber minVal)
 {
     switch (type()) {
-        case INTEGER:
-            _pimpl->minValue->setIntegerValue(minVal->integerValue());
+        case APUNUM_INTEGER:
+            _pimpl->minValue.setIntegerValue(minVal.integerValue());
             break;
-        case FLOAT:
-            _pimpl->minValue->setFloatValue(minVal->floatValue());
+        case APUNUM_FLOAT:
+            _pimpl->minValue.setFloatValue(minVal.floatValue());
             break;
         default:
             break;
     }
 }
 
-void BlockDSPParameter::setMaxValue(BlockDSPNumberRef maxVal)
+void BlockDSPParameter::setMaxValue(APUNumber maxVal)
 {
     switch (type()) {
-        case INTEGER:
-            _pimpl->maxValue->setIntegerValue(maxVal->integerValue());
+        case APUNUM_INTEGER:
+            _pimpl->maxValue.setIntegerValue(maxVal.integerValue());
             break;
-        case FLOAT:
-            _pimpl->maxValue->setFloatValue(maxVal->floatValue());
+        case APUNUM_FLOAT:
+            _pimpl->maxValue.setFloatValue(maxVal.floatValue());
             break;
         default:
             break;
     }
 }
 
-BlockDSPNumberRef BlockDSPParameter::getMaxValue()
+APUNumber BlockDSPParameter::getMaxValue()
 {
-    return _pimpl->maxValue->copy();
+    //Initialize to create copy
+    APUNumber val;
+    val = _pimpl->maxValue;
+    return val;
 }
 
-BlockDSPNumberRef BlockDSPParameter::getMinValue()
+APUNumber BlockDSPParameter::getMinValue()
 {
-    return _pimpl->minValue->copy();
+    APUNumber val;
+    val = _pimpl->minValue;
+    return val;
 }
 
 BlockDSPParameter::pimpl::~pimpl()

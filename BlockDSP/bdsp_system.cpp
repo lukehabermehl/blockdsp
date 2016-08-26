@@ -117,7 +117,7 @@ BlockDSPInputNode *BlockDSPSystem::createInputNode()
     return node;
 }
 
-void BlockDSPSystem::addNumber(const char *name, BlockDSPNumberRef number)
+void BlockDSPSystem::addNumber(const char *name, APUNumber number)
 {
     std::string numName = std::string(name);
     auto it = _pimpl->numberMap.find(numName);
@@ -135,12 +135,15 @@ BlockDSPNode *BlockDSPSystem::nodeWithID(ssize_t id) {
     return it->second;
 }
 
-BlockDSPNumberRef BlockDSPSystem::numberWithName(const char *name) {
+APUNumber BlockDSPSystem::numberWithName(const char *name, bool &success) {
     auto it = _pimpl->numberMap.find(name);
     if (it != _pimpl->numberMap.end()) {
+        success = true;
         return it->second;
     }
-    return nullptr;
+
+    success = false;
+    return APUNumber::numberForBool(false);
 }
 
 BlockDSPDelayLine * BlockDSPSystem::delayLineWithID(BlockDSPNodeID id) {
@@ -187,14 +190,14 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned i
     BiQuadCoefficients coeffs;
     coeffs.calculateForLPF(1000, 3.0, sampleRate);
     
-    a0Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a0);
-    a1Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a1);
-    a2Node->coefficient = BlockDSPNumber::numberForFloat(coeffs.a2);
-    b1Node->coefficient = BlockDSPNumber::numberForFloat(-1 * coeffs.b1);
-    b2Node->coefficient = BlockDSPNumber::numberForFloat(-1 * coeffs.b2);
+    a0Node->coefficient = APUNumber::numberForFloat(coeffs.a0);
+    a1Node->coefficient = APUNumber::numberForFloat(coeffs.a1);
+    a2Node->coefficient = APUNumber::numberForFloat(coeffs.a2);
+    b1Node->coefficient = APUNumber::numberForFloat(-1 * coeffs.b1);
+    b2Node->coefficient = APUNumber::numberForFloat(-1 * coeffs.b2);
     
     system->mainOutputNode = outGainNode;
-    outGainNode->coefficient = BlockDSPNumber::numberForFloat(2.0);
+    outGainNode->coefficient = APUNumber::numberForFloat(2.0);
     
     return system;
 }

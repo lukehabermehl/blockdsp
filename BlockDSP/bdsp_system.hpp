@@ -46,7 +46,7 @@ public:
       * @param name a name for the number (ex. "a1")
       * @param number the number to add
       */
-    void addNumber(const char *name, BlockDSPNumberRef number);
+    void addNumber(const char *name, APUNumber number);
     /** Pull the next sample from the input node and push it into the system */
     void next();
     /** Zero out the system. This will call reset() on any delay lines */
@@ -58,9 +58,10 @@ public:
     BlockDSPNode *nodeWithID(BlockDSPNodeID id);
     /** Get the number with the given name
       * @param name the name of the number
-      * @returns the number or NULL if not found
+      * @param inout flag that will be set to true if the number exists
+      * @returns the number or 0 if not found
       */
-    BlockDSPNumberRef numberWithName(const char *name);
+    APUNumber numberWithName(const char *name, bool &success);
     /** Get the delay line with the given ID
       * @returns the delay line or NULL if not found
       */

@@ -65,11 +65,11 @@ void write_test_system(const char *outputdir)
     coeffs.b1 *= -1;
     coeffs.b2 *= -1;
     
-    cb.setNumberDefaultValue("a0Node->coefficient", BlockDSPNumberType::FLOAT, &coeffs.a0);
-    cb.setNumberDefaultValue("a1Node->coefficient", BlockDSPNumberType::FLOAT, &coeffs.a1);
-    cb.setNumberDefaultValue("a2Node->coefficient", BlockDSPNumberType::FLOAT, &coeffs.a2);
-    cb.setNumberDefaultValue("b1Node->coefficient", BlockDSPNumberType::FLOAT, &coeffs.b1);
-    cb.setNumberDefaultValue("b2Node->coefficient", BlockDSPNumberType::FLOAT, &coeffs.b2);
+    cb.setNumberDefaultValue("a0Node->coefficient", APUNumberType::APUNUM_FLOAT, &coeffs.a0);
+    cb.setNumberDefaultValue("a1Node->coefficient", APUNumberType::APUNUM_FLOAT, &coeffs.a1);
+    cb.setNumberDefaultValue("a2Node->coefficient", APUNumberType::APUNUM_FLOAT, &coeffs.a2);
+    cb.setNumberDefaultValue("b1Node->coefficient", APUNumberType::APUNUM_FLOAT, &coeffs.b1);
+    cb.setNumberDefaultValue("b2Node->coefficient", APUNumberType::APUNUM_FLOAT, &coeffs.b2);
     
     cb.closeSourceFile();
     

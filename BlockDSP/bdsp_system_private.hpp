@@ -21,7 +21,7 @@ public:
     std::unordered_map<BlockDSPNodeID, BlockDSPNode *> nodeMap;
     std::unordered_map<BlockDSPNodeID, BlockDSPDelayLine *> delayLineMap;
     std::unordered_map<std::string, BlockDSPParameter *> parameterMap;
-    std::unordered_map<std::string, BlockDSPNumberRef> numberMap;
+    std::unordered_map<std::string, APUNumber> numberMap;
     
     uint32_t counter;
     uint32_t inputChannelCount;

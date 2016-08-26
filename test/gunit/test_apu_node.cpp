@@ -7,7 +7,7 @@ public:
 	TestAPU() : BlockDSPAPU(new BlockDSPSystem) {
 		BlockDSPMultiplierNode *mulNode = getSystem()->createMultiplierNode();
 		mulNode->connectInput(getSystem()->mainInputNode);
-		mulNode->coefficient->setFloatValue(0.5);
+		mulNode->coefficient.setFloatValue(0.5);
 		getSystem()->mainOutputNode = mulNode;
 	}
 };

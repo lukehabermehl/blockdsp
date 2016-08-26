@@ -8,6 +8,7 @@
 
 #include "bdsp_codebuilder.hpp"
 #include "bdsp_codebuilder_private.hpp"
+#include "autil_number.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -42,16 +43,16 @@ void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType typ
     }
 }
 
-void BDStringForParameterType(char *str, BlockDSPNumberType type)
+void BDStringForParameterType(char *str, APUNumberType type)
 {
     switch (type)
     {
-        case BlockDSPNumberType::FLOAT:
-            strcpy(str, "BlockDSPNumberType::FLOAT");
-        case BlockDSPNumberType::BOOLEAN:
-            strcpy(str, "BlockDSPNumberType::BOOLEAN");
-        case BlockDSPNumberType::INTEGER:
-            strcpy(str, "BlockDSPNumberType::INTEGER");
+        case APUNumberType::APUNUM_FLOAT:
+            strcpy(str, "APUNumberType::APUNUM_FLOAT");
+        case APUNumberType::APUNUM_BOOLEAN:
+            strcpy(str, "APUNumberType::APUNUM_BOOL");
+        case APUNumberType::APUNUM_INTEGER:
+            strcpy(str, "APUNumberType::APUNUM_INTEGER");
     }
 }
 
@@ -166,7 +167,7 @@ void BDCodeBuilder::openSourceFile()
     
     for (auto it = _pimpl->callbackMap.begin(); it != _pimpl->callbackMap.end(); it++)
     {
-        fprintf(f, "\nvoid %s(BlockDSPAPU *contextAPU, BlockDSPParameter *parameter, BlockDSPNumber *value) {", it->first.c_str());
+        fprintf(f, "\nvoid %s(BlockDSPAPU *contextAPU, BlockDSPParameter *parameter, APUNumber value) {", it->first.c_str());
         fprintf(f, "\n\t%s\n}\n", it->second.c_str());
     }
     
@@ -222,7 +223,6 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
         //Use typeStr for space efficiency
         sprintf(typeStr, "%s->coefficient", name);
         _pimpl->numSet[typeStr] = true;
-        fprintf(_pimpl->openFile, "%s = BlockDSPNumber::numberForFloat(0.0);\n", typeStr);
     }
 }
 
@@ -263,7 +263,7 @@ void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLine
     fprintf(_pimpl->openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu);\n", nodeName, delayLineName, delayIndex);
 }
 
-void BDCodeBuilder::addParameter(const char *name, const char *callback, const char *target, BlockDSPNumberType type)
+void BDCodeBuilder::addParameter(const char *name, const char *callback, const char *target, APUNumberType type)
 {
     BD_FILE_CHECK();
     
@@ -295,11 +295,11 @@ void BDCodeBuilder::addNumber(const char *name)
     
     _pimpl->numSet[numName] = true;
     
-    fprintf(_pimpl->openFile, "BlockDSPNumberRef %s(new BlockDSPNumber());\n", name);
+    fprintf(_pimpl->openFile, "APUNumber %s;\n", name);
     fprintf(_pimpl->openFile, "system->addNumber(\"%s\", %s);\n", name, name);
 }
 
-void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPNumberType valueType, void *value)
+void BDCodeBuilder::setNumberDefaultValue(const char *numberName, APUNumberType valueType, void *value)
 {
     BD_FILE_CHECK();
     
@@ -312,21 +312,21 @@ void BDCodeBuilder::setNumberDefaultValue(const char *numberName, BlockDSPNumber
     
     switch (valueType)
     {
-        case BlockDSPNumberType::FLOAT:
+        case APUNumberType::APUNUM_FLOAT:
         {
-            fprintf(_pimpl->openFile, "%s->setFloatValue(%f);\n", numberName, *((float *)value));
+            fprintf(_pimpl->openFile, "%s.setFloatValue(%f);\n", numberName, *((float *)value));
             break;
         }
             
-        case BlockDSPNumberType::BOOLEAN:
+        case APUNumberType::APUNUM_BOOLEAN:
         {
-            fprintf(_pimpl->openFile, "%s->setBoolValue(%s);\n", numberName, *((bool *)value) ? "true" : "false");
+            fprintf(_pimpl->openFile, "%s.setBoolValue(%s);\n", numberName, *((bool *)value) ? "true" : "false");
             break;
         }
             
-        case BlockDSPNumberType::INTEGER:
+        case APUNumberType::APUNUM_INTEGER:
         {
-            fprintf(_pimpl->openFile, "%s->setIntegerValue(%d);\n", numberName, *((int *)value));
+            fprintf(_pimpl->openFile, "%s.setIntegerValue(%d);\n", numberName, *((int *)value));
             break;
         }
     }

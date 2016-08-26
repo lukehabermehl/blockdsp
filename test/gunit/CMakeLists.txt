@@ -15,9 +15,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include/ ${CMAKE_CURRENT_S
 set (SOURCES "test_bdsp_system.cpp" 
 	"test_apu_node.cpp"
 	"test_audiomanager_api.cpp"
+	"test_apunumber.cpp"
 	"test_code_builder.cpp"
 	"test_dsp_blocks.cpp"
-	"test_parameter.cpp"
 	"test_thread_manager.cpp"
 	"test_all.cpp")
 
