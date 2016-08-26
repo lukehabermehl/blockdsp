@@ -16,11 +16,12 @@ protected:
 
 TEST_F(BDSPSystemTestFixture, test_system_number)
 {
-	BlockDSPNumberRef num(new BlockDSPNumber());
-	ASSERT_TRUE((num != NULL));
+	APUNumber num = APUNumber::numberForInteger(5);
 	system->addNumber("num", num);
-	BlockDSPNumberRef lookup = system->numberWithName("num");
-	EXPECT_EQ(num.get(), lookup.get());
+	bool success;
+	APUNumber lookup = system->numberWithName("num", success);
+	EXPECT_TRUE(success);
+	EXPECT_EQ(num.integerValue(), lookup.integerValue());
 }
 
 TEST_F(BDSPSystemTestFixture, test_system_delay_line)

@@ -70,10 +70,10 @@ public:
     /** Create a parameter
       * @param name variable name to assign
       * @param callback the name used to create a callback code block. NULL if none
-      * @param target the name of a BlockDSPNumber variable or NULL. Changing the parameter value will change the value of the target, if given.
+      * @param target the name of a APUNumber variable or NULL. Changing the parameter value will change the value of the target, if given.
       * @param type parameter value type
       */
-    void addParameter(const char *name, const char *callback, const char *target, BlockDSPNumberType type);
+    void addParameter(const char *name, const char *callback, const char *target, APUNumberType type);
     /** Create a number
       * @param name var name to assign the number
       */
@@ -83,7 +83,7 @@ public:
       * @param valueType the type of the number value
       * @param value a pointer to a float, double, int, or bool. The data will be copied.
       */
-    void setNumberDefaultValue(const char *numberName, BlockDSPNumberType valueType, void *value);
+    void setNumberDefaultValue(const char *numberName, APUNumberType valueType, void *value);
     /** Connect the output of one node to the input of another 
       * @param from the var name used to create the output node
       * @param to the var name used to create the target node

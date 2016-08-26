@@ -52,19 +52,19 @@ void BDSPSimpleDelayEffect::configureSystem()
     
     system->mainOutputNode = outputSummer;
     
-    wetDryParam = createParameter("Mix", BlockDSPNumberType::FLOAT, NULL);
-    delayTimeParam = createParameter("Delay Time", BlockDSPNumberType::FLOAT, NULL);
+    wetDryParam = createParameter("Mix", APUNumberType::APUNUM_FLOAT, NULL);
+    delayTimeParam = createParameter("Delay Time", APUNumberType::APUNUM_FLOAT, NULL);
 }
 
-void BDSPSimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef value)
+void BDSPSimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, APUNumber value)
 {
     if (parameter == wetDryParam) {
-        wetMultiplier->coefficient->setFloatValue(value->floatValue());
-        dryMultiplier->coefficient->setFloatValue(1 - value->floatValue());
+        wetMultiplier->coefficient->setFloatValue(value.floatValue());
+        dryMultiplier->coefficient->setFloatValue(1 - value.floatValue());
     }
     
     else if (parameter == delayTimeParam) {
-        msDelay = value->floatValue();
+        msDelay = value.floatValue();
         updateDelay();
     }
 }

@@ -17,7 +17,7 @@ public:
     BDSPSimpleDelayEffect();
     
     unsigned long getMaxDelaySamples();
-    virtual void onParameterChanged(BlockDSPParameter *parameter, BlockDSPNumberRef number);
+    virtual void onParameterChanged(BlockDSPParameter *parameter, APUNumber number);
     
     static void generateWithCodeBuilder(const char *outputDir);
     
