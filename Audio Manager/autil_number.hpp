@@ -43,11 +43,11 @@ public:
     static APUNumber numberForBool(bool b);
 
     /** Get the float value of the number */
-    float floatValue();
+    float floatValue() const;
     /** Get the integer value of the number. If the true value is a float, the value will be floored. */
-    int integerValue();
+    int integerValue() const;
     /** Get the boolean value. Non-zero values return true */
-    bool boolValue();
+    bool boolValue() const;
 
     /** Set the value to the given float */
     void setFloatValue(float f);

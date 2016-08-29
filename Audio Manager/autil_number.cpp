@@ -50,7 +50,7 @@ void APUNumber::setBoolValue(bool b)
     _pimpl->paramType = APUNumberType::APUNUM_BOOLEAN;
 }
 
-int APUNumber::integerValue()
+int APUNumber::integerValue() const
 {
     switch (_pimpl->paramType) {
         case APUNumberType::APUNUM_INTEGER:
@@ -64,7 +64,7 @@ int APUNumber::integerValue()
     }
 }
 
-float APUNumber::floatValue()
+float APUNumber::floatValue() const
 {
     switch (_pimpl->paramType) {
         case APUNumberType::APUNUM_INTEGER:
@@ -78,7 +78,7 @@ float APUNumber::floatValue()
     }
 }
 
-bool APUNumber::boolValue()
+bool APUNumber::boolValue() const
 {
     int i = integerValue();
     return (i != 0);

@@ -16,11 +16,6 @@ class BlockDSPParameter::pimpl
 public:
     ~pimpl();
     
-    char name[BDSP_MAX_PARAMLEN];
-    APUNumber target;
-    APUNumber minValue;
-    APUNumber maxValue;
-    APUNumberType type;
     BlockDSPAPU *contextAPU;
     
 };
