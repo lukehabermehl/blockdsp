@@ -5,7 +5,9 @@
 //  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
-/** @file autil_dspkernel.hpp */
+/** @file autil_dspkernel.hpp 
+  * Internal interface to PortAudio API
+  */
 
 #ifndef AudioDSPKernel_hpp
 #define AudioDSPKernel_hpp
@@ -22,164 +24,21 @@ static const char *kAudioDSPKernelLogPrefix = "[AudioDSPKernel]";
 class AudioDSPKernel {
 public:
     typedef void (*StreamStatusChangeCallback)(void *);
-    AudioDSPKernel()
-    {
-        audioProcessingUnit = NULL;
-        passthroughUnit = AudioProcessingUnit::createPassthroughUnit();
-        numInputChannels = 1;
-        numOutputChannels = 1;
-        stream = 0;
-        useFileInput = false;
-        audioFile = 0;
-        status = AudioManagerStatusDone;
-        streamStatusChangeCallback = NULL;
-        streamStatusChangeCallbackCtx = NULL;
-    }
+    AudioDSPKernel();
+    ~AudioDSPKernel();
     
-    ~AudioDSPKernel()
-    {
-        if (stream)
-            close();
-        
-        delete passthroughUnit;
-    }
+    bool open(PaDeviceIndex outputDevIndex);
+    bool close();
+    bool start();
+    bool stop();
     
-    bool open(PaDeviceIndex outputDevIndex)
-    {
-        PaStreamParameters outputParameters;
-        outputParameters.device = outputDevIndex;
-        if (outputParameters.device == paNoDevice)
-        {
-            BDLogError(kAudioDSPKernelLogPrefix, "Failed to find output device!");
-            return false;
-        }
-        
-        outputParameters.channelCount = numOutputChannels;
-        outputParameters.sampleFormat = paFloat32;
-        const PaDeviceInfo *devInfo = Pa_GetDeviceInfo(outputParameters.device);
-        outputParameters.suggestedLatency = devInfo->defaultLowOutputLatency;
-        
-        outputParameters.hostApiSpecificStreamInfo = NULL;
-        
-        if (useFileInput)
-            sampleRate = audioFile->sampleRate();
-        else
-        {
-            const PaDeviceInfo *inputDevInfo = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
-            sampleRate = inputDevInfo->defaultSampleRate;
-        }
-        
-        BDLogFormat(kAudioDSPKernelLogPrefix, "Open stream with sample rate: %lu", sampleRate);
-        
-        PaError err = Pa_OpenStream(&stream,
-                                    NULL,
-                                    &outputParameters,
-                                    sampleRate,
-                                    1,
-                                    0,
-                                    &AudioDSPKernel::paCallback,
-                                    this);
-        
-        if (err != paNoError)
-        {
-            BDLogError(kAudioDSPKernelLogPrefix, "Failed to open stream! PAError code: %d", err);
-            return false;
-        }
-        
-        err = Pa_SetStreamFinishedCallback(stream, &AudioDSPKernel::paStreamFinished);
-        if (err != paNoError)
-        {
-            Pa_CloseStream(stream);
-            stream = 0;
-            return false;
-        }
-        
-        return true;
-    }
-    
-    bool close()
-    {
-        if (stream == 0)
-            return false;
-        
-        PaError err = Pa_CloseStream(stream);
-        stream = 0;
-        
-        return (err == paNoError);
-    }
-    
-    bool start()
-    {
-        if (stream == 0)
-            return false;
-        
-        PaError err = Pa_StartStream(stream);
-        status = AudioManagerStatusRunning;
-        if (streamStatusChangeCallback) {
-            streamStatusChangeCallback(streamStatusChangeCallbackCtx);
-        }
-        return (err == paNoError);
-    }
-    
-    bool stop()
-    {
-        if (stream == 0)
-            return false;
-        
-        PaError err = Pa_StopStream(stream);
-        status = AudioManagerStatusDone;
-        return (err == paNoError);
-    }
-    
-    void paStreamFinishedMethod()
-    {
-        status = AudioManagerStatusDone;
-        if (streamStatusChangeCallback) {
-            streamStatusChangeCallback(streamStatusChangeCallbackCtx);
-        }
-    }
+    void paStreamFinishedMethod();
     
     int paCallbackMethod(const void *inputBuffer, void *outputBuffer,
                          unsigned long framesPerBuffer,
                          const PaStreamCallbackTimeInfo *timeInfo,
-                         PaStreamCallbackFlags statusFlags)
-    {
-        float *out = (float *)outputBuffer;
-        float *in = 0;
-        if (!useFileInput)
-        {
-            in = (float *)inputBuffer;
-        }
-        
-        PaStreamCallbackResult ret = paContinue;
-        
-        for (unsigned long i=0; i<framesPerBuffer; i++)
-        {
-            if (useFileInput)
-            {
-                if (audioFile->nextFrame(&in) != AudioFileBufferStatusOK)
-                {
-                    ret = paComplete;
-                    break;
-                }
-            }
-            
-            //If no APU, passthrough
-            if (audioProcessingUnit == NULL)
-            {
-                passthroughUnit->processAudio(in, out, numInputChannels, numOutputChannels);
-            }
-            
-            else
-            {
-                audioProcessingUnit->processAudio(in, out, numInputChannels, numOutputChannels);
-            }
-            
-        }
-        
-        return ret;
-    }
-    
+                         PaStreamCallbackFlags statusFlags);
+
     static int paCallback(const void *inputBuffer, void *outputBuffer,
                           unsigned long framesPerBuffer,
                           const PaStreamCallbackTimeInfo *timeInfo,
@@ -194,10 +53,7 @@ public:
                                         statusFlags);
     }
     
-    static void paStreamFinished(void *userData)
-    {
-        return ((AudioDSPKernel *)userData)->paStreamFinishedMethod();
-    }
+    static void paStreamFinished(void *userData);
     
     int numOutputChannels;
     int numInputChannels;

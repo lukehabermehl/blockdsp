@@ -48,3 +48,9 @@ add_custom_command(TARGET blockdsp
 					COMMAND cp ARGS -f ${PUBLIC_HEADERS} include/blockdsp/
 					COMMAND cp ARGS -f blockdsp.h include/
 					WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_custom_target("uninstall")
+add_custom_command(TARGET "uninstall" 
+					POST_BUILD
+					COMMAND rm -rf /usr/local/lib/libblockdsp.a
+					COMMAND rm -rf /usr/local/include/blockdsp*)
