@@ -10,7 +10,7 @@
 #include "bdsp_parameter.hpp"
 #include "bdsp_logger.hpp"
 
-BlockDSPAPU::BlockDSPAPU(BlockDSPSystem *system) : system_(system)
+BlockDSPAPU::BlockDSPAPU(BlockDSPSystem *system) : AudioProcessingUnit(), system_(system)
 {
 }
 
@@ -21,9 +21,6 @@ BlockDSPAPU::BlockDSPAPU(BlockDSPSystemFactoryFunc systemFactoryFunc)
 
 BlockDSPAPU::~BlockDSPAPU()
 {
-    for (auto it = paramMap_.begin(); it != paramMap_.end(); it++) {
-        delete it->second;
-    }
     delete system_;
 }
 
@@ -62,13 +59,11 @@ void BlockDSPAPU::onParameterChanged(BlockDSPParameter *parameter, APUNumber val
 
 BlockDSPParameter * BlockDSPAPU::createParameter(const char *name, APUNumberType numberType, APUNumber target)
 {
+    if (getParameterWithName(name)) {
+        return NULL;
+    }
     BlockDSPParameter * param = new BlockDSPParameter(numberType, name, target, this);
-    paramMap_.append(param);
+    addParameter(param);
     
     return param;
-}
-
-BlockDSPParameterMap& BlockDSPAPU::getParameterMap()
-{
-    return paramMap_;
 }

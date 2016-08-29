@@ -41,20 +41,19 @@ public:
       * @param value a number representing the new value. *NOTE* do not keep a reference to this value; its memory will be freed after the callback returns.
       */
     virtual void onParameterChanged(BlockDSPParameter *parameter, APUNumber value);
-    /** @return the list of available parameters for the APU */
-    BlockDSPParameterMap& getParameterMap();
     
 protected:
     /** Use this method to create parameters.
      * @param the name of the parameter
      * @param numberType the value type
      * @param target optional target number or NULL
+     *
+     * @return NULL if a parameter with the given name already exists in the APU
      */
     BlockDSPParameter * createParameter(const char *name, APUNumberType numberType, APUNumber target);
     
 private:
     BlockDSPSystem *system_;
-    BlockDSPParameterMap paramMap_;
 };
 
 
