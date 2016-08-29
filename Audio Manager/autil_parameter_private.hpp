@@ -16,7 +16,7 @@ class APUParameter::Pimpl
 public:
     Pimpl(APUNumberType vtype, const char *pname, APUParameterCallback *callbck)
     :isSmoothing(false), smoothingEnabled(false), smoothingInterval_msec(0), smoothingFrames(0)
-    ,name(NULL), valueType(vtype)
+    ,uiAttr(0), name(NULL), valueType(vtype)
     ,cb(NULL)
     {
         switch (valueType) {
@@ -61,6 +61,7 @@ public:
     APUNumber maxValue;
     float diffPerUpdate;
     APUNumberType valueType;
+    APUUIAttribute uiAttr;
 
     APUParameterCallback *cb;
 };

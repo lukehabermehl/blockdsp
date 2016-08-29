@@ -22,6 +22,7 @@
 		A32854871D6489DD0052B516 /* bdsp_builtin_delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A32854851D6489DD0052B516 /* bdsp_builtin_delay.cpp */; };
 		A32854881D6489DD0052B516 /* bdsp_builtin_delay.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A32854861D6489DD0052B516 /* bdsp_builtin_delay.hpp */; };
 		A329C6301D15997000D8D7CF /* blockdsp.h in Headers */ = {isa = PBXBuildFile; fileRef = A329C62F1D1596B800D8D7CF /* blockdsp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A33E2CA21D7483BB0067422B /* autil_uiattrs.h in Headers */ = {isa = PBXBuildFile; fileRef = A33E2CA11D7483BB0067422B /* autil_uiattrs.h */; };
 		A342C6C91CF3ED9E000E354E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342C6C81CF3ED9E000E354E /* main.cpp */; };
 		A34593731D6F59080055B14C /* autil_number.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A34593711D6F59080055B14C /* autil_number.cpp */; };
 		A34593741D6F59080055B14C /* autil_number.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A34593721D6F59080055B14C /* autil_number.hpp */; };
@@ -87,6 +88,7 @@
 		A32854851D6489DD0052B516 /* bdsp_builtin_delay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bdsp_builtin_delay.cpp; path = BuiltIns/bdsp_builtin_delay.cpp; sourceTree = "<group>"; };
 		A32854861D6489DD0052B516 /* bdsp_builtin_delay.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = bdsp_builtin_delay.hpp; path = BuiltIns/bdsp_builtin_delay.hpp; sourceTree = "<group>"; };
 		A329C62F1D1596B800D8D7CF /* blockdsp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blockdsp.h; sourceTree = "<group>"; };
+		A33E2CA11D7483BB0067422B /* autil_uiattrs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = autil_uiattrs.h; path = "Audio Manager/autil_uiattrs.h"; sourceTree = "<group>"; };
 		A342C6C61CF3ED9E000E354E /* dsptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dsptest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A34593711D6F59080055B14C /* autil_number.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = autil_number.cpp; path = "Audio Manager/autil_number.cpp"; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 				A34593721D6F59080055B14C /* autil_number.hpp */,
 				A3569AFD1D70B8FD0055D991 /* autil_parameter.cpp */,
 				A3569AFE1D70B8FD0055D991 /* autil_parameter.hpp */,
+				A33E2CA11D7483BB0067422B /* autil_uiattrs.h */,
 			);
 			name = APUtils;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				A31E34341CFCBCA60051A6FB /* bdsp_node_private.hpp in Headers */,
 				A3F744821CF656860004C79A /* bdsp_codebuilder.hpp in Headers */,
 				A31E343B1CFCBCBD0051A6FB /* autil_file_private.hpp in Headers */,
+				A33E2CA21D7483BB0067422B /* autil_uiattrs.h in Headers */,
 				A31E34351CFCBCA60051A6FB /* bdsp_number_private.hpp in Headers */,
 				A31E342E1CFCBC920051A6FB /* bdsp_apuloader_private.hpp in Headers */,
 				A3F7445D1CF653C10004C79A /* autil_audioprocessingunit.hpp in Headers */,

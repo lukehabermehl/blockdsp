@@ -14,6 +14,16 @@ protected:
 	}
 };
 
+class SliderParameter : public APUParameter
+{
+public:
+	SliderParameter(const char *name, APUNumberType type)
+	: APUParameter(name, type) {}
+	APUUIAttribute getUIAttributes() {
+		return (APU_UI_TYPE_SLIDER ^ APU_UI_ORIENTATION_HORIZONTAL);
+	}
+};
+
 TEST_F(APUParameterTestFixture, test_essentials)
 {
 	APUParameter param("param", APUNUM_FLOAT);
@@ -50,4 +60,14 @@ TEST_F(APUParameterTestFixture, test_value_clamping)
 	EXPECT_EQ(5.0, param->getCurrentValue().floatValue());
 
 	delete param;
+}
+
+TEST_F(APUParameterTestFixture, test_ui_attrs)
+{
+	SliderParameter *param = new SliderParameter("param", APUNUM_FLOAT);
+	APUUIAttribute uiAttrs = param->getUIAttributes();
+
+	EXPECT_TRUE(((uiAttrs & APU_UI_TYPE_SLIDER) > 0));
+	EXPECT_TRUE(((uiAttrs & APU_UI_ORIENTATION_HORIZONTAL) > 0));
+	EXPECT_TRUE(((uiAttrs & APU_UI_TYPE_SWITCH) == 0));
 }

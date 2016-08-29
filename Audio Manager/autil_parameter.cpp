@@ -121,6 +121,11 @@ bool APUParameter::isSmoothingEnabled()
     return _pimpl->smoothingEnabled;
 }
 
+APUUIAttribute APUParameter::getUIAttributes()
+{
+    return _pimpl->uiAttr;
+}
+
 void APUParameter::update()
 {
     if (_pimpl->isSmoothing) {
@@ -170,4 +175,9 @@ void APUParameter::normalizeValue(APUNumber &value)
         default:
             break;
     }
+}
+
+void APUParameter::setUIAttributes(APUUIAttribute attr)
+{
+    _pimpl->uiAttr = attr;
 }
