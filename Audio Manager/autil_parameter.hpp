@@ -10,6 +10,7 @@
 #define autil_parameter_hpp
 
 #include "autil_number.hpp"
+#include "autil_uiattrs.h"
 
 class APUParameter;
 class AudioProcessingUnit;
@@ -63,13 +64,18 @@ public:
     virtual double getSmoothingInterval();
     /** Determine if smoothing is enabled for the parameter */
     bool isSmoothingEnabled();
+    /** Get the description of the UI control for the parameter */
+    virtual APUUIAttribute getUIAttributes();
 
 private:
     /** Called by the APU to update the current parameter value for smoothing */
     void update();
+    /** Set the sample rate internally to calculate smoothing time */
     void setSampleRate(size_t sampleRate);
-
+    /** Clamp the value to the min/max if needed */
     void normalizeValue(APUNumber &value);
+    /** Set the UI attribute flags */
+    void setUIAttributes(APUUIAttribute attr);
 
     class Pimpl;
     Pimpl *_pimpl;
