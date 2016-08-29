@@ -20,3 +20,11 @@ target_link_libraries(dsptest.out ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libblockdsp
 							${SNDFILE})
 
 install(TARGETS dsptest.out DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../)
+
+add_custom_target("run"
+				DEPENDS dsptest.out)
+
+add_custom_command(TARGET "run"
+					POST_BUILD
+					WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../
+					COMMAND ./dsptest/build/dsptest.out)
