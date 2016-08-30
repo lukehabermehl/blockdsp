@@ -17,7 +17,6 @@ public:
     ~pimpl();
     
     BlockDSPAPU *contextAPU;
-    
 };
 
 

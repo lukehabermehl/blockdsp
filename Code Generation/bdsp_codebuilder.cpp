@@ -276,7 +276,7 @@ void BDCodeBuilder::addParameter(const char *name, const char *callback, const c
             return;
     }
     
-    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = system->createParameter(\"%s\", %s, %s, _CONTEXT_APU);\n", name, name, typeParam, targetParam);
+    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = createParameter(\"%s\", %s);\n", name, name, typeParam);
     if (callback)
         fprintf(_pimpl->openFile, "%s->callback = %s;\n", name, callback);
 }

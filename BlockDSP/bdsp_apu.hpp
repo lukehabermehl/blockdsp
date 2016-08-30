@@ -38,9 +38,8 @@ public:
     
     /** Called when a BlockDSPParameter's value is changed
       * @param parameter the BlockDSPParameter instance whose value was modified
-      * @param value a number representing the new value. *NOTE* do not keep a reference to this value; its memory will be freed after the callback returns.
       */
-    virtual void onParameterChanged(BlockDSPParameter *parameter, APUNumber value);
+    virtual void onParameterChanged(BlockDSPParameter *parameter);
     
 protected:
     /** Use this method to create parameters.
@@ -50,7 +49,7 @@ protected:
      *
      * @return NULL if a parameter with the given name already exists in the APU
      */
-    BlockDSPParameter * createParameter(const char *name, APUNumberType numberType, APUNumber target);
+    BlockDSPParameter * createParameter(const char *name, APUNumberType numberType);
     
 private:
     BlockDSPSystem *system_;

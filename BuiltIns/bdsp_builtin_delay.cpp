@@ -7,6 +7,7 @@
 //
 
 #include "bdsp_builtin_delay.hpp"
+#include "bdsp_logger.hpp"
 #include <cmath>
 
 static const char * kLogPrefix = "[BDSPSimpleDelayEffect]";
@@ -39,10 +40,10 @@ void BDSPSimpleDelayEffect::configureSystem()
     
     dryMultiplier = system->createMultiplierNode();
     dryMultiplier->connectInput(system->mainInputNode);
-    dryMultiplier->coefficient->setFloatValue(0.7);
+    dryMultiplier->coefficient.setFloatValue(0.7);
     
     wetMultiplier = system->createMultiplierNode();
-    wetMultiplier->coefficient->setFloatValue(0.2);
+    wetMultiplier->coefficient.setFloatValue(0.2);
     
     updateDelay();
     
@@ -52,15 +53,15 @@ void BDSPSimpleDelayEffect::configureSystem()
     
     system->mainOutputNode = outputSummer;
     
-    wetDryParam = createParameter("Mix", APUNumberType::APUNUM_FLOAT, NULL);
-    delayTimeParam = createParameter("Delay Time", APUNumberType::APUNUM_FLOAT, NULL);
+    wetDryParam = createParameter("Mix", APUNumberType::APUNUM_FLOAT);
+    delayTimeParam = createParameter("Delay Time", APUNumberType::APUNUM_FLOAT);
 }
 
 void BDSPSimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, APUNumber value)
 {
     if (parameter == wetDryParam) {
-        wetMultiplier->coefficient->setFloatValue(value.floatValue());
-        dryMultiplier->coefficient->setFloatValue(1 - value.floatValue());
+        wetMultiplier->coefficient.setFloatValue(value.floatValue());
+        dryMultiplier->coefficient.setFloatValue(1 - value.floatValue());
     }
     
     else if (parameter == delayTimeParam) {
