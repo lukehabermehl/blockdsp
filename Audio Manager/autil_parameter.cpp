@@ -38,6 +38,11 @@ APUNumberType APUParameter::type()
     return _pimpl->valueType;
 }
 
+void APUParameter::setCallback(APUParameterCallback *cb)
+{
+    _pimpl->cb = cb;
+}
+
 APUNumber APUParameter::getTarget()
 {
     APUNumber num;

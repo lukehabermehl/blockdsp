@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(blockdsp_unit_tests)
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-std=c++11 -ggdb")
 
 find_library(PORTAUDIO portaudio
 	PATHS /usr/local/lib)
@@ -20,6 +20,7 @@ set (SOURCES "test_bdsp_system.cpp"
 	"test_code_builder.cpp"
 	"test_dsp_blocks.cpp"
 	"test_thread_manager.cpp"
+	"test_bdsp_parameter.cpp"
 	"test_all.cpp")
 
 add_executable (test_all ${SOURCES})

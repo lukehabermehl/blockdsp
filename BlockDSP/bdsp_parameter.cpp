@@ -13,12 +13,13 @@
 #include <string.h>
 #include <limits.h>
 
-BlockDSPParameter::BlockDSPParameter(APUNumberType type, const char *name, APUNumber target, BlockDSPAPU *contextAPU)
+BlockDSPParameter::BlockDSPParameter(APUNumberType type, const char *name, BlockDSPAPU *contextAPU)
 : APUParameter(name, type, NULL)
 , callback(NULL)
 {
     _pimpl = new pimpl;
     _pimpl->contextAPU = contextAPU;
+    
 }
 
 BlockDSPParameter::~BlockDSPParameter()
@@ -28,4 +29,28 @@ BlockDSPParameter::~BlockDSPParameter()
 
 BlockDSPParameter::pimpl::~pimpl()
 {
+}
+
+void BlockDSPParameter::setValue(APUNumber &value)
+{
+    APUParameter::setValue(value);
+    triggerCallbacks();
+}
+
+void BlockDSPParameter::update()
+{
+    float old = getCurrentValue().floatValue();
+    APUParameter::update();
+    if (old != getCurrentValue().floatValue()) {
+        triggerCallbacks();
+    }
+}
+
+void BlockDSPParameter::triggerCallbacks()
+{
+    _pimpl->contextAPU->onParameterChanged(this);
+
+    if (callback) {
+        callback(_pimpl->contextAPU, this);
+    }
 }

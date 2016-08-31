@@ -9,7 +9,7 @@
 #ifndef BDSP_BUILTIN_DELAY_HPP_
 #define BDSP_BUILTIN_DELAY_HPP_
 
-#include "blockdsp.h"
+#include "bdsp_apu.hpp"
 
 class BDSPSimpleDelayEffect : public BlockDSPAPU
 {

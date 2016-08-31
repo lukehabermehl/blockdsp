@@ -83,7 +83,7 @@ size_t AudioProcessingUnit::getNumParameters()
 
 APUParameter * AudioProcessingUnit::getParameterWithName(const char *name)
 {
-    auto it = _pimpl->parameterMap.find(name);
+    auto it = _pimpl->parameterMap.find(std::string(name));
     if (it != _pimpl->parameterMap.end()) {
         return it->second;
     }
@@ -101,7 +101,7 @@ bool AudioProcessingUnit::addParameter(APUParameter *param)
         return false;
     }
 
-    _pimpl->parameterMap[param->getName()] = param;
+    _pimpl->parameterMap[std::string(param->getName())] = param;
     return true;
 }
 

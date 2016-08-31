@@ -42,6 +42,9 @@ public:
     /** Get the value type of the parameter */
     APUNumberType type();
 
+    /** Set the callback object for the parameter */
+    void setCallback(APUParameterCallback *cb);
+
     /** Set the minimum permissible value */
     void setMinValue(APUNumber minVal);
     /** Set the maximum permissible value */
@@ -67,16 +70,17 @@ public:
     /** Get the description of the UI control for the parameter */
     virtual APUUIAttribute getUIAttributes();
 
-private:
+protected:
     /** Called by the APU to update the current parameter value for smoothing */
-    void update();
+    virtual void update();
     /** Set the sample rate internally to calculate smoothing time */
-    void setSampleRate(size_t sampleRate);
+    virtual void setSampleRate(size_t sampleRate);
     /** Clamp the value to the min/max if needed */
     void normalizeValue(APUNumber &value);
     /** Set the UI attribute flags */
-    void setUIAttributes(APUUIAttribute attr);
+    virtual void setUIAttributes(APUUIAttribute attr);
 
+private:
     class Pimpl;
     Pimpl *_pimpl;
 };
