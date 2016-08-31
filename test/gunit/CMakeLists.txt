@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(blockdsp_unit_tests)
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-std=c++11 -ggdb")
 
 find_library(PORTAUDIO portaudio
 	PATHS /usr/local/lib)

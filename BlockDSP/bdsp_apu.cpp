@@ -8,7 +8,6 @@
 
 #include "bdsp_apu.hpp"
 #include "bdsp_parameter.hpp"
-#include "bdsp_logger.hpp"
 
 BlockDSPAPU::BlockDSPAPU(BlockDSPSystem *system) : AudioProcessingUnit(), system_(system)
 {
