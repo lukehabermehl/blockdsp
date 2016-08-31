@@ -22,6 +22,11 @@ APUNumber::APUNumber(const APUNumber& num)
     _pimpl = num._pimpl;
 }
 
+APUNumber::APUNumber(std::shared_ptr<pimpl> impl)
+{
+    _pimpl = impl;
+}
+
 APUNumber& APUNumber::operator=(const APUNumber &num)
 {
     _pimpl = num._pimpl->copy();
@@ -30,6 +35,11 @@ APUNumber& APUNumber::operator=(const APUNumber &num)
 
 APUNumber::~APUNumber()
 {
+}
+
+APUNumber APUNumber::copy()
+{
+    return APUNumber(_pimpl->copy());
 }
 
 void APUNumber::setIntegerValue(int i)

@@ -35,6 +35,9 @@ public:
     APUNumber& operator=(APUNumber const& num);
     ~APUNumber();
 
+    /** Get a copy of the number */
+    APUNumber copy();
+
     /** Create a new number for a float value */
     static APUNumber numberForFloat(float f);
     /** Create a new number for an integer value */
@@ -59,6 +62,8 @@ public:
 private:
     class pimpl;
     std::shared_ptr<pimpl> _pimpl;
+
+    APUNumber(std::shared_ptr<pimpl> impl);
 };
 
 
