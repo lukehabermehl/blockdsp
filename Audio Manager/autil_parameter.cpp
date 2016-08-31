@@ -57,9 +57,9 @@ APUNumber APUParameter::getCurrentValue()
     return num;
 }
 
-void APUParameter::setValue(APUNumber &value)
+bool APUParameter::setValue(APUNumber value)
 {
-    normalizeValue(value);
+    bool ret = normalizeValue(value);
     _pimpl->isSmoothing = false;
     _pimpl->current = value;
     _pimpl->target = value;
@@ -67,11 +67,13 @@ void APUParameter::setValue(APUNumber &value)
     if (_pimpl->cb) {
         _pimpl->cb->onParameterChanged(this);
     }
+
+    return !ret;
 }
 
-void APUParameter::setTarget(APUNumber& target)
+bool APUParameter::setTarget(APUNumber target)
 {
-    normalizeValue(target);
+    bool ret = normalizeValue(target);
     if (!isSmoothingEnabled()) {
         setValue(target);
     } else {
@@ -79,6 +81,8 @@ void APUParameter::setTarget(APUNumber& target)
         _pimpl->target = target;
         _pimpl->diffPerUpdate = (_pimpl->target.floatValue() - _pimpl->current.floatValue()) / (float)_pimpl->smoothingFrames;
     }
+
+    return !ret;
 }
 
 void APUParameter::setMinValue(APUNumber minVal)
@@ -155,16 +159,19 @@ void APUParameter::setSampleRate(size_t sampleRate)
     _pimpl->smoothingFrames = floor(dFramesPerUpdate);
 }
 
-void APUParameter::normalizeValue(APUNumber &value)
+bool APUParameter::normalizeValue(APUNumber &value)
 {
+    bool didNormalize = false;
     switch (type())
     {
         case APUNUM_FLOAT:
         {
             if (value.floatValue() < _pimpl->minValue.floatValue()) {
                 value.setFloatValue(_pimpl->minValue.floatValue());
+                didNormalize = true;
             } else if (value.floatValue() > _pimpl->maxValue.floatValue()) {
                 value.setFloatValue(_pimpl->maxValue.floatValue());
+                didNormalize = true;
             }
             break;
         }
@@ -172,14 +179,18 @@ void APUParameter::normalizeValue(APUNumber &value)
         {
             if (value.integerValue() < _pimpl->minValue.integerValue()) {
                 value.setIntegerValue(_pimpl->minValue.integerValue());
+                didNormalize = true;
             } else if (value.integerValue() > _pimpl->maxValue.integerValue()) {
                 value.setIntegerValue(_pimpl->maxValue.integerValue());
+                didNormalize = true;
             }
             break;
         }
         default:
             break;
     }
+
+    return didNormalize;
 }
 
 void APUParameter::setUIAttributes(APUUIAttribute attr)

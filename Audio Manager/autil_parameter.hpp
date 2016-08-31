@@ -55,10 +55,14 @@ public:
     /** Get the maximum allowed value for the parameter */
     APUNumber getMaxValue();
 
-    /** Set the value (no smoothing) of the parameter. If the value is outside of the min/max range, it will be clamped. You can check if the value was clamped by checking the value of the parameter after calling the method */
-    virtual void setValue(APUNumber& value);
-    /** Set the value of the parameter to be smoothed if smoothing is enabled. See `setValue()` for value clamping. */
-    virtual void setTarget(APUNumber& target);
+    /** Set the value (no smoothing) of the parameter. If the value is outside of the min/max range, it will be clamped.
+      * @return false if the value was clamped. Otherwise, true
+      */
+    virtual bool setValue(APUNumber value);
+    /** Set the value of the parameter to be smoothed if smoothing is enabled.
+      * @return false if the value was clamped. Otherwise, true
+      */
+    virtual bool setTarget(APUNumber target);
     /** Set whether or not parameters will ramp to the target value over time. Smoothing is only allowed for FLOAT types. */
     virtual void setSmoothingEnabled(bool enabled);
     /** Set the interval (in millseconds) over which the parameter value will ramp if smoothing is enabled */
@@ -76,7 +80,7 @@ protected:
     /** Set the sample rate internally to calculate smoothing time */
     virtual void setSampleRate(size_t sampleRate);
     /** Clamp the value to the min/max if needed */
-    void normalizeValue(APUNumber &value);
+    bool normalizeValue(APUNumber &value);
     /** Set the UI attribute flags */
     virtual void setUIAttributes(APUUIAttribute attr);
 
