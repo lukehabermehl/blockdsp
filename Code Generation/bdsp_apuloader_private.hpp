@@ -1,9 +1,6 @@
 //
-//  BDAPULoader_Private.hpp
+//  bdsp_apuloader_private.hpp
 //  libblockdsp
-//
-//  Created by Luke on 5/30/16.
-//  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
 #ifndef BDAPULoader_Private_h

@@ -2,9 +2,6 @@
 //  BDLogger.cpp
 //  libblockdsp
 //
-//  Created by Luke on 5/30/16.
-//  Copyright © 2016 Luke Habermehl. All rights reserved.
-//
 
 #include "bdsp_logger.hpp"
 #include "bdsp_logger_private.hpp"

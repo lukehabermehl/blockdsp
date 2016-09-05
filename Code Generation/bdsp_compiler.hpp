@@ -1,8 +1,6 @@
 //
+//  bdsp_compiler.hpp
 //  libblockdsp
-//
-//  Created by Luke on 5/28/16.
-//  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
 /** @file bdsp_compiler.hpp */

@@ -2,8 +2,6 @@
 //  bdsp_builtin_delay.cpp
 //  libblockdsp
 //
-//  Created by Luke on 8/9/16.
-//  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
 #include "bdsp_builtin_delay.hpp"

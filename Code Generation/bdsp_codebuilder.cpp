@@ -1,9 +1,7 @@
 //
-//  BDCodeBuilder.cpp
+//  bdsp_codebuilder.cpp
 //  libblockdsp
 //
-//  Created by Luke on 5/25/16.
-//  Copyright © 2016 Luke Habermehl. All rights reserved.
 //
 
 #include "bdsp_codebuilder.hpp"
