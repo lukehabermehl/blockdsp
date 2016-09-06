@@ -14,7 +14,7 @@ APUNumber::APUNumber()
 {
     _pimpl.reset(new pimpl);
     _pimpl->paramType = APUNumberType::APUNUM_INTEGER;
-    _pimpl->intValue = 0;
+    _pimpl->data.intValue = 0;
 }
 
 APUNumber::APUNumber(const APUNumber& num)
@@ -44,19 +44,19 @@ APUNumber APUNumber::copy()
 
 void APUNumber::setIntegerValue(int i)
 {
-    _pimpl->intValue = i;
+    _pimpl->data.intValue = i;
     _pimpl->paramType = APUNumberType::APUNUM_INTEGER;
 }
 
 void APUNumber::setFloatValue(float f)
 {
-    _pimpl->floatValue = f;
+    _pimpl->data.floatValue = f;
     _pimpl->paramType = APUNumberType::APUNUM_FLOAT;
 }
 
 void APUNumber::setBoolValue(bool b)
 {
-    _pimpl->boolValue = b;
+    _pimpl->data.boolValue = b;
     _pimpl->paramType = APUNumberType::APUNUM_BOOLEAN;
 }
 
@@ -64,11 +64,11 @@ int APUNumber::integerValue() const
 {
     switch (_pimpl->paramType) {
         case APUNumberType::APUNUM_INTEGER:
-            return _pimpl->intValue;
+            return _pimpl->data.intValue;
         case APUNumberType::APUNUM_FLOAT:
-            return (int)floorf(_pimpl->floatValue);
+            return (int)floorf(_pimpl->data.floatValue);
         case APUNumberType::APUNUM_BOOLEAN:
-            return _pimpl->boolValue ? 1 : 0;
+            return _pimpl->data.boolValue ? 1 : 0;
         default:
             return 0;
     }
@@ -78,11 +78,11 @@ float APUNumber::floatValue() const
 {
     switch (_pimpl->paramType) {
         case APUNumberType::APUNUM_INTEGER:
-            return (float)(_pimpl->intValue);
+            return (float)(_pimpl->data.intValue);
         case APUNumberType::APUNUM_FLOAT:
-            return _pimpl->floatValue;
+            return _pimpl->data.floatValue;
         case APUNumberType::APUNUM_BOOLEAN:
-            return _pimpl->boolValue ? 1.f : 0.f;
+            return _pimpl->data.boolValue ? 1.f : 0.f;
         default:
             return 0;
     }
@@ -121,9 +121,7 @@ APUNumber APUNumber::numberForBool(bool b)
 std::shared_ptr<APUNumber::pimpl> APUNumber::pimpl::copy()
 {
     std::shared_ptr<pimpl> cpy = std::make_shared<pimpl>();
-    cpy->boolValue = boolValue;
-    cpy->intValue = intValue;
-    cpy->floatValue = floatValue;
+    cpy->data = data;
     cpy->paramType = paramType;
 
     return cpy;
