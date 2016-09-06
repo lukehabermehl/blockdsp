@@ -14,10 +14,14 @@
 class APUNumber::pimpl
 {
 public:
-    int intValue;
-    bool boolValue;
-    float floatValue;
+    union DataContainer
+    {
+        int intValue;
+        bool boolValue;
+        float floatValue;
+    };
 
+    DataContainer data;
     APUNumberType paramType;
     std::shared_ptr<APUNumber::pimpl> copy();
 };
