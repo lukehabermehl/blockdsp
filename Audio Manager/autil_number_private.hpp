@@ -16,7 +16,8 @@ class APUNumber::pimpl
 public:
     union DataContainer
     {
-        int intValue;
+        int32_t intValue;
+        uint32_t unsignedIntValue;
         bool boolValue;
         float floatValue;
     };

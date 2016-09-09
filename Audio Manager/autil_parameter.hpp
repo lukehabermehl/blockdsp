@@ -11,6 +11,7 @@
 
 #include "autil_number.hpp"
 #include "autil_uiattrs.h"
+#include "autil_stringlist.hpp"
 
 class APUParameter;
 class AudioProcessingUnit;
@@ -46,9 +47,9 @@ public:
     void setCallback(APUParameterCallback *cb);
 
     /** Set the minimum permissible value */
-    void setMinValue(APUNumber minVal);
+    virtual void setMinValue(APUNumber minVal);
     /** Set the maximum permissible value */
-    void setMaxValue(APUNumber maxVal);
+    virtual void setMaxValue(APUNumber maxVal);
 
     /** Get the minimum allowed value for the parameter */
     APUNumber getMinValue();
@@ -71,6 +72,7 @@ public:
     virtual double getSmoothingInterval();
     /** Determine if smoothing is enabled for the parameter */
     bool isSmoothingEnabled();
+
     /** Get the description of the UI control for the parameter */
     virtual APUUIAttribute getUIAttributes();
 
@@ -87,6 +89,31 @@ protected:
 private:
     class Pimpl;
     Pimpl *_pimpl;
+};
+
+/** Parameter representing a set of discrete values */
+class APUEnumParameter : public APUParameter
+{
+public:
+    /** Constructor
+      * @param name name of the parameter
+      * @param numItems number of values. Must be non-zero
+      * @param cb optional callback object
+      */
+    APUEnumParameter(const char *name, APUStringList strings, APUParameterCallback *cb=NULL);
+    virtual ~APUEnumParameter();
+
+    /** Cannot set min value for enums. Minimum is always 0 */
+    void setMinValue(APUNumber minVal);
+    /** Cannot set max value for enums. Maximum is always numItems - 1 */
+    void setMaxValue(APUNumber maxVal);
+
+    /** Get the string representation of the given value */
+    const char * stringForValue(uint32_t value);
+
+private:
+    class EnumParamPimpl;
+    EnumParamPimpl *_enumParamPimpl;
 };
 
 #endif /* autil_parameter_hpp */

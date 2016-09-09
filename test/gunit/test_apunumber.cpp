@@ -25,6 +25,11 @@ TEST_F(TestAPUNumber, test_number_types)
 	EXPECT_EQ(5, intNumber.integerValue());
 	EXPECT_EQ(true, intNumber.boolValue());
 
+	APUNumber unsignedIntNumber = APUNumber::numberForUnsignedInt(100);
+	EXPECT_EQ(100.f, unsignedIntNumber.floatValue());
+	EXPECT_EQ(100, unsignedIntNumber.integerValue());
+	EXPECT_EQ(true, unsignedIntNumber.boolValue());
+
 	APUNumber boolNumber = APUNumber::numberForBool(false);
 	EXPECT_EQ(0, boolNumber.floatValue());
 	EXPECT_EQ(0, boolNumber.integerValue());

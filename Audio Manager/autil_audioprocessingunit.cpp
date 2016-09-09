@@ -8,6 +8,7 @@
 
 #include "autil_audioprocessingunit.hpp"
 #include "autil_audioprocessingunit_private.hpp"
+#include "bdsp_logger.hpp"
 
 AudioProcessingUnit::AudioProcessingUnit()
 {
@@ -97,7 +98,8 @@ const APUParameterMap& AudioProcessingUnit::getParameterMap()
 
 bool AudioProcessingUnit::addParameter(APUParameter *param)
 {
-    if (getParameterWithName(param->getName())) {
+    if (getParameterWithName(param->getName()) != NULL) {
+        printf("param already exists: %lu", (uintptr_t)(getParameterWithName(param->getName())));
         return false;
     }
 

@@ -42,10 +42,16 @@ APUNumber APUNumber::copy()
     return APUNumber(_pimpl->copy());
 }
 
-void APUNumber::setIntegerValue(int i)
+void APUNumber::setIntegerValue(int32_t i)
 {
     _pimpl->data.intValue = i;
     _pimpl->paramType = APUNumberType::APUNUM_INTEGER;
+}
+
+void APUNumber::setUnsignedIntValue(uint32_t u)
+{
+    _pimpl->data.unsignedIntValue = u;
+    _pimpl->paramType = APUNumberType::APUNUM_UINT;
 }
 
 void APUNumber::setFloatValue(float f)
@@ -60,11 +66,13 @@ void APUNumber::setBoolValue(bool b)
     _pimpl->paramType = APUNumberType::APUNUM_BOOLEAN;
 }
 
-int APUNumber::integerValue() const
+int32_t APUNumber::integerValue() const
 {
     switch (_pimpl->paramType) {
         case APUNumberType::APUNUM_INTEGER:
             return _pimpl->data.intValue;
+        case APUNumberType::APUNUM_UINT:
+            return _pimpl->data.unsignedIntValue;
         case APUNumberType::APUNUM_FLOAT:
             return (int)floorf(_pimpl->data.floatValue);
         case APUNumberType::APUNUM_BOOLEAN:
@@ -74,11 +82,23 @@ int APUNumber::integerValue() const
     }
 }
 
+uint32_t APUNumber::unsignedIntValue() const
+{
+    switch(_pimpl->paramType) {
+        case APUNumberType::APUNUM_UINT:
+            return _pimpl->data.unsignedIntValue;
+        default:
+            return integerValue();
+    }
+}
+
 float APUNumber::floatValue() const
 {
     switch (_pimpl->paramType) {
         case APUNumberType::APUNUM_INTEGER:
             return (float)(_pimpl->data.intValue);
+        case APUNumberType::APUNUM_UINT:
+            return (float)(_pimpl->data.unsignedIntValue);
         case APUNumberType::APUNUM_FLOAT:
             return _pimpl->data.floatValue;
         case APUNumberType::APUNUM_BOOLEAN:
@@ -98,6 +118,14 @@ APUNumber APUNumber::numberForInteger(int i)
 {
     APUNumber num;
     num.setIntegerValue(i);
+
+    return num;
+}
+
+APUNumber APUNumber::numberForUnsignedInt(uint32_t u)
+{
+    APUNumber num;
+    num.setUnsignedIntValue(u);
 
     return num;
 }
