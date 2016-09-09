@@ -64,7 +64,7 @@ bool BDCompiler::compileLibrary(const char *outputPath)
         _pimpl->error = BDCompilerErrorSourceCompileFailed;
         
         if (handler)
-            handler(false, this);
+            handler->handleCompilerFinished(this);
         
         return false;;
     }
@@ -77,7 +77,7 @@ bool BDCompiler::compileLibrary(const char *outputPath)
         _pimpl->error = BDCompilerErrorMoveObjectsFailed;
         
         if (handler)
-            handler(false, this);
+            handler->handleCompilerFinished(this);
     }
     
     oss.clear();
@@ -91,13 +91,13 @@ bool BDCompiler::compileLibrary(const char *outputPath)
         _pimpl->error = BDCompilerErrorCompileLibFailed;
         
         if (handler)
-            handler(false, this);
+            handler->handleCompilerFinished(this);
         
         return false;
     }
     
     if (handler)
-        handler(true, this);
+        handler->handleCompilerFinished(this);
     
     return true;
 }

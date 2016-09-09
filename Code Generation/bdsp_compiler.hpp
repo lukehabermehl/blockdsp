@@ -12,8 +12,15 @@
 
 class BDCompiler;
 
-/** typedef for handler function called when the compile job is finished. The function accepts a **bool** that is true if the job is successful, and a pointer to the BDCompiler instance used */
-typedef void (* BDCompilerHandler)(bool, BDCompiler *);
+//Interface for a callback object to handle BDCompiler job completion
+class BDCompilerHandler
+{
+public:
+    /** Called when the compiler either fails or completes its job successfully
+      * @param compiler a pointer to the sender instance
+      */
+    virtual void handleCompilerFinished(BDCompiler *compiler) = 0;
+};
 
 /** Error codes for compilation */
 enum BDCompilerError
@@ -48,8 +55,8 @@ public:
       */
     bool compileLibrary(const char *outputPath);
     
-    /** Public member to hold the handler function pointer */
-    BDCompilerHandler handler;
+    /** Public member to hold the handler pointer */
+    BDCompilerHandler *handler;
     
     
 private:
