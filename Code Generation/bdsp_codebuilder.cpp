@@ -25,17 +25,17 @@ void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType typ
             strcpy(typeName, "BlockDSPInputNode");
             strcpy(factoryMethodName, "createInputNode");
             break;
-            
+
         case BDBlockTypeSummer:
             strcpy(typeName, "BlockDSPSummerNode");
             strcpy(factoryMethodName, "createSummerNode");
             break;
-            
+
         case BDBlockTypeMultiplier:
             strcpy(typeName, "BlockDSPMultiplierNode");
             strcpy(factoryMethodName, "createMultiplierNode");
             break;
-            
+
         default:
             break;
     }
@@ -59,21 +59,21 @@ void BDStringForParameterType(char *str, APUNumberType type)
 BDCodeBuilder::BDCodeBuilder(const char *name, const char *dirpath)
 {
     _pimpl = new pimpl;
-    
+
     _pimpl->name = (char *)malloc(strlen(name) + 1);
     _pimpl->dirpath = (char *)malloc(strlen(dirpath) + 1);
-    
+
     _pimpl->openFile = 0;
     _pimpl->error = BDCodeBuilderErrorNoError;
-    
+
     strcpy(_pimpl->name, name);
     strcpy(_pimpl->dirpath, dirpath);
     _pimpl->makeClassName();
-    
+
     struct stat st;
     if (stat(_pimpl->dirpath, &st) == -1)
         mkdir(_pimpl->dirpath, 0700);
-    
+
 }
 
 BDCodeBuilder::~BDCodeBuilder()
@@ -81,7 +81,7 @@ BDCodeBuilder::~BDCodeBuilder()
     free(_pimpl->name);
     free(_pimpl->className);
     free(_pimpl->dirpath);
-    
+
     delete _pimpl;
 }
 
@@ -89,7 +89,7 @@ void BDCodeBuilder::addCallbackCode(const char *callbackName, const char *code)
 {
     if (hasCallback(callbackName))
         return;
-    
+
     _pimpl->callbackMap[std::string(callbackName)] = std::string(code);
 }
 
@@ -121,14 +121,14 @@ void BDCodeBuilder::writeHeaderFile()
 {
     char filepath[1024];
     sprintf(filepath, "%s/%s.h", _pimpl->dirpath, _pimpl->name);
-    
+
     FILE *f = fopen(filepath, "w");
     if (!f)
     {
         _pimpl->error = BDCodeBuilderErrorBadPath;
         return;
     }
-    
+
     fprintf(f, "\n//This file was automatically generated.\n\n#ifndef BlockDSP_Factory_HPP\n#define BlockDSP_Factory_HPP\n");
     fprintf(f, "\n#include <blockdsp.h>");
     fprintf(f, "\nextern \"C\" AudioProcessingUnit *AudioProcessingUnitFactoryCreate();\n");
@@ -140,7 +140,7 @@ void BDCodeBuilder::writeHeaderFile()
     fprintf(f, "\n\tvirtual void configureSystem();");
     fprintf(f, "\n};");
     fprintf(f, "\n#endif\n");
-    
+
     fclose(f);
 }
 
@@ -150,30 +150,30 @@ void BDCodeBuilder::openSourceFile()
     {
         fclose(_pimpl->openFile);
     }
-    
+
     char filepath[1024];
     char headerFileName[256];
     sprintf(filepath, "%s/%s.cpp", _pimpl->dirpath, _pimpl->name);
     sprintf(headerFileName, "%s.h", _pimpl->name);
-    
+
     FILE *f = fopen(filepath, "w");
     if (!f)
     {
         _pimpl->error = BDCodeBuilderErrorBadPath;
         return;
     }
-    
+
     fprintf(f, "\n//This file was automatically generated.\n\n#include \"%s\"\n", headerFileName);
-    
+
     for (auto it = _pimpl->callbackMap.begin(); it != _pimpl->callbackMap.end(); it++)
     {
         fprintf(f, "\nvoid %s(BlockDSPAPU *contextAPU, BlockDSPParameter *parameter, APUNumber value) {", it->first.c_str());
         fprintf(f, "\n\t%s\n}\n", it->second.c_str());
     }
-    
+
     _pimpl->nodeSet["MAIN_INPUT_NODE"] = true;
     _pimpl->nodeSet["MAIN_OUTPUT_NODE"] = true;
-    
+
     fprintf(f, "\n%s::%s() : BlockDSPAPU(new BlockDSPSystem()) {\n", className(), className());
     fprintf(f, "\tconfigureSystem();\n}\n");
     fprintf(f, "\nconst char * %s::getName() { return \"%s\"; }", className(), name());
@@ -183,16 +183,16 @@ void BDCodeBuilder::openSourceFile()
     fprintf(f, "BlockDSPMultiplierNode *MAIN_OUTPUT_NODE = system->createMultiplierNode();\n");
     fprintf(f, "system->mainOutputNode = MAIN_OUTPUT_NODE;\n");
     fprintf(f, "MAIN_OUTPUT_NODE->coefficient.setFloatValue(1.0);\n");
-    
+
     _pimpl->openFile = f;
-    
+
     BD_FILE_CHECK();
 }
 
 void BDCodeBuilder::closeSourceFile()
 {
     BD_FILE_CHECK();
-    
+
     fprintf(_pimpl->openFile, "\n}\n");
     fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() { return new %s(); }", className());
     fclose(_pimpl->openFile);
@@ -202,21 +202,21 @@ void BDCodeBuilder::closeSourceFile()
 void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
 {
     BD_FILE_CHECK();
-    
+
     std::string strName = std::string(name);
     if (hasNode(name))
     {
         _pimpl->error = BDCodeBuilderErrorNonUnique;
         return;
     }
-    
+
     char typeStr[256];
     char factoryMethodName[256];
-    
+
     _pimpl->nodeSet[strName] = true;
-    
+
     BDInfoForBlockType(typeStr, factoryMethodName, type);
-    
+
     fprintf(_pimpl->openFile, "%s *%s = system->%s();\n", typeStr, name, factoryMethodName);
     if (type == BDBlockTypeMultiplier)
     {
@@ -229,16 +229,16 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
 void BDCodeBuilder::addDelayLine(const char *name, const char *inputNodeName, size_t size)
 {
     BD_FILE_CHECK();
-    
+
     if (!hasNode(inputNodeName))
     {
         _pimpl->error = BDCodeBuilderErrorNotFound;
         return;
     }
-    
-    
+
+
     _pimpl->delayLineSet[std::string(name)] = true;
-    
+
     fprintf(_pimpl->openFile, "BlockDSPDelayLine *%s = system->createDelayLine(%s);\n", name, inputNodeName);
     fprintf(_pimpl->openFile, "%s->setSize(%lu);\n", name, size);
 }
@@ -246,28 +246,27 @@ void BDCodeBuilder::addDelayLine(const char *name, const char *inputNodeName, si
 void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex)
 {
     BD_FILE_CHECK();
-    
+
     if (hasNode(nodeName))
     {
         _pimpl->error = BDCodeBuilderErrorNonUnique;
         return;
     }
-    
+
     if (!hasDelayLine(delayLineName))
     {
         _pimpl->error = BDCodeBuilderErrorNotFound;
         return;
     }
-    
+
     _pimpl->nodeSet[std::string(nodeName)] = true;
     fprintf(_pimpl->openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu);\n", nodeName, delayLineName, delayIndex);
 }
 
-void BDCodeBuilder::addParameter(const char *name, const char *callback, const char *target, APUNumberType type)
+void BDCodeBuilder::addParameter(const char *name, const char *callback, APUNumberType type)
 {
     BD_FILE_CHECK();
-    
-    const char *targetParam = target ? target : "0";
+
     char typeParam[20];
     BDStringForParameterType(typeParam, type);
     if (callback)
@@ -275,7 +274,7 @@ void BDCodeBuilder::addParameter(const char *name, const char *callback, const c
         if (!hasCallback(callback))
             return;
     }
-    
+
     fprintf(_pimpl->openFile, "BlockDSPParameter *%s = createParameter(\"%s\", %s);\n", name, name, typeParam);
     if (callback)
         fprintf(_pimpl->openFile, "%s->callback = %s;\n", name, callback);
@@ -284,55 +283,55 @@ void BDCodeBuilder::addParameter(const char *name, const char *callback, const c
 void BDCodeBuilder::addNumber(const char *name)
 {
     BD_FILE_CHECK();
-    
+
     if (hasNumber(name))
     {
         _pimpl->error = BDCodeBuilderErrorNonUnique;
         return;
     }
-    
+
     std::string numName = std::string(name);
-    
+
     _pimpl->numSet[numName] = true;
-    
+
     fprintf(_pimpl->openFile, "APUNumber %s;\n", name);
     fprintf(_pimpl->openFile, "system->addNumber(\"%s\", %s);\n", name, name);
 }
 
-void BDCodeBuilder::setNumberDefaultValue(const char *numberName, APUNumberType valueType, void *value)
+void BDCodeBuilder::setNumberDefaultValue(const char *numberName, APUNumber value, APUNumberType valueType)
 {
     BD_FILE_CHECK();
-    
+
     std::string numName = std::string(numberName);
     if (!hasNumber(numberName))
     {
         _pimpl->error = BDCodeBuilderErrorNotFound;
         return;
     }
-    
+
     switch (valueType)
     {
         case APUNumberType::APUNUM_FLOAT:
         {
-            fprintf(_pimpl->openFile, "%s.setFloatValue(%f);\n", numberName, *((float *)value));
+            fprintf(_pimpl->openFile, "%s.setFloatValue(%f);\n", numberName, value.floatValue());
             break;
         }
-            
+
         case APUNumberType::APUNUM_BOOLEAN:
         {
-            fprintf(_pimpl->openFile, "%s.setBoolValue(%s);\n", numberName, *((bool *)value) ? "true" : "false");
+            fprintf(_pimpl->openFile, "%s.setBoolValue(%s);\n", numberName, value.boolValue() ? "true" : "false");
             break;
         }
-            
+
         case APUNumberType::APUNUM_INTEGER:
         {
-            fprintf(_pimpl->openFile, "%s.setIntegerValue(%d);\n", numberName, *((int *)value));
+            fprintf(_pimpl->openFile, "%s.setIntegerValue(%d);\n", numberName, value.integerValue());
             break;
         }
 
         case APUNumberType::APUNUM_UINT:
         {
-            fprintf(_pimpl->openFile, "%s.setUnsignedIntValue(%u);\n", numberName, *((uint32_t *)value));
+            fprintf(_pimpl->openFile, "%s.setUnsignedIntValue(%u);\n", numberName, value.unsignedIntValue());
         }
     }
 }
@@ -340,13 +339,13 @@ void BDCodeBuilder::setNumberDefaultValue(const char *numberName, APUNumberType 
 void BDCodeBuilder::connect(const char *from, const char *to)
 {
     BD_FILE_CHECK();
-    
+
     if (!hasNode(from) || !hasNode(to))
     {
         _pimpl->error = BDCodeBuilderErrorNotFound;
         return;
     }
-    
+
     fprintf(_pimpl->openFile, "%s->connectInput(%s);\n", to, from);
 }
 
@@ -369,7 +368,7 @@ BDCodeBuilderError BDCodeBuilder::error()
 {
     BDCodeBuilderError rv = _pimpl->error;
     _pimpl->error = BDCodeBuilderErrorNoError;
-    
+
     return rv;
 }
 

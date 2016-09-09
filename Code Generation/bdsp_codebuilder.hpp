@@ -68,20 +68,19 @@ public:
     /** Create a parameter
       * @param name variable name to assign
       * @param callback the name used to create a callback code block. NULL if none
-      * @param target the name of a APUNumber variable or NULL. Changing the parameter value will change the value of the target, if given.
       * @param type parameter value type
       */
-    void addParameter(const char *name, const char *callback, const char *target, APUNumberType type);
+    void addParameter(const char *name, const char *callback, APUNumberType type);
     /** Create a number
       * @param name var name to assign the number
       */
     void addNumber(const char *name);
     /** Assign a default value to a number variable
       * @param numberName the var name used to create the number
-      * @param valueType the type of the number value
-      * @param value a pointer to a float, double, int, or bool. The data will be copied.
+      * @param value an APUNumber containing the value and type of the default value
+      * @param valueType Default type for the number
       */
-    void setNumberDefaultValue(const char *numberName, APUNumberType valueType, void *value);
+    void setNumberDefaultValue(const char *numberName, APUNumber value, APUNumberType valueType);
     /** Connect the output of one node to the input of another 
       * @param from the var name used to create the output node
       * @param to the var name used to create the target node
