@@ -51,6 +51,8 @@ void BDStringForParameterType(char *str, APUNumberType type)
             strcpy(str, "APUNumberType::APUNUM_BOOL");
         case APUNumberType::APUNUM_INTEGER:
             strcpy(str, "APUNumberType::APUNUM_INTEGER");
+        case APUNumberType::APUNUM_UINT:
+            strcpy(str, "APUNumberType::APUNUM_UINT");
     }
 }
 
@@ -326,6 +328,11 @@ void BDCodeBuilder::setNumberDefaultValue(const char *numberName, APUNumberType 
         {
             fprintf(_pimpl->openFile, "%s.setIntegerValue(%d);\n", numberName, *((int *)value));
             break;
+        }
+
+        case APUNumberType::APUNUM_UINT:
+        {
+            fprintf(_pimpl->openFile, "%s.setUnsignedIntValue(%u);\n", numberName, *((uint32_t *)value));
         }
     }
 }

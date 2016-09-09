@@ -10,6 +10,8 @@
 #define autil_parameter_private_h
 
 #include "autil_parameter.hpp"
+#include "autil_stringlist.hpp"
+#include <string>
 
 class APUParameter::Pimpl
 {
@@ -27,6 +29,10 @@ public:
             case APUNUM_INTEGER:
                 target.setIntegerValue(0);
                 current.setIntegerValue(0);
+                break;
+            case APUNUM_UINT:
+                target.setUnsignedIntValue(0);
+                current.setUnsignedIntValue(0);
                 break;
             case APUNUM_BOOLEAN:
                 target.setBoolValue(false);
@@ -64,6 +70,12 @@ public:
     APUUIAttribute uiAttr;
 
     APUParameterCallback *cb;
+};
+
+class APUEnumParameter::EnumParamPimpl
+{
+public:
+    APUStringList strings;
 };
 
 

@@ -27,6 +27,7 @@ public:
 TEST_F(APUParameterTestFixture, test_essentials)
 {
 	APUParameter param("param", APUNUM_FLOAT);
+	param.setMaxValue(APUNUM_FLOAT(10));
 	EXPECT_EQ(0, strcmp("param", param.getName()));
 	param.setName("new_name");
 	EXPECT_EQ(0, strcmp("new_name", param.getName()));
@@ -70,4 +71,20 @@ TEST_F(APUParameterTestFixture, test_ui_attrs)
 	EXPECT_TRUE(((uiAttrs & APU_UI_TYPE_SLIDER) > 0));
 	EXPECT_TRUE(((uiAttrs & APU_UI_ORIENTATION_HORIZONTAL) > 0));
 	EXPECT_TRUE(((uiAttrs & APU_UI_TYPE_SWITCH) == 0));
+}
+
+TEST_F(APUParameterTestFixture, test_enum_param)
+{
+	APUStringList strings;
+	strings.append("OFF");
+	strings.append("ON");
+	APUEnumParameter enumParam("enumParam", strings, NULL);
+
+	std::string value0Str = enumParam.stringForValue(0);
+	EXPECT_EQ("OFF", value0Str);
+
+	std::string value1Str = enumParam.stringForValue(1);
+	EXPECT_EQ("ON", value1Str);
+
+	EXPECT_EQ(NULL, enumParam.stringForValue(2));
 }

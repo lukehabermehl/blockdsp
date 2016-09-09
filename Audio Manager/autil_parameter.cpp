@@ -10,12 +10,11 @@
 #include "autil_parameter_private.hpp"
 #include <cmath>
 #include <climits>
+#include <assert.h>
 
 APUParameter::APUParameter(const char *name, APUNumberType valueType, APUParameterCallback *cb)
 {
     _pimpl = new Pimpl(valueType, name, cb);
-    setMaxValue(APUNUM_INT(INT_MAX));
-    setMinValue(APUNUM_INT(INT_MIN));
 }
 
 APUParameter::~APUParameter()
@@ -197,3 +196,39 @@ void APUParameter::setUIAttributes(APUUIAttribute attr)
 {
     _pimpl->uiAttr = attr;
 }
+
+//----------------------------------------------------------------------------
+//
+// APUEnumParameter
+//
+//----------------------------------------------------------------------------
+
+APUEnumParameter::APUEnumParameter(const char *name, APUStringList strings, APUParameterCallback *cb)
+: APUParameter(name, APUNUM_UINT, cb)
+{
+    _enumParamPimpl = new EnumParamPimpl();
+    _enumParamPimpl->strings = strings.copy();
+    uint32_t numItems = (uint32_t)_enumParamPimpl->strings.size();
+    APUParameter::setMaxValue(APUNUM_UINT(numItems));
+}
+
+APUEnumParameter::~APUEnumParameter()
+{
+    delete _enumParamPimpl;
+}
+
+const char * APUEnumParameter::stringForValue(uint32_t value)
+{
+    return _enumParamPimpl->strings.getString(value);
+}
+
+void APUEnumParameter::setMinValue(APUNumber minVal)
+{
+    //No-op
+}
+
+void APUEnumParameter::setMaxValue(APUNumber maxVal)
+{
+    //No-op
+}
+
