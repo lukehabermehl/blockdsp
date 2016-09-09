@@ -2,9 +2,8 @@
 //  autil_number.hpp
 //  libblockdsp
 //
-//  Created by Luke on 8/25/16.
-//  Copyright © 2016 Luke Habermehl. All rights reserved.
-//
+
+/** @file autil_number.hpp */
 
 #ifndef autil_number_hpp
 #define autil_number_hpp
