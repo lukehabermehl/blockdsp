@@ -46,7 +46,7 @@ TEST_F(APUApiTestFixture, test_param_lookup)
 
 TEST_F(APUApiTestFixture, test_param_list)
 {
-	const APUParameterMap& params = apu->getParameterMap();
+	const APUParameterMap params = apu->getParameterMap();
 
 	EXPECT_EQ(2, params.size());
 }

@@ -52,7 +52,7 @@ float BlockDSPAPUNode::valueForChannel(uint32_t channelNo)
     return outputFrame_[channelNo];
 }
 
-const APUParameterMap& BlockDSPAPUNode::getParameters()
+const APUParameterMap BlockDSPAPUNode::getParameters()
 {
     return apu_->getParameterMap();
 }

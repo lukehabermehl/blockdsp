@@ -22,6 +22,8 @@
 		A32854871D6489DD0052B516 /* bdsp_builtin_delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A32854851D6489DD0052B516 /* bdsp_builtin_delay.cpp */; };
 		A32854881D6489DD0052B516 /* bdsp_builtin_delay.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A32854861D6489DD0052B516 /* bdsp_builtin_delay.hpp */; };
 		A329C6301D15997000D8D7CF /* blockdsp.h in Headers */ = {isa = PBXBuildFile; fileRef = A329C62F1D1596B800D8D7CF /* blockdsp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A336EEDE1D83298E00CA4059 /* autil_parametermap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A336EEDC1D83298E00CA4059 /* autil_parametermap.cpp */; };
+		A336EEDF1D83298E00CA4059 /* autil_parametermap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A336EEDD1D83298E00CA4059 /* autil_parametermap.hpp */; };
 		A33E2CA21D7483BB0067422B /* autil_uiattrs.h in Headers */ = {isa = PBXBuildFile; fileRef = A33E2CA11D7483BB0067422B /* autil_uiattrs.h */; };
 		A342C6C91CF3ED9E000E354E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342C6C81CF3ED9E000E354E /* main.cpp */; };
 		A34593731D6F59080055B14C /* autil_number.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A34593711D6F59080055B14C /* autil_number.cpp */; };
@@ -90,6 +92,9 @@
 		A32854851D6489DD0052B516 /* bdsp_builtin_delay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bdsp_builtin_delay.cpp; path = BuiltIns/bdsp_builtin_delay.cpp; sourceTree = "<group>"; };
 		A32854861D6489DD0052B516 /* bdsp_builtin_delay.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = bdsp_builtin_delay.hpp; path = BuiltIns/bdsp_builtin_delay.hpp; sourceTree = "<group>"; };
 		A329C62F1D1596B800D8D7CF /* blockdsp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blockdsp.h; sourceTree = "<group>"; };
+		A336EEDC1D83298E00CA4059 /* autil_parametermap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = autil_parametermap.cpp; path = "Audio Manager/autil_parametermap.cpp"; sourceTree = "<group>"; };
+		A336EEDD1D83298E00CA4059 /* autil_parametermap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = autil_parametermap.hpp; path = "Audio Manager/autil_parametermap.hpp"; sourceTree = "<group>"; };
+		A336EEE01D832CC500CA4059 /* autil_parametermap_private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = autil_parametermap_private.hpp; path = "Audio Manager/autil_parametermap_private.hpp"; sourceTree = "<group>"; };
 		A33E2CA11D7483BB0067422B /* autil_uiattrs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = autil_uiattrs.h; path = "Audio Manager/autil_uiattrs.h"; sourceTree = "<group>"; };
 		A342C6C61CF3ED9E000E354E /* dsptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dsptest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -221,6 +226,8 @@
 				A33E2CA11D7483BB0067422B /* autil_uiattrs.h */,
 				A3D9EBD61D81D44D0092FD24 /* autil_stringlist.cpp */,
 				A3D9EBD71D81D44D0092FD24 /* autil_stringlist.hpp */,
+				A336EEDC1D83298E00CA4059 /* autil_parametermap.cpp */,
+				A336EEDD1D83298E00CA4059 /* autil_parametermap.hpp */,
 			);
 			name = APUtils;
 			sourceTree = "<group>";
@@ -302,6 +309,7 @@
 				A3569B011D70BBFC0055D991 /* autil_parameter_private.hpp */,
 				A3DD27F21D735B1D00254892 /* autil_audioprocessingunit_private.hpp */,
 				A3D9EBDA1D81D5540092FD24 /* autil_stringlist_private.hpp */,
+				A336EEE01D832CC500CA4059 /* autil_parametermap_private.hpp */,
 			);
 			name = "Private Headers";
 			sourceTree = "<group>";
@@ -356,6 +364,7 @@
 				A3F744571CF653C10004C79A /* autil_dspkernel.hpp in Headers */,
 				A3F744761CF653F70004C79A /* dsputil_delaybuffer.hpp in Headers */,
 				A3F744771CF653F70004C79A /* dsphelpers.hpp in Headers */,
+				A336EEDF1D83298E00CA4059 /* autil_parametermap.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,6 +474,7 @@
 				A32854871D6489DD0052B516 /* bdsp_builtin_delay.cpp in Sources */,
 				A31E34401CFCBD8F0051A6FB /* bdsp_logger.cpp in Sources */,
 				A3F744711CF653F70004C79A /* bdsp_parameter.cpp in Sources */,
+				A336EEDE1D83298E00CA4059 /* autil_parametermap.cpp in Sources */,
 				A3F7446D1CF653F70004C79A /* bdsp_node.cpp in Sources */,
 				A3F744581CF653C10004C79A /* autil_file.cpp in Sources */,
 				A3569AFF1D70B8FD0055D991 /* autil_parameter.cpp in Sources */,
