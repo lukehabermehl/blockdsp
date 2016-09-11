@@ -24,7 +24,7 @@ public:
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual void onNext();
     
-    virtual const APUParameterMap& getParameters();
+    virtual const APUParameterMap getParameters();
     
 private:
     BlockDSPAPU *apu_;

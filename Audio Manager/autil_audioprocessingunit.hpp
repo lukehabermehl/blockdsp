@@ -11,10 +11,9 @@
 #define AudioProcessingUnit_hpp
 
 #include "autil_parameter.hpp"
+#include "autil_parametermap.hpp"
 #include <unordered_map>
 #include <string>
-
-typedef std::unordered_map<std::string, APUParameter *> APUParameterMap;
 
 /** Abstract class */
 class AudioProcessingUnit
@@ -45,7 +44,7 @@ public:
       */
     APUParameter * getParameterWithName(const char *name);
     /** Get the parameter map */
-    const APUParameterMap& getParameterMap();
+    const APUParameterMap getParameterMap();
     
     static AudioProcessingUnit * createPassthroughUnit();
     

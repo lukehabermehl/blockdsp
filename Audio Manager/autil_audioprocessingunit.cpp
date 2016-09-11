@@ -17,10 +17,6 @@ AudioProcessingUnit::AudioProcessingUnit()
 
 AudioProcessingUnit::~AudioProcessingUnit()
 {
-    for (auto it = _pimpl->parameterMap.begin(); it != _pimpl->parameterMap.end(); it++) {
-        delete it->second;
-    }
-    
     delete _pimpl;
 }
 
@@ -60,8 +56,8 @@ void AudioProcessingUnit::setSampleRate(unsigned long sampleRate)
 {
     _pimpl->sampleRate = sampleRate;
 
-    for (auto it = _pimpl->parameterMap.begin(); it != _pimpl->parameterMap.end(); it++) {
-        it->second->setSampleRate(sampleRate);
+    for (APUParameterMap::Iterator it = _pimpl->parameterMap.begin(); it.valid(); ++it) {
+        it.second()->setSampleRate(sampleRate);
     }
 
     onSampleRateChanged();
@@ -84,14 +80,10 @@ size_t AudioProcessingUnit::getNumParameters()
 
 APUParameter * AudioProcessingUnit::getParameterWithName(const char *name)
 {
-    auto it = _pimpl->parameterMap.find(std::string(name));
-    if (it != _pimpl->parameterMap.end()) {
-        return it->second;
-    }
-    return NULL;
+    return _pimpl->parameterMap.parameterWithName(name);
 }
 
-const APUParameterMap& AudioProcessingUnit::getParameterMap()
+const APUParameterMap AudioProcessingUnit::getParameterMap()
 {
     return _pimpl->parameterMap;
 }
@@ -102,7 +94,7 @@ bool AudioProcessingUnit::addParameter(APUParameter *param)
         return false;
     }
 
-    _pimpl->parameterMap[std::string(param->getName())] = param;
+    _pimpl->parameterMap.addParameter(param);
     return true;
 }
 
