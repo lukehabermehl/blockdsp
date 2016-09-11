@@ -64,6 +64,18 @@ APUParameterMap::Iterator APUParameterMap::begin() const
     return it;
 }
 
+const char * APUParameterMap::Iterator::first()
+{
+    if (!valid()) return NULL;
+    return _pimpl->mapIterator->first.c_str();
+}
+
+APUParameter * APUParameterMap::Iterator::second()
+{
+    if (!valid()) return NULL;
+    return _pimpl->mapIterator->second;
+}
+
 size_t APUParameterMap::size() const
 {
     return _pimpl->params.size();

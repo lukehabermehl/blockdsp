@@ -57,7 +57,7 @@ void AudioProcessingUnit::setSampleRate(unsigned long sampleRate)
     _pimpl->sampleRate = sampleRate;
 
     for (APUParameterMap::Iterator it = _pimpl->parameterMap.begin(); it.valid(); ++it) {
-        it.second->setSampleRate(sampleRate);
+        it.second()->setSampleRate(sampleRate);
     }
 
     onSampleRateChanged();

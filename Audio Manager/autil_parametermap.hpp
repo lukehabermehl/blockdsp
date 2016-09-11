@@ -24,9 +24,9 @@ public:
         
     public:
         /** The name of the parameter */
-        const char *first;
+        const char *first();
         /** The parameter instance */
-        APUParameter *second;
+        APUParameter *second();
         /** Move the iterator forward to the next key/value pair */
         Iterator& operator++();
         /** @return true if iterator points to a valid key/value pair. Otherwise, false. */
