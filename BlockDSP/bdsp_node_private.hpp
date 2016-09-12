@@ -18,6 +18,7 @@ public:
     uint32_t numInputChannels;
     uint32_t numOutputChannels;
     BlockDSPNodeID nodeID;
+    bool bypass;
 };
 
 class BlockDSPSummerNode::summerNodePimpl
