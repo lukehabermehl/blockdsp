@@ -49,6 +49,13 @@ public:
     void setNumOutputChannels(uint32_t num);
     /** Get the number of input channels */
     void setNumInputChannels(uint32_t num);
+
+    /** Turn on/off bypass setting
+      * @param active true if bypass is on (node becomes passthrough). False if off (node processing is active)
+      */
+    virtual void setBypass(bool active);
+    /** @return true if the node is bypassed. Otherwise false */
+    virtual bool isBypassed();
     
     /** Called when the system advances to the next frame. Override this if you need to handle the event */
     virtual void onNext();

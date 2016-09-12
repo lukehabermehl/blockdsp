@@ -16,6 +16,7 @@ BlockDSPNode::BlockDSPNode(uint32_t numInputChannels, uint32_t numOutputChannels
     _pimpl = new pimpl;
     _pimpl->numInputChannels = numInputChannels;
     _pimpl->numOutputChannels = numOutputChannels;
+    _pimpl->bypass = false;
     setID(kInvalidNodeID);
 }
 
@@ -61,6 +62,16 @@ float BlockDSPNode::valueForChannel(uint32_t channelNo) {
     return 0.0;
 }
 
+void BlockDSPNode::setBypass(bool active)
+{
+    _pimpl->bypass = active;
+}
+
+bool BlockDSPNode::isBypassed()
+{
+    return _pimpl->bypass;
+}
+
 void BlockDSPNode::onNext()
 {
 }
@@ -87,6 +98,9 @@ void BlockDSPSummerNode::connectInput(BlockDSPNode *inputNode) {
 
 float BlockDSPSummerNode::valueForChannel(uint32_t channelNo) {
     float val = 0.0;
+    if (isBypassed())
+        return val;
+
     for (size_t i=0; i<_summerNodePimpl->inputNodes.size(); i++) {
         val += _summerNodePimpl->inputNodes[i]->valueForChannel(channelNo);
     }
@@ -108,7 +122,7 @@ void BlockDSPMultiplierNode::connectInput(BlockDSPNode *inputNode) {
 }
 
 float BlockDSPMultiplierNode::valueForChannel(uint32_t channelNo) {
-    return _multiplierNodePimpl->inputNode->valueForChannel(channelNo) * coefficient.floatValue();
+    return _multiplierNodePimpl->inputNode->valueForChannel(channelNo) * (isBypassed() ? 1.f : coefficient.floatValue());
 }
 
 BlockDSPMultiplierNode::~BlockDSPMultiplierNode() {
@@ -127,6 +141,9 @@ void BlockDSPDelayLineNode::connectInput(BlockDSPNode *inputNode)
 }
 
 float BlockDSPDelayLineNode::valueForChannel(uint32_t channelNo) {
+    if (isBypassed())
+        return delayLine->inputNode->valueForChannel(channelNo);
+
     return delayLine->valueForDelayIndex(delayIndex, channelNo);
 }
 
@@ -201,5 +218,5 @@ void BlockDSPInputNode::connectInput(BlockDSPNode *inputNode)
 }
 
 float BlockDSPInputNode::valueForChannel(uint32_t channelNo) {
-    return inputBuffer[channelNo];
+    return isBypassed() ? 0.f : inputBuffer[channelNo];
 }

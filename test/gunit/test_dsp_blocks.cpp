@@ -88,3 +88,38 @@ TEST_F(DSPBlockTestFixture, test_delay_line)
 	EXPECT_EQ(0.5, delayLine.valueForDelayIndex(1, 0));
 	EXPECT_EQ(-0.5, delayLine.valueForDelayIndex(1, 1));
 }
+
+TEST_F(DSPBlockTestFixture, test_bypass)
+{
+	SetInputFrame(0.5, -0.5);
+
+	testInputNode->setBypass(true);
+	EXPECT_EQ(0.f, testInputNode->valueForChannel(0));
+	EXPECT_EQ(0.f, testInputNode->valueForChannel(1));
+
+	testInputNode->setBypass(false);
+	EXPECT_EQ(0.5, testInputNode->valueForChannel(0));
+	EXPECT_EQ(-0.5, testInputNode->valueForChannel(1));
+
+	BlockDSPMultiplierNode multiplierNode(2);
+	multiplierNode.connectInput(testInputNode);
+	multiplierNode.coefficient = APUNUM_FLOAT(0.5);
+	EXPECT_EQ(0.25, multiplierNode.valueForChannel(0));
+	EXPECT_EQ(-0.25, multiplierNode.valueForChannel(1));
+
+	multiplierNode.setBypass(true);
+	EXPECT_EQ(0.5, multiplierNode.valueForChannel(0));
+	EXPECT_EQ(-0.5, multiplierNode.valueForChannel(1));
+
+	multiplierNode.setBypass(false);
+
+	BlockDSPSummerNode summerNode(2);
+	summerNode.connectInput(&multiplierNode);
+	summerNode.connectInput(testInputNode);
+	EXPECT_EQ(0.75, summerNode.valueForChannel(0));
+	EXPECT_EQ(-0.75, summerNode.valueForChannel(1));
+
+	summerNode.setBypass(true);
+	EXPECT_EQ(0.f, summerNode.valueForChannel(0));
+	EXPECT_EQ(0.f, summerNode.valueForChannel(1));
+}
