@@ -40,6 +40,14 @@ public:
         }
 
         setName(pname);
+        units = "";
+    }
+
+    ~Pimpl()
+    {
+        if (name) {
+            delete []name;
+        }
     }
 
     void setName(const char *pname)
@@ -60,6 +68,7 @@ public:
     size_t smoothingFrames;
 
     char *name;
+    std::string units;
 
     APUNumber target;
     APUNumber current;

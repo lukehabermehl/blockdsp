@@ -43,6 +43,11 @@ public:
     /** Get the value type of the parameter */
     APUNumberType type();
 
+    /** Set the string representing the units of the parameter value */
+    virtual void setUnits(const char *units);
+    /** Get the string representing the units of the parameter value */
+    virtual const char *getUnits();
+
     /** Set the callback object for the parameter */
     void setCallback(APUParameterCallback *cb);
 
@@ -103,9 +108,9 @@ public:
     APUEnumParameter(const char *name, APUStringList strings, APUParameterCallback *cb=NULL);
     virtual ~APUEnumParameter();
 
-    /** Cannot set min value for enums. Minimum is always 0 */
+    /** NO-OP: Cannot set min value for enums. Minimum is always 0 */
     void setMinValue(APUNumber minVal);
-    /** Cannot set max value for enums. Maximum is always numItems - 1 */
+    /** NO-OP: Cannot set max value for enums. Maximum is always numItems - 1 */
     void setMaxValue(APUNumber maxVal);
 
     /** Get the string representation of the given value */

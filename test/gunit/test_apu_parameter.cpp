@@ -27,6 +27,8 @@ public:
 TEST_F(APUParameterTestFixture, test_essentials)
 {
 	APUParameter param("param", APUNUM_FLOAT);
+	param.setUnits("Hz");
+	EXPECT_EQ("Hz", std::string(param.getUnits()));
 	param.setMaxValue(APUNUM_FLOAT(10));
 	EXPECT_EQ(0, strcmp("param", param.getName()));
 	param.setName("new_name");

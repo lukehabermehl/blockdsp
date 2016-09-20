@@ -32,6 +32,16 @@ void APUParameter::setName(const char *name)
     _pimpl->setName(name);
 }
 
+const char * APUParameter::getUnits()
+{
+    return _pimpl->units.c_str();
+}
+
+void APUParameter::setUnits(const char *units)
+{
+    _pimpl->units = std::string(units);
+}
+
 APUNumberType APUParameter::type()
 {
     return _pimpl->valueType;
