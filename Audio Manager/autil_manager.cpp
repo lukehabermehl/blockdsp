@@ -118,6 +118,7 @@ bool AudioManager::close()
 
 bool AudioManager::start()
 {
+    _pimpl->dspKernel->audioProcessingUnit->setupInitialState();
     return _pimpl->dspKernel->start();
 }
 

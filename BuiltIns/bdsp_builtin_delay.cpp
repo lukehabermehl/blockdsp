@@ -29,6 +29,11 @@ unsigned long BDSPSimpleDelayEffect::getMaxDelaySamples()
     return maxDelaySamples;
 }
 
+void BDSPSimpleDelayEffect::setupInitialState()
+{
+    BlockDSPAPU::setupInitialState();
+}
+
 void BDSPSimpleDelayEffect::configureSystem()
 {
     BlockDSPSystem *system = getSystem();

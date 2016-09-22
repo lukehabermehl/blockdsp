@@ -208,9 +208,7 @@ void APUParameter::setUIAttributes(APUUIAttribute attr)
 }
 
 //----------------------------------------------------------------------------
-//
 // APUEnumParameter
-//
 //----------------------------------------------------------------------------
 
 APUEnumParameter::APUEnumParameter(const char *name, APUStringList strings, APUParameterCallback *cb)

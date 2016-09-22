@@ -13,7 +13,8 @@ class BDSPSimpleDelayEffect : public BlockDSPAPU
 {
 public:
     BDSPSimpleDelayEffect();
-    
+
+    virtual void setupInitialState();
     unsigned long getMaxDelaySamples();
     virtual void onParameterChanged(BlockDSPParameter *parameter, APUNumber number);
     

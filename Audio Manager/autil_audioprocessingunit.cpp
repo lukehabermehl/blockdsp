@@ -20,6 +20,10 @@ AudioProcessingUnit::~AudioProcessingUnit()
     delete _pimpl;
 }
 
+void AudioProcessingUnit::setupInitialState()
+{
+}
+
 void AudioProcessingUnit::processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels)
 {
     outputBuffer[0] = inputBuffer[0];

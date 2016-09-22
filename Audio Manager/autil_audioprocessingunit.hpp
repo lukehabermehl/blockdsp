@@ -22,6 +22,9 @@ public:
     AudioProcessingUnit();
     virtual ~AudioProcessingUnit();
 
+    /** This method is called by the APU host before starting any processing. Configure variables and default values in an override */
+    virtual void setupInitialState();
+
     /** Override this method to do audio processing */
     virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels);
     

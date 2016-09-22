@@ -28,6 +28,10 @@ public:
     
     /** The system that drives the audio processing */
     virtual BlockDSPSystem *getSystem();
+
+    /** Configure variables and default values before processing starts. If overriding, make sure to call the method on the base class */
+    virtual void setupInitialState();
+    
     /** Process a frame of audio. See AudioProcessingUnit */
     virtual void processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels);
     

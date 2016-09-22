@@ -28,6 +28,11 @@ BlockDSPSystem * BlockDSPAPU::getSystem()
     return system_;
 }
 
+void BlockDSPAPU::setupInitialState()
+{
+    system_->reset();
+}
+
 void BlockDSPAPU::processAudio(float *inputBuffer, float *outputBuffer, int numInputChannels, int numOutputChannels)
 {
     system_->mainInputNode->inputBuffer = inputBuffer;
