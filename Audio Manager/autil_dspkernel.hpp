@@ -64,6 +64,7 @@ public:
     AudioProcessingUnit *audioProcessingUnit;
     AudioManagerStatus status;
     StreamStatusChangeCallback streamStatusChangeCallback;
+    PaError paError;
     void *streamStatusChangeCallbackCtx;
     
 private:

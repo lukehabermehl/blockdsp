@@ -57,7 +57,7 @@ bool AudioDSPKernel::open(PaDeviceIndex outputDevIndex)
 
     BDLogFormat(kAudioDSPKernelLogPrefix, "Open stream with sample rate: %lu", sampleRate);
 
-    PaError err = Pa_OpenStream(&stream,
+    paError = Pa_OpenStream(&stream,
                                 NULL,
                                 &outputParameters,
                                 sampleRate,
@@ -66,14 +66,14 @@ bool AudioDSPKernel::open(PaDeviceIndex outputDevIndex)
                                 &AudioDSPKernel::paCallback,
                                 this);
 
-    if (err != paNoError)
+    if (paError != paNoError)
     {
-        BDLogError(kAudioDSPKernelLogPrefix, "Failed to open stream! PAError code: %d", err);
+        BDLogError(kAudioDSPKernelLogPrefix, "Failed to open stream! PAError code: %d", paError);
         return false;
     }
 
-    err = Pa_SetStreamFinishedCallback(stream, &AudioDSPKernel::paStreamFinished);
-    if (err != paNoError)
+    paError = Pa_SetStreamFinishedCallback(stream, &AudioDSPKernel::paStreamFinished);
+    if (paError != paNoError)
     {
         Pa_CloseStream(stream);
         stream = 0;
@@ -88,10 +88,10 @@ bool AudioDSPKernel::close()
     if (stream == 0)
         return false;
 
-    PaError err = Pa_CloseStream(stream);
+    paError = Pa_CloseStream(stream);
     stream = 0;
 
-    return (err == paNoError);
+    return (paError == paNoError);
 }
 
 bool AudioDSPKernel::start()
@@ -99,12 +99,12 @@ bool AudioDSPKernel::start()
     if (stream == 0)
         return false;
 
-    PaError err = Pa_StartStream(stream);
+    paError = Pa_StartStream(stream);
     status = AudioManagerStatusRunning;
     if (streamStatusChangeCallback) {
         streamStatusChangeCallback(streamStatusChangeCallbackCtx);
     }
-    return (err == paNoError);
+    return (paError == paNoError);
 }
 
 bool AudioDSPKernel::stop()
@@ -112,9 +112,9 @@ bool AudioDSPKernel::stop()
     if (stream == 0)
         return false;
 
-    PaError err = Pa_StopStream(stream);
+    paError = Pa_StopStream(stream);
     status = AudioManagerStatusDone;
-    return (err == paNoError);
+    return (paError == paNoError);
 }
 
 void AudioDSPKernel::paStreamFinishedMethod()

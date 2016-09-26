@@ -30,6 +30,17 @@ enum AudioManagerStatus
     AudioManagerStatusDone
 };
 
+enum AudioManagerErrorCode
+{
+    AudioManagerOK = 0,
+    AudioManagerErrorUnintialized,
+    AudioManagerErrorInvalidChannelCount,
+    AudioManagerErrorInvalidSampleRate,
+    AudioManagerErrorInvalidDevice,
+    AudioManagerErrorDeviceUnavailable,
+    AudioManagerErrorCodeOther
+};
+
 /** Use AudioDeviceIndex when referring to the integer index of an audio device */
 typedef int AudioDeviceIndex;
 
@@ -75,6 +86,12 @@ public:
      @returns a linked list of AudioDeviceInfo 
      */
     AudioDeviceInfoRef getDevices();
+
+    /** Get the error code of the last error the ocurred.
+      * @return AudioManagerErrorNoError is everything is OK
+      */
+
+    AudioManagerErrorCode error() const;
     
     /** Set the input device index (use with AudioInputModeDevice) */
     void setInputDeviceIndex(AudioDeviceIndex devIndex);

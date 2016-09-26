@@ -94,6 +94,27 @@ AudioDeviceInfoRef AudioManager::getDevices()
     return devInfoRef;
 }
 
+AudioManagerErrorCode AudioManager::error() const
+{
+    switch (_pimpl->dspKernel->paError)
+    {
+        case paNoError:
+            return AudioManagerOK;
+        case paNotInitialized:
+            return AudioManagerErrorUnintialized;
+        case paInvalidChannelCount:
+            return AudioManagerErrorInvalidChannelCount;
+        case paInvalidSampleRate:
+            return AudioManagerErrorInvalidSampleRate;
+        case paInvalidDevice:
+            return AudioManagerErrorInvalidDevice;
+        case paDeviceUnavailable:
+            return AudioManagerErrorDeviceUnavailable;
+        default:
+            return AudioManagerErrorCodeOther;
+    }
+}
+
 void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)
 {
     _pimpl->dspKernel->audioProcessingUnit = unit;
