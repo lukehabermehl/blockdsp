@@ -158,6 +158,11 @@ bool AudioManager::setInputFile(AudioFile *file)
     return true;
 }
 
+AudioFile * AudioManager::getInputFile()
+{
+    return _pimpl->dspKernel->audioFile;
+}
+
 AudioManagerStatus AudioManager::status()
 {
     return _pimpl->dspKernel->status;

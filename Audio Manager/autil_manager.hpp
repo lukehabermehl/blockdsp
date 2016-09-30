@@ -78,6 +78,11 @@ public:
     
     /** Load input from file */
     bool setInputFile(AudioFile *file);
+
+    /** Get the current input file.
+      * @return NULL if none has been specified
+      */
+    AudioFile *getInputFile();
     
     /** Specify the audio input source */
     void setInputMode(AudioInputMode mode);
