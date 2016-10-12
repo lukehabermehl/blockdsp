@@ -82,6 +82,11 @@ BDCodeBuilder::~BDCodeBuilder()
     free(_pimpl->className);
     free(_pimpl->dirpath);
 
+    for (size_t i=0; i<_pimpl->dlInfoList.size(); i++)
+    {
+        delete _pimpl->dlInfoList[i];
+    }
+
     delete _pimpl;
 }
 
@@ -193,6 +198,8 @@ void BDCodeBuilder::closeSourceFile()
 {
     BD_FILE_CHECK();
 
+    connectDelayLineInputs();
+
     fprintf(_pimpl->openFile, "\n}\n");
     fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() { return new %s(); }", className());
     fclose(_pimpl->openFile);
@@ -230,17 +237,16 @@ void BDCodeBuilder::addDelayLine(const char *name, const char *inputNodeName, si
 {
     BD_FILE_CHECK();
 
-    if (!hasNode(inputNodeName))
-    {
-        _pimpl->error = BDCodeBuilderErrorNotFound;
-        return;
-    }
+    BDDelayLineInfo *dlInfo = new BDDelayLineInfo();
+    dlInfo->name = name;
+    dlInfo->inputNodeName = inputNodeName;
+    dlInfo->delaySize = size;
 
+    _pimpl->dlInfoList.push_back(dlInfo);
 
-    _pimpl->delayLineSet[std::string(name)] = true;
-
-    fprintf(_pimpl->openFile, "BlockDSPDelayLine *%s = system->createDelayLine(%s);\n", name, inputNodeName);
+    fprintf(_pimpl->openFile, "BlockDSPDelayLine *%s = system->createDelayLine(NULL);\n", name);
     fprintf(_pimpl->openFile, "%s->setSize(%lu);\n", name, size);
+    //Must connect input node after nodes are initialized!
 }
 
 void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex)
@@ -383,6 +389,15 @@ void BDCodeBuilder::pimpl::makeClassName()
         if (!isalnum(className[i]) && className[i] != '_') {
             className[i] = '_';
         }
+    }
+}
+
+void BDCodeBuilder::connectDelayLineInputs()
+{
+    for (size_t i=0; i<_pimpl->dlInfoList.size(); i++)
+    {
+        BDDelayLineInfo *dlInfo = _pimpl->dlInfoList[i];
+        fprintf(_pimpl->openFile, "%s->inputNode = %s;\n", dlInfo->name.c_str(), dlInfo->inputNodeName.c_str());
     }
 }
 

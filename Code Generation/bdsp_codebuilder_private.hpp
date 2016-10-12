@@ -9,6 +9,14 @@
 #include "bdsp_codebuilder.hpp"
 #include <string>
 #include <unordered_map>
+#include <vector>
+
+struct BDDelayLineInfo
+{
+    std::string name;
+    std::string inputNodeName;
+    size_t delaySize;
+};
 
 class BDCodeBuilder::pimpl
 {
@@ -23,6 +31,7 @@ public:
     std::unordered_map<std::string, bool> nodeSet;
     std::unordered_map<std::string, bool> numSet;
     std::unordered_map<std::string, bool> delayLineSet;
+    std::vector<BDDelayLineInfo *> dlInfoList;
 };
 
 #endif /* BDCodeBuilder_Private_h */

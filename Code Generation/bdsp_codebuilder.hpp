@@ -109,10 +109,14 @@ public:
     
     /** Get the last error that occurred, if one exists */
     BDCodeBuilderError error();
+
+protected:
+    void connectDelayLineInputs();
     
 private:
     class pimpl;
     pimpl *_pimpl;
+
 };
 
 #endif /* BDCodeBuilder_hpp */
