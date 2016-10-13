@@ -7,6 +7,7 @@
 #include "bdsp_codebuilder.hpp"
 #include "bdsp_codebuilder_private.hpp"
 #include "autil_number.hpp"
+#include "bdsp_logger.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -16,6 +17,8 @@
 #include <sstream>
 
 #define BD_FILE_CHECK() if (!_pimpl->openFile) { _pimpl->error = BDCodeBuilderErrorFileNotOpen; return; }
+
+static const char * kCodeBuilderPrefix = "[BDCodeBuilder]";
 
 void BDInfoForBlockType(char *typeName, char *factoryMethodName, BDBlockType type)
 {
@@ -82,11 +85,6 @@ BDCodeBuilder::~BDCodeBuilder()
     free(_pimpl->className);
     free(_pimpl->dirpath);
 
-    for (size_t i=0; i<_pimpl->dlInfoList.size(); i++)
-    {
-        delete _pimpl->dlInfoList[i];
-    }
-
     delete _pimpl;
 }
 
@@ -100,8 +98,12 @@ void BDCodeBuilder::addCallbackCode(const char *callbackName, const char *code)
 
 bool BDCodeBuilder::hasNode(const char *name)
 {
-    auto it = _pimpl->nodeSet.find(std::string(name));
-    return  !(it == _pimpl->nodeSet.end());
+    std::string strName = std::string(name);
+    auto it = _pimpl->nodeSet.find(strName);
+    if (it != _pimpl->nodeSet.end()) return true;
+
+    auto it2 = _pimpl->delayLineSet.find(strName);
+    return !(it2 == _pimpl->delayLineSet.end());
 }
 
 bool BDCodeBuilder::hasCallback(const char *name)
@@ -165,6 +167,7 @@ void BDCodeBuilder::openSourceFile()
     if (!f)
     {
         _pimpl->error = BDCodeBuilderErrorBadPath;
+        BDLogFormat(kCodeBuilderPrefix, "Failed to open file at path: %s", filepath);
         return;
     }
 
@@ -198,8 +201,6 @@ void BDCodeBuilder::closeSourceFile()
 {
     BD_FILE_CHECK();
 
-    connectDelayLineInputs();
-
     fprintf(_pimpl->openFile, "\n}\n");
     fprintf(_pimpl->openFile, "\n\nAudioProcessingUnit *AudioProcessingUnitFactoryCreate() { return new %s(); }", className());
     fclose(_pimpl->openFile);
@@ -214,6 +215,7 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
     if (hasNode(name))
     {
         _pimpl->error = BDCodeBuilderErrorNonUnique;
+        BDLogFormat(kCodeBuilderPrefix, "Failed to add block node %s: name non-unique", name);
         return;
     }
 
@@ -233,20 +235,36 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
     }
 }
 
-void BDCodeBuilder::addDelayLine(const char *name, const char *inputNodeName, size_t size)
+void BDCodeBuilder::addDelayLine(const char *name, size_t size)
 {
     BD_FILE_CHECK();
-
-    BDDelayLineInfo *dlInfo = new BDDelayLineInfo();
-    dlInfo->name = name;
-    dlInfo->inputNodeName = inputNodeName;
-    dlInfo->delaySize = size;
-
-    _pimpl->dlInfoList.push_back(dlInfo);
+    
+    _pimpl->delayLineSet[name] = true;
 
     fprintf(_pimpl->openFile, "BlockDSPDelayLine *%s = system->createDelayLine(NULL);\n", name);
     fprintf(_pimpl->openFile, "%s->setSize(%lu);\n", name, size);
     //Must connect input node after nodes are initialized!
+}
+
+void BDCodeBuilder::setDelayLineInput(const char *delayLineName, const char *inputNodeName)
+{
+    BD_FILE_CHECK();
+
+    if (!hasDelayLine(delayLineName))
+    {
+        _pimpl->error = BDCodeBuilderErrorNotFound;
+        BDLogFormat(kCodeBuilderPrefix, "Delay Line not found: %s", delayLineName);
+        return;
+    }
+
+    if (!hasNode(inputNodeName))
+    {
+        _pimpl->error = BDCodeBuilderErrorNotFound;
+        BDLogFormat(kCodeBuilderPrefix, "Node not found: %s", inputNodeName);
+        return;
+    }
+
+    fprintf(_pimpl->openFile, "%s->inputNode = %s;\n", delayLineName, inputNodeName);
 }
 
 void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex)
@@ -256,12 +274,14 @@ void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLine
     if (hasNode(nodeName))
     {
         _pimpl->error = BDCodeBuilderErrorNonUnique;
+        BDLogFormat(kCodeBuilderPrefix, "Failed to add delay line tap: %s: name non-unique", nodeName);
         return;
     }
 
     if (!hasDelayLine(delayLineName))
     {
         _pimpl->error = BDCodeBuilderErrorNotFound;
+        BDLogFormat(kCodeBuilderPrefix, "Failed to find delay line %s", delayLineName);
         return;
     }
 
@@ -312,6 +332,7 @@ void BDCodeBuilder::setNumberDefaultValue(const char *numberName, APUNumber valu
     if (!hasNumber(numberName))
     {
         _pimpl->error = BDCodeBuilderErrorNotFound;
+        BDLogFormat(kCodeBuilderPrefix, "Number not found: %s", numberName);
         return;
     }
 
@@ -389,15 +410,6 @@ void BDCodeBuilder::pimpl::makeClassName()
         if (!isalnum(className[i]) && className[i] != '_') {
             className[i] = '_';
         }
-    }
-}
-
-void BDCodeBuilder::connectDelayLineInputs()
-{
-    for (size_t i=0; i<_pimpl->dlInfoList.size(); i++)
-    {
-        BDDelayLineInfo *dlInfo = _pimpl->dlInfoList[i];
-        fprintf(_pimpl->openFile, "%s->inputNode = %s;\n", dlInfo->name.c_str(), dlInfo->inputNodeName.c_str());
     }
 }
 
