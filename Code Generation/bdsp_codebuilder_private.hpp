@@ -9,6 +9,7 @@
 #include "bdsp_codebuilder.hpp"
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class BDCodeBuilder::pimpl
 {

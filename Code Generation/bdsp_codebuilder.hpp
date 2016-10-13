@@ -55,10 +55,14 @@ public:
     void addBlockNode(const char *name, BDBlockType type);
     /** Add a delay line
       * @param name name of the delay line
-      * @param inputNodeName the name of the node at the input
       * @param size the number of samples of delay
       */
-    void addDelayLine(const char *name, const char *inputNodeName, size_t size);
+    void addDelayLine(const char *name, size_t size);
+    /** Connect a node as the input of a delay line
+      * @param delayLineName The name of the delay line
+      * @param inputNodeName the name of the input node
+      */
+    void setDelayLineInput(const char *delayLineName, const char *inputNodeName);
     /** Create a variable for the sample at the given delay index
       * @param nodeName the name to assign to the created variable
       * @param delayLineName the name used to create the delay line
@@ -113,6 +117,7 @@ public:
 private:
     class pimpl;
     pimpl *_pimpl;
+
 };
 
 #endif /* BDCodeBuilder_hpp */
