@@ -30,6 +30,7 @@ AudioManager::AudioManager()
 AudioManager::~AudioManager()
 {
     delete _pimpl;
+    Pa_Terminate();
 }
 
 void AudioManager::setNumOutputChannels(int numOutputChannels)
@@ -130,7 +131,6 @@ bool AudioManager::close()
 {
     if (_pimpl->dspKernel->close())
     {
-        Pa_Terminate();
         return true;
     }
     
