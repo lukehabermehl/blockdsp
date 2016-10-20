@@ -70,11 +70,15 @@ public:
       */
     void getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex);
     /** Create a parameter
-      * @param name variable name to assign
+      * @param varName variable name to assign
+      * @param name the parameter name that will be exposed to the host application
+      * @param minValue the minimum allowed value of the parameter
+      * @param maxValue the maximum allowed value of the parameter
+      * @param defaultValue the value that the parameter will have at startup
       * @param callback the name used to create a callback code block. NULL if none
       * @param type parameter value type
       */
-    void addParameter(const char *name, const char *callback, APUNumberType type);
+    void addParameter(const char *varName, const char *name, APUNumber minValue, APUNumber maxValue, APUNumber defaultValue, const char *callback, APUNumberType type);
     /** Create a number
       * @param name var name to assign the number
       */

@@ -289,7 +289,7 @@ void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLine
     fprintf(_pimpl->openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu);\n", nodeName, delayLineName, delayIndex);
 }
 
-void BDCodeBuilder::addParameter(const char *name, const char *callback, APUNumberType type)
+void BDCodeBuilder::addParameter(const char *varName, const char *name, APUNumber minValue, APUNumber maxValue, APUNumber defaultValue, const char *callback, APUNumberType type)
 {
     BD_FILE_CHECK();
 
@@ -301,9 +301,13 @@ void BDCodeBuilder::addParameter(const char *name, const char *callback, APUNumb
             return;
     }
 
-    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = createParameter(\"%s\", %s);\n", name, name, typeParam);
+    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = createParameter(\"%s\", %s);\n", varName, name, typeParam);
+    fprintf(_pimpl->openFile, "%s->setMinValue(APUNUM_FLOAT(%f);\n", varName, minValue.floatValue());
+    fprintf(_pimpl->openFile, "%s->setMaxValue(APUNUM_FLOAT(%f);\n", varName, maxValue.floatValue());
+    fprintf(_pimpl->openFile, "%s->setValue(APUNUM_FLOAT(%f);\n", varName, defaultValue.floatValue());
+
     if (callback)
-        fprintf(_pimpl->openFile, "%s->callback = %s;\n", name, callback);
+        fprintf(_pimpl->openFile, "%s->callback = %s;\n", varName, callback);
 }
 
 void BDCodeBuilder::addNumber(const char *name)

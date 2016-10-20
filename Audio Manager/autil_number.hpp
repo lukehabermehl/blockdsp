@@ -39,6 +39,9 @@ public:
     /** Get a copy of the number */
     APUNumber copy();
 
+    /** Get the primitive type of the number */
+    APUNumberType getType();
+
     /** Create a new number for a float value */
     static APUNumber numberForFloat(float f);
     /** Create a new number for an integer value */
