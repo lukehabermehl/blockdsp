@@ -42,6 +42,11 @@ APUNumber APUNumber::copy()
     return APUNumber(_pimpl->copy());
 }
 
+APUNumberType APUNumber::getType()
+{
+    return _pimpl->paramType;
+}
+
 void APUNumber::setIntegerValue(int32_t i)
 {
     _pimpl->data.intValue = i;
