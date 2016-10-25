@@ -10,9 +10,7 @@
 
 BDSPGainEffect::BDSPGainEffect() : AudioProcessingUnit()
 {
-    gainParameter = new APUParameter("Gain", APUNUM_FLOAT);
-    gainParameter->setMaxValue(APUNUM_FLOAT(2));
-    gainParameter->setMinValue(APUNUM_FLOAT(0));
+    gainParameter = new APUParameter("Gain", APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(2));
     gainParameter->setValue(APUNUM_FLOAT(1));
 
     addParameter(gainParameter);

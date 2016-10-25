@@ -9,7 +9,7 @@
 #ifndef bdsp_builtin_gain_hpp
 #define bdsp_builtin_gain_hpp
 
-#include "blockdsp.h"
+#include "autil_audioprocessingunit.hpp"
 
 class BDSPGainEffect : public AudioProcessingUnit
 {

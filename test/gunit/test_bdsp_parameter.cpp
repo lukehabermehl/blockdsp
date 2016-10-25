@@ -10,9 +10,7 @@ protected:
 		BlockDSPParameter *parameter;
 
 		TestAPU(BlockDSPSystem *system) : BlockDSPAPU(system) {
-			this->parameter = new BlockDSPParameter(APUNUM_FLOAT, "param", this);
-			this->parameter->setMinValue(APUNUM_FLOAT(-100));
-			this->parameter->setMaxValue(APUNUM_FLOAT(100));
+			this->parameter = new BlockDSPParameter(APUNUM_FLOAT, "param", this, APUNUM_FLOAT(-100), APUNUM_FLOAT(100));
 			addParameter(this->parameter);
 		}
 		APUNumber lastParamValue;
