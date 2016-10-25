@@ -13,8 +13,8 @@
 #include <string.h>
 #include <limits.h>
 
-BlockDSPParameter::BlockDSPParameter(APUNumberType type, const char *name, BlockDSPAPU *contextAPU)
-: APUParameter(name, type, NULL)
+BlockDSPParameter::BlockDSPParameter(APUNumberType type, const char *name, BlockDSPAPU *contextAPU, APUNumber minValue, APUNumber maxValue)
+: APUParameter(name, type, minValue, maxValue, NULL)
 , callback(NULL)
 {
     _pimpl = new pimpl;

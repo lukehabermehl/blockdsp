@@ -301,9 +301,7 @@ void BDCodeBuilder::addParameter(const char *varName, const char *name, APUNumbe
             return;
     }
 
-    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = createParameter(\"%s\", %s);\n", varName, name, typeParam);
-    fprintf(_pimpl->openFile, "%s->setMinValue(APUNUM_FLOAT(%f);\n", varName, minValue.floatValue());
-    fprintf(_pimpl->openFile, "%s->setMaxValue(APUNUM_FLOAT(%f);\n", varName, maxValue.floatValue());
+    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = createParameter(\"%s\", %s, APUNUM_FLOAT(%f), APUNUM_FLOAT(%f));\n", varName, name, typeParam, minValue.floatValue(), maxValue.floatValue());
     fprintf(_pimpl->openFile, "%s->setValue(APUNUM_FLOAT(%f);\n", varName, defaultValue.floatValue());
 
     if (callback)

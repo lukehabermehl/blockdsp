@@ -18,7 +18,7 @@ class SliderParameter : public APUParameter
 {
 public:
 	SliderParameter(const char *name, APUNumberType type)
-	: APUParameter(name, type) {}
+	: APUParameter(name, type, APUNUM_FLOAT(0), APUNUM_FLOAT(10)) {}
 	APUUIAttribute getUIAttributes() {
 		return (APU_UI_TYPE_SLIDER ^ APU_UI_ORIENTATION_HORIZONTAL);
 	}
@@ -26,10 +26,9 @@ public:
 
 TEST_F(APUParameterTestFixture, test_essentials)
 {
-	APUParameter param("param", APUNUM_FLOAT);
+	APUParameter param("param", APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(10));
 	param.setUnits("Hz");
 	EXPECT_EQ("Hz", std::string(param.getUnits()));
-	param.setMaxValue(APUNUM_FLOAT(10));
 	EXPECT_EQ(0, strcmp("param", param.getName()));
 	param.setName("new_name");
 	EXPECT_EQ(0, strcmp("new_name", param.getName()));
@@ -46,9 +45,7 @@ TEST_F(APUParameterTestFixture, test_essentials)
 
 TEST_F(APUParameterTestFixture, test_value_clamping)
 {
-	APUParameter *param = new APUParameter("param", APUNUM_FLOAT);
-	param->setMinValue(APUNUM_FLOAT(-5));
-	param->setMaxValue(APUNUM_FLOAT(5));
+	APUParameter *param = new APUParameter("param", APUNUM_FLOAT, APUNUM_FLOAT(-5), APUNUM_FLOAT(5));
 
 	APUNumber val = APUNUM_FLOAT(3.5);
 	param->setValue(val);

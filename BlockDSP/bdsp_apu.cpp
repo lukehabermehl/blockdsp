@@ -61,12 +61,12 @@ void BlockDSPAPU::onParameterChanged(BlockDSPParameter *parameter)
 {
 }
 
-BlockDSPParameter * BlockDSPAPU::createParameter(const char *name, APUNumberType numberType)
+BlockDSPParameter * BlockDSPAPU::createParameter(const char *name, APUNumberType numberType, APUNumber minValue, APUNumber maxValue)
 {
     if (getParameterWithName(name)) {
         return NULL;
     }
-    BlockDSPParameter * param = new BlockDSPParameter(numberType, name, this);
+    BlockDSPParameter * param = new BlockDSPParameter(numberType, name, this, minValue, maxValue);
     addParameter(param);
     
     return param;
