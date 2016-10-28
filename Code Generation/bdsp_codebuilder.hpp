@@ -82,6 +82,13 @@ public:
     /** Create a number
       * @param name var name to assign the number
       */
+
+    /** Set the given multiplier node's coefficient to use a parameter value
+      * @param paramVarName the variable name of the parameter
+      * @param multiplierNodeName the name of a multiplier node
+      */
+    void connectParameterToMultiplierNode(const char *paramVarName, const char *multiplierNodeName);
+    
     void addNumber(const char *name);
     /** Assign a default value to a number variable
       * @param numberName the var name used to create the number
@@ -107,6 +114,8 @@ public:
     bool hasNumber(const char *name);
     /** Determine if a delay line with the given name has been created */
     bool hasDelayLine(const char *name);
+    /** Determine if a parameter with the given name has been created */
+    bool hasParameter(const char *name);
     
     /** Get the name set in the constructor */
     const char *name();

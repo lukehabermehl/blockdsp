@@ -128,6 +128,12 @@ bool BDCodeBuilder::hasDelayLine(const char *name)
     return  !(it == _pimpl->delayLineSet.end());
 }
 
+bool BDCodeBuilder::hasParameter(const char *name)
+{
+    auto it = _pimpl->parameterSet.find(name);
+    return !(it == _pimpl->parameterSet.end());
+}
+
 void BDCodeBuilder::writeHeaderFile()
 {
     char filepath[1024];
@@ -309,6 +315,19 @@ void BDCodeBuilder::addParameter(const char *varName, const char *name, APUNumbe
 
     if (callback)
         fprintf(_pimpl->openFile, "%s->callback = %s;\n", varName, callback);
+
+    _pimpl->parameterSet[varName] = true;
+}
+
+void BDCodeBuilder::connectParameterToMultiplierNode(const char *paramVarName, const char *multiplierNodeName)
+{
+    if (!hasNode(multiplierNodeName))
+    {
+        _pimpl->error = BDCodeBuilderErrorNotFound;
+        return;
+    }
+    fprintf(_pimpl->openFile, "%s->parameter = %s;\n", multiplierNodeName, paramVarName);
+    fprintf(_pimpl->openFile, "%s->useParameter = true;\n", multiplierNodeName);
 }
 
 void BDCodeBuilder::addNumber(const char *name)

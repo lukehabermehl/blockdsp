@@ -24,6 +24,7 @@ public:
     std::unordered_map<std::string, bool> nodeSet;
     std::unordered_map<std::string, bool> numSet;
     std::unordered_map<std::string, bool> delayLineSet;
+    std::unordered_map<std::string, bool> parameterSet;
 };
 
 #endif /* BDCodeBuilder_Private_h */

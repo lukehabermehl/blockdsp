@@ -113,6 +113,7 @@ BlockDSPMultiplierNode::BlockDSPMultiplierNode(uint32_t numInputChannels, uint32
 : BlockDSPNode(numInputChannels, numOutputChannels)
 {
     coefficient.setFloatValue(1.0);
+    useParameter = false;
     _multiplierNodePimpl = new multiplierNodePimpl;
 }
 
@@ -122,7 +123,12 @@ void BlockDSPMultiplierNode::connectInput(BlockDSPNode *inputNode) {
 }
 
 float BlockDSPMultiplierNode::valueForChannel(uint32_t channelNo) {
-    return _multiplierNodePimpl->inputNode->valueForChannel(channelNo) * (isBypassed() ? 1.f : coefficient.floatValue());
+    float coeff = coefficient.floatValue();
+    if (useParameter && parameter != NULL)
+    {
+        coeff = parameter->getCurrentValue().floatValue();
+    }
+    return _multiplierNodePimpl->inputNode->valueForChannel(channelNo) * (isBypassed() ? 1.f : coeff);
 }
 
 BlockDSPMultiplierNode::~BlockDSPMultiplierNode() {

@@ -13,6 +13,7 @@
 #define BlockDSPNode_h
 
 #include "autil_number.hpp"
+#include "autil_parameter.hpp"
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -87,6 +88,9 @@ class BlockDSPMultiplierNode : public BlockDSPNode {
 public:
     /** The coefficient number */
     APUNumber coefficient;
+    /** If true, use the provided parameter as the coefficient value */
+    bool useParameter;
+    APUParameter *parameter;
     
     BlockDSPMultiplierNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     virtual void connectInput(BlockDSPNode *inputNode);
