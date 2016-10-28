@@ -48,14 +48,18 @@ void BDStringForParameterType(char *str, APUNumberType type)
 {
     switch (type)
     {
-        case APUNumberType::APUNUM_FLOAT:
-            strcpy(str, "APUNumberType::APUNUM_FLOAT");
-        case APUNumberType::APUNUM_BOOLEAN:
-            strcpy(str, "APUNumberType::APUNUM_BOOL");
-        case APUNumberType::APUNUM_INTEGER:
-            strcpy(str, "APUNumberType::APUNUM_INTEGER");
-        case APUNumberType::APUNUM_UINT:
-            strcpy(str, "APUNumberType::APUNUM_UINT");
+        case APUNUM_FLOAT:
+            strcpy(str, "APUNUM_FLOAT");
+            break;
+        case APUNUM_BOOLEAN:
+            strcpy(str, "APUNUM_BOOLEAN");
+            break;
+        case APUNUM_INTEGER:
+            strcpy(str, "APUNUM_INTEGER");
+            break;
+        case APUNUM_UINT:
+            strcpy(str, "APUNUM_UINT");
+            break;
     }
 }
 
@@ -122,6 +126,12 @@ bool BDCodeBuilder::hasDelayLine(const char *name)
 {
     auto it = _pimpl->delayLineSet.find(std::string(name));
     return  !(it == _pimpl->delayLineSet.end());
+}
+
+bool BDCodeBuilder::hasParameter(const char *name)
+{
+    auto it = _pimpl->parameterSet.find(name);
+    return !(it == _pimpl->parameterSet.end());
 }
 
 void BDCodeBuilder::writeHeaderFile()
@@ -293,7 +303,7 @@ void BDCodeBuilder::addParameter(const char *varName, const char *name, APUNumbe
 {
     BD_FILE_CHECK();
 
-    char typeParam[20];
+    char typeParam[126];
     BDStringForParameterType(typeParam, type);
     if (callback)
     {
@@ -301,11 +311,23 @@ void BDCodeBuilder::addParameter(const char *varName, const char *name, APUNumbe
             return;
     }
 
-    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = createParameter(\"%s\", %s, APUNUM_FLOAT(%f), APUNUM_FLOAT(%f));\n", varName, name, typeParam, minValue.floatValue(), maxValue.floatValue());
-    fprintf(_pimpl->openFile, "%s->setValue(APUNUM_FLOAT(%f);\n", varName, defaultValue.floatValue());
+    fprintf(_pimpl->openFile, "BlockDSPParameter *%s = createParameter(\"%s\", %s, APUNUM_FLOAT(%f), APUNUM_FLOAT(%f), APUNUM_FLOAT(%f));\n", varName, name, typeParam, minValue.floatValue(), maxValue.floatValue(), defaultValue.floatValue());
 
     if (callback)
         fprintf(_pimpl->openFile, "%s->callback = %s;\n", varName, callback);
+
+    _pimpl->parameterSet[varName] = true;
+}
+
+void BDCodeBuilder::connectParameterToMultiplierNode(const char *paramVarName, const char *multiplierNodeName)
+{
+    if (!hasNode(multiplierNodeName))
+    {
+        _pimpl->error = BDCodeBuilderErrorNotFound;
+        return;
+    }
+    fprintf(_pimpl->openFile, "%s->parameter = %s;\n", multiplierNodeName, paramVarName);
+    fprintf(_pimpl->openFile, "%s->useParameter = true;\n", multiplierNodeName);
 }
 
 void BDCodeBuilder::addNumber(const char *name)

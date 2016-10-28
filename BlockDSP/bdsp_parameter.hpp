@@ -32,7 +32,7 @@ public:
       * @param name the name of the parameter (ex. "Output gain")
       * @param system the containing system 
       */
-    BlockDSPParameter(APUNumberType type, const char *name, BlockDSPAPU *contextAPU, APUNumber minValue, APUNumber maxValue);
+    BlockDSPParameter(APUNumberType type, const char *name, BlockDSPAPU *contextAPU, APUNumber minValue, APUNumber maxValue, APUNumber defaultValue);
     ~BlockDSPParameter();
 
     /** Holds the callback function pointer or NULL if none exists */
