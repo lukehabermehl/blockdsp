@@ -31,7 +31,7 @@ class APUParameter
     friend class AudioProcessingUnit;
 
 public:
-    APUParameter(const char *name, APUNumberType valueType, APUNumber minValue, APUNumber maxValue, APUParameterCallback *cb=NULL);
+    APUParameter(const char *name, APUNumberType valueType, APUNumber minValue, APUNumber maxValue, APUNumber defaultValue, APUParameterCallback *cb=NULL);
     virtual ~APUParameter();
     void setName(const char *name);
     const char *getName();

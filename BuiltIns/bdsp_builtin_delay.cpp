@@ -56,9 +56,9 @@ void BDSPSimpleDelayEffect::configureSystem()
     
     system->mainOutputNode = outputSummer;
     
-    wetDryParam = createParameter("Mix", APUNumberType::APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(1));
+    wetDryParam = createParameter("Mix", APUNumberType::APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(1), APUNUM_FLOAT(0.5));
 
-    delayTimeParam = createParameter("Delay Time", APUNumberType::APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(30));
+    delayTimeParam = createParameter("Delay Time", APUNumberType::APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(30), APUNUM_FLOAT(10));
 }
 
 void BDSPSimpleDelayEffect::onParameterChanged(BlockDSPParameter *parameter, APUNumber value)

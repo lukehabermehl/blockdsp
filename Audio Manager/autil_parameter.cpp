@@ -12,11 +12,13 @@
 #include <climits>
 #include <assert.h>
 
-APUParameter::APUParameter(const char *name, APUNumberType valueType, APUNumber minValue, APUNumber maxValue, APUParameterCallback *cb)
+APUParameter::APUParameter(const char *name, APUNumberType valueType, APUNumber minValue, APUNumber maxValue, APUNumber defaultValue, APUParameterCallback *cb)
 {
     _pimpl = new Pimpl(valueType, name, cb);
     setMinValue(minValue);
     setMaxValue(maxValue);
+    _pimpl->current = defaultValue;
+    _pimpl->target = defaultValue;
 }
 
 APUParameter::~APUParameter()
@@ -214,7 +216,7 @@ void APUParameter::setUIAttributes(APUUIAttribute attr)
 //----------------------------------------------------------------------------
 
 APUEnumParameter::APUEnumParameter(const char *name, APUStringList strings, APUParameterCallback *cb)
-: APUParameter(name, APUNUM_UINT, APUNUM_UINT(0), APUNUM_UINT((uint32_t)strings.size()), cb)
+: APUParameter(name, APUNUM_UINT, APUNUM_UINT(0), APUNUM_UINT((uint32_t)strings.size()), APUNUM_UINT(0), cb)
 {
     _enumParamPimpl = new EnumParamPimpl();
     _enumParamPimpl->strings = strings.copy();

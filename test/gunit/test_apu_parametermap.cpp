@@ -7,8 +7,8 @@ protected:
 	APUParameterMap paramMap;
 	void SetUp()
 	{
-		paramMap.addParameter(new APUParameter("param1", APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(100), NULL));
-		paramMap.addParameter(new APUParameter("param2", APUNUM_BOOLEAN, APUNUM_BOOL(0), APUNUM_BOOL(1), NULL));
+		paramMap.addParameter(new APUParameter("param1", APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(100), APUNUM_FLOAT(0)));
+		paramMap.addParameter(new APUParameter("param2", APUNUM_BOOLEAN, APUNUM_BOOL(0), APUNUM_BOOL(1), APUNUM_BOOL(0)));
 	}
 };
 

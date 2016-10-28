@@ -52,10 +52,11 @@ protected:
      * @param target optional target number or NULL
      * @param minValue minimum allowed value
      * @param maxValue maximum allowed value
+     * @param defaultValue default value for the parameter
      *
      * @return NULL if a parameter with the given name already exists in the APU
      */
-    BlockDSPParameter * createParameter(const char *name, APUNumberType numberType, APUNumber minValue, APUNumber maxValue);
+    BlockDSPParameter * createParameter(const char *name, APUNumberType numberType, APUNumber minValue, APUNumber maxValue, APUNumber defaultValue);
     
 private:
     BlockDSPSystem *system_;
