@@ -24,6 +24,15 @@ public:
     
 protected:
     virtual void onSampleRateChanged();
+
+    enum NodeID
+    {
+        OUTPUT_SUMMER_ID = 1,
+        WET_MULTIPLIER_ID,
+        DRY_MULTIPLIER_ID,
+        DELAY_LINE_ID,
+        DELAY_LINE_TAP_ID
+    };
     
 private:
     void configureSystem();

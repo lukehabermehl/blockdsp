@@ -35,7 +35,7 @@ public:
     /** Constructor
       * @param numChannels Number of output channels
       */
-    BlockDSPNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
+    BlockDSPNode(BlockDSPNodeID nodeID, uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     /** Connect a node to this node's input
       * @param inputNode node to connect
       */
@@ -73,7 +73,7 @@ private:
 /** Performs a summing operation. Supports virtually any number of input nodes */
 class BlockDSPSummerNode : public BlockDSPNode {
 public:
-    BlockDSPSummerNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
+    BlockDSPSummerNode(BlockDSPNodeID nodeID, uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     virtual ~BlockDSPSummerNode();
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
@@ -92,7 +92,7 @@ public:
     bool useParameter;
     APUParameter *parameter;
     
-    BlockDSPMultiplierNode(uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
+    BlockDSPMultiplierNode(BlockDSPNodeID nodeID, uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
     virtual ~BlockDSPMultiplierNode();
@@ -113,7 +113,7 @@ public:
     size_t delayIndex;
     
     /** Constructor. For delay line nodes, the input and output channel count should be equal */
-    BlockDSPDelayLineNode(uint32_t numChannels);
+    BlockDSPDelayLineNode(BlockDSPNodeID nodeID, uint32_t numChannels);
     /** Is no-op for delay line nodes */
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
@@ -127,13 +127,13 @@ public:
     BlockDSPNodeID getID();
     /** Constructor
       * @param numChannels number of output channels */
-    BlockDSPDelayLine(uint32_t numChannels);
+    BlockDSPDelayLine(BlockDSPNodeID delayLineID, uint32_t numChannels);
     ~BlockDSPDelayLine();
     
     /** Input node of the delay line */
     BlockDSPNode *inputNode;
     /** Get the node at the given index. Note that the memory allocated for each node will be freed in the destructor of the parent delay line */
-    BlockDSPDelayLineNode *nodeForDelayIndex(size_t index);
+    BlockDSPDelayLineNode *nodeForDelayIndex(BlockDSPNodeID nodeID, size_t index);
     /** Get the sample value at the given delay index and channel */
     float valueForDelayIndex(size_t delayIndex, uint32_t channelNo);
     /** Set the delay length in samples */
@@ -154,7 +154,7 @@ private:
 class BlockDSPInputNode : public BlockDSPNode {
 public:
     /** Constructor. Since input is manual, only the output channel count is relevant */
-    BlockDSPInputNode(uint32_t numOutputChannels);
+    BlockDSPInputNode(BlockDSPNodeID nodeID, uint32_t numOutputChannels);
     ~BlockDSPInputNode();
     /** This must be set to a custom array of floating point samples with a length equal to the number of output channels. The array should represent one frame of audio */
     float *inputBuffer;

@@ -17,7 +17,7 @@
 class BlockDSPAPUNode : public BlockDSPNode
 {
 public:
-    BlockDSPAPUNode(BlockDSPAPU * apu, uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
+    BlockDSPAPUNode(BlockDSPNodeID nodeID, BlockDSPAPU * apu, uint32_t numInputChannels=1, uint32_t numOutputChannels=1);
     ~BlockDSPAPUNode();
     
     virtual float valueForChannel(uint32_t channelNo);

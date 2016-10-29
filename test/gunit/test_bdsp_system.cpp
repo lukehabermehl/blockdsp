@@ -26,7 +26,7 @@ TEST_F(BDSPSystemTestFixture, test_system_number)
 
 TEST_F(BDSPSystemTestFixture, test_system_delay_line)
 {
-	BlockDSPDelayLine * dl = system->createDelayLine(system->mainInputNode);
+	BlockDSPDelayLine * dl = system->createDelayLine(1, system->mainInputNode);
 	ASSERT_TRUE((dl != NULL));
 	BlockDSPDelayLine *lookup = system->delayLineWithID(dl->getID());
 	EXPECT_EQ(dl, lookup);
@@ -34,7 +34,7 @@ TEST_F(BDSPSystemTestFixture, test_system_delay_line)
 
 TEST_F(BDSPSystemTestFixture, test_system_node)
 {
-	BlockDSPInputNode *node = system->createInputNode();
+	BlockDSPInputNode *node = system->createInputNode(1);
 	ASSERT_TRUE((node != NULL));
 	BlockDSPNode * lookup = system->nodeWithID(node->getID());
 	EXPECT_EQ(node, lookup);
@@ -55,9 +55,9 @@ TEST_F(BDSPSystemTestFixture, test_system_next)
 	float frame[] = {0.5};
 	node->inputBuffer = &frame[0];
 
-	BlockDSPDelayLine * dl = system->createDelayLine(system->mainInputNode);
+	BlockDSPDelayLine * dl = system->createDelayLine(1, system->mainInputNode);
 	dl->setSize(1);
-	system->mainOutputNode = dl->nodeForDelayIndex(1);
+	system->mainOutputNode = dl->nodeForDelayIndex(2, 1);
 
 	EXPECT_EQ(0, system->mainOutputNode->valueForChannel(0));
 	system->next();
@@ -70,9 +70,9 @@ TEST_F(BDSPSystemTestFixture, test_system_reset)
 	float frame[] = {0.5};
 	node->inputBuffer = &frame[0];
 
-	BlockDSPDelayLine * dl = system->createDelayLine(system->mainInputNode);
+	BlockDSPDelayLine * dl = system->createDelayLine(1, system->mainInputNode);
 	dl->setSize(1);
-	system->mainOutputNode = dl->nodeForDelayIndex(1);
+	system->mainOutputNode = dl->nodeForDelayIndex(2, 1);
 
 	EXPECT_EQ(0, system->mainOutputNode->valueForChannel(0));
 	system->next();
