@@ -198,7 +198,7 @@ void BDCodeBuilder::openSourceFile()
     fprintf(f, "\nvoid %s::configureSystem() {\n", className());
     fprintf(f, "BlockDSPSystem *system = getSystem();\n");
     fprintf(f, "BlockDSPInputNode *MAIN_INPUT_NODE = system->mainInputNode;\n");
-    fprintf(f, "BlockDSPMultiplierNode *MAIN_OUTPUT_NODE = system->createMultiplierNode();\n");
+    fprintf(f, "BlockDSPMultiplierNode *MAIN_OUTPUT_NODE = system->createMultiplierNode(1);\n");
     fprintf(f, "system->mainOutputNode = MAIN_OUTPUT_NODE;\n");
     fprintf(f, "MAIN_OUTPUT_NODE->coefficient.setFloatValue(1.0);\n");
 
