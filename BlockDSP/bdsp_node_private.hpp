@@ -41,5 +41,11 @@ public:
     BlockDSPNodeID dlID;
 };
 
+class BlockDSPInputNode::inputNodePimpl
+{
+public:
+    BlockDSPNode *sourceNode;
+};
+
 
 #endif /* BlockDSPNode_Private_h */

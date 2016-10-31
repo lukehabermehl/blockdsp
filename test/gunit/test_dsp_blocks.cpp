@@ -38,6 +38,12 @@ TEST_F(DSPBlockTestFixture, test_input_node)
 	SetInputFrame(0.5, -0.5);
 	EXPECT_EQ(inputFrame[0], testInputNode->valueForChannel(0));
 	EXPECT_EQ(inputFrame[1], testInputNode->valueForChannel(1));
+
+	BlockDSPInputNode inputNode2(2, 2);
+	inputNode2.setSourceNode(testInputNode);
+
+	EXPECT_EQ(inputFrame[0], inputNode2.valueForChannel(0));
+	EXPECT_EQ(inputFrame[1], inputNode2.valueForChannel(1));
 }
 
 TEST_F(DSPBlockTestFixture, test_multiplier_node)
