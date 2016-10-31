@@ -214,15 +214,34 @@ BlockDSPInputNode::BlockDSPInputNode(BlockDSPNodeID nodeID, uint32_t numInputCha
 : BlockDSPNode(nodeID, numInputChannels, numInputChannels)
 , inputBuffer(NULL)
 {
+    _inputNodePimpl = new inputNodePimpl;
+    _inputNodePimpl->sourceNode = NULL;
 }
 
-BlockDSPInputNode::~BlockDSPInputNode() {
+BlockDSPInputNode::~BlockDSPInputNode()
+{
+    delete _inputNodePimpl;
+}
+
+void BlockDSPInputNode::setSourceNode(BlockDSPNode *node)
+{
+    _inputNodePimpl->sourceNode = node;
 }
 
 void BlockDSPInputNode::connectInput(BlockDSPNode *inputNode)
 {
+    setSourceNode(inputNode);
 }
 
 float BlockDSPInputNode::valueForChannel(uint32_t channelNo) {
-    return isBypassed() ? 0.f : inputBuffer[channelNo];
+    if (isBypassed())
+    {
+        return 0.f;
+    }
+    else if (_inputNodePimpl->sourceNode)
+    {
+        return _inputNodePimpl->sourceNode->valueForChannel(channelNo);
+    }
+
+    return inputBuffer[channelNo];
 }

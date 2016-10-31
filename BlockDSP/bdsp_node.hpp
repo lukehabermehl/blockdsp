@@ -156,11 +156,19 @@ public:
     /** Constructor. Since input is manual, only the output channel count is relevant */
     BlockDSPInputNode(BlockDSPNodeID nodeID, uint32_t numOutputChannels);
     ~BlockDSPInputNode();
+    /** Set the node to pull samples from (optional)
+      * @param node if NULL, use the input buffer, else use the output of the source node
+      */
+    void setSourceNode(BlockDSPNode *node);
     /** This must be set to a custom array of floating point samples with a length equal to the number of output channels. The array should represent one frame of audio */
     float *inputBuffer;
-    /** Is no-op for input nodes */
+    /** Maps to setSourceNode for Input Nodes */
     virtual void connectInput(BlockDSPNode *inputNode);
     virtual float valueForChannel(uint32_t channelNo);
+
+private:
+    class inputNodePimpl;
+    inputNodePimpl *_inputNodePimpl;
 };
 
 
