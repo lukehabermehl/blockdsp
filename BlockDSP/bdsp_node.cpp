@@ -12,12 +12,12 @@
 #include "bdsp_number.hpp"
 
 #pragma mark - BlockDSPNode
-BlockDSPNode::BlockDSPNode(uint32_t numInputChannels, uint32_t numOutputChannels) {
+BlockDSPNode::BlockDSPNode(BlockDSPNodeID nodeID, uint32_t numInputChannels, uint32_t numOutputChannels) {
     _pimpl = new pimpl;
     _pimpl->numInputChannels = numInputChannels;
     _pimpl->numOutputChannels = numOutputChannels;
     _pimpl->bypass = false;
-    setID(kInvalidNodeID);
+    setID(nodeID);
 }
 
 BlockDSPNode::~BlockDSPNode() {
@@ -78,8 +78,8 @@ void BlockDSPNode::onNext()
 
 #pragma mark - BlockDSPSummerNode
 
-BlockDSPSummerNode::BlockDSPSummerNode(uint32_t numInputChannels, uint32_t numOutputChannels)
-: BlockDSPNode(numInputChannels, numOutputChannels)
+BlockDSPSummerNode::BlockDSPSummerNode(BlockDSPNodeID nodeID, uint32_t numInputChannels, uint32_t numOutputChannels)
+: BlockDSPNode(nodeID, numInputChannels, numOutputChannels)
 {
     _summerNodePimpl = new summerNodePimpl;
 }
@@ -109,8 +109,8 @@ float BlockDSPSummerNode::valueForChannel(uint32_t channelNo) {
 }
 
 #pragma mark - BlockDSPMultiplierNode
-BlockDSPMultiplierNode::BlockDSPMultiplierNode(uint32_t numInputChannels, uint32_t numOutputChannels)
-: BlockDSPNode(numInputChannels, numOutputChannels)
+BlockDSPMultiplierNode::BlockDSPMultiplierNode(BlockDSPNodeID nodeID, uint32_t numInputChannels, uint32_t numOutputChannels)
+: BlockDSPNode(nodeID, numInputChannels, numOutputChannels)
 {
     coefficient.setFloatValue(1.0);
     useParameter = false;
@@ -137,7 +137,7 @@ BlockDSPMultiplierNode::~BlockDSPMultiplierNode() {
 
 
 #pragma mark - BlockDSPDelayLineNode
-BlockDSPDelayLineNode::BlockDSPDelayLineNode(uint32_t numChannels) : BlockDSPNode(numChannels) {
+BlockDSPDelayLineNode::BlockDSPDelayLineNode(BlockDSPNodeID nodeID, uint32_t numChannels) : BlockDSPNode(nodeID, numChannels) {
     delayIndex = 0;
     delayLine = 0;
 }
@@ -154,11 +154,11 @@ float BlockDSPDelayLineNode::valueForChannel(uint32_t channelNo) {
 }
 
 #pragma mark - BlockDSPDelayLine
-BlockDSPDelayLine::BlockDSPDelayLine(uint32_t numChannels) {
+BlockDSPDelayLine::BlockDSPDelayLine(BlockDSPNodeID delayLineID, uint32_t numChannels) {
     _delayLinePimpl = new delayLinePimpl;
     _delayLinePimpl->numChannels = numChannels;
     _delayLinePimpl->delayBuffers = new DelayBuffer[numChannels];
-    setID(kInvalidNodeID);
+    setID(delayLineID);
 }
 
 BlockDSPDelayLine::~BlockDSPDelayLine() {
@@ -179,8 +179,8 @@ void BlockDSPDelayLine::setID(BlockDSPNodeID nID)
     _delayLinePimpl->dlID = nID;
 }
 
-BlockDSPDelayLineNode *BlockDSPDelayLine::nodeForDelayIndex(size_t index) {
-    BlockDSPDelayLineNode *dlnode = new BlockDSPDelayLineNode(_delayLinePimpl->numChannels);
+BlockDSPDelayLineNode *BlockDSPDelayLine::nodeForDelayIndex(BlockDSPNodeID nodeID, size_t index) {
+    BlockDSPDelayLineNode *dlnode = new BlockDSPDelayLineNode(nodeID, _delayLinePimpl->numChannels);
     dlnode->delayLine = this;
     dlnode->delayIndex = index;
     
@@ -210,8 +210,8 @@ void BlockDSPDelayLine::reset() {
 }
 
 #pragma mark - BlockDSPInputNode
-BlockDSPInputNode::BlockDSPInputNode(uint32_t numInputChannels)
-: BlockDSPNode(numInputChannels, numInputChannels)
+BlockDSPInputNode::BlockDSPInputNode(BlockDSPNodeID nodeID, uint32_t numInputChannels)
+: BlockDSPNode(nodeID, numInputChannels, numInputChannels)
 , inputBuffer(NULL)
 {
 }

@@ -67,15 +67,16 @@ public:
       */
     BlockDSPDelayLine *delayLineWithID(BlockDSPNodeID id);
     /** Create a new delay line and add it to the system 
+      * @param delayLineID the ID to assign to the delay line
       * @param inputNode the input to the delay line
       */
-    BlockDSPDelayLine *createDelayLine(BlockDSPNode *inputNode);
+    BlockDSPDelayLine *createDelayLine(BlockDSPNodeID delayLineID, BlockDSPNode *inputNode);
     /** Create a new summer node and add it to the system */
-    BlockDSPSummerNode *createSummerNode();
+    BlockDSPSummerNode *createSummerNode(BlockDSPNodeID nodeID);
     /** Create a new multiplier node and add it to the system */
-    BlockDSPMultiplierNode *createMultiplierNode();
+    BlockDSPMultiplierNode *createMultiplierNode(BlockDSPNodeID nodeID);
     /** Create a new input node and add it to the system */
-    BlockDSPInputNode *createInputNode();
+    BlockDSPInputNode *createInputNode(BlockDSPNodeID nodeID);
     
     BlockDSPSystem();
     ~BlockDSPSystem();

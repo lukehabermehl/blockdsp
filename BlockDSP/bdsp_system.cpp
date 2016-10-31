@@ -19,7 +19,7 @@ BlockDSPSystem::BlockDSPSystem() {
     _pimpl->inputChannelCount = 1;
     _pimpl->counter = 0;
     
-    mainInputNode = new BlockDSPInputNode(getNumInputChannels());
+    mainInputNode = new BlockDSPInputNode(0, getNumInputChannels());
     mainOutputNode = mainInputNode;
 }
 
@@ -60,9 +60,7 @@ void BlockDSPSystem::setNumOutputChannels(uint32_t num)
 }
 
 void BlockDSPSystem::addNode(BlockDSPNode *node) {
-    if (node->getID() == kInvalidNodeID)
-        node->setID(_pimpl->counter++);
-    
+    //TODO: assert node ID?
     _pimpl->nodeMap[node->getID()] = node;
 }
 
@@ -87,31 +85,31 @@ void BlockDSPSystem::next() {
     }
 }
 
-BlockDSPSummerNode *BlockDSPSystem::createSummerNode() {
-    BlockDSPSummerNode *summerNode = new BlockDSPSummerNode(getNumInputChannels(), getNumOutputChannels());
+BlockDSPSummerNode *BlockDSPSystem::createSummerNode(BlockDSPNodeID nodeID) {
+    BlockDSPSummerNode *summerNode = new BlockDSPSummerNode(nodeID, getNumInputChannels(), getNumOutputChannels());
     addNode(summerNode);
     
     return summerNode;
 }
 
-BlockDSPDelayLine *BlockDSPSystem::createDelayLine(BlockDSPNode *inputNode) {
-    BlockDSPDelayLine *delayLine = new BlockDSPDelayLine(getNumInputChannels());
+BlockDSPDelayLine *BlockDSPSystem::createDelayLine(BlockDSPNodeID delayLineID, BlockDSPNode *inputNode) {
+    BlockDSPDelayLine *delayLine = new BlockDSPDelayLine(delayLineID, getNumInputChannels());
     delayLine->inputNode = inputNode;
     addDelayLine(delayLine);
     
     return delayLine;
 }
 
-BlockDSPMultiplierNode *BlockDSPSystem::createMultiplierNode() {
-    BlockDSPMultiplierNode *node = new BlockDSPMultiplierNode(getNumInputChannels(), getNumOutputChannels());
+BlockDSPMultiplierNode *BlockDSPSystem::createMultiplierNode(BlockDSPNodeID nodeID) {
+    BlockDSPMultiplierNode *node = new BlockDSPMultiplierNode(nodeID, getNumInputChannels(), getNumOutputChannels());
     addNode(node);
     
     return node;
 }
 
-BlockDSPInputNode *BlockDSPSystem::createInputNode()
+BlockDSPInputNode *BlockDSPSystem::createInputNode(BlockDSPNodeID nodeID)
 {
-    BlockDSPInputNode *node = new BlockDSPInputNode(getNumInputChannels());
+    BlockDSPInputNode *node = new BlockDSPInputNode(nodeID, getNumInputChannels());
     addNode(node);
     
     return node;
@@ -159,27 +157,41 @@ BlockDSPSystem *BlockDSPSystem::systemForBiQuad(uint32_t numChannels, unsigned i
     BlockDSPSystem *system = new BlockDSPSystem();
     system->setNumInputChannels(numChannels);
     system->setNumOutputChannels(numChannels);
+
+    const BlockDSPNodeID IN_DELAY_ID = 1;
+    const BlockDSPNodeID SUMMER_ID = 2;
+    const BlockDSPNodeID OUT_DELAY_ID = 3;
+    const BlockDSPNodeID A0_NODE_ID = 4;
+    const BlockDSPNodeID A1_NODE_ID = 5;
+    const BlockDSPNodeID A2_NODE_ID = 6;
+    const BlockDSPNodeID B1_NODE_ID = 7;
+    const BlockDSPNodeID B2_NODE_ID = 8;
+    const BlockDSPNodeID OUT_GAIN_ID = 9;
+    const BlockDSPNodeID IN_DELAY_TAP1_ID = 10;
+    const BlockDSPNodeID IN_DELAY_TAP2_ID = 11;
+    const BlockDSPNodeID OUT_DELAY_TAP1_ID = 12;
+    const BlockDSPNodeID OUT_DELAY_TAP2_ID = 13;
     
-    BlockDSPDelayLine *inDelayLine = system->createDelayLine(system->mainInputNode);
+    BlockDSPDelayLine *inDelayLine = system->createDelayLine(IN_DELAY_ID, system->mainInputNode);
     inDelayLine->setSize(2);
-    BlockDSPSummerNode *summer = system->createSummerNode();
-    BlockDSPDelayLine *outDelayLine = system->createDelayLine(summer);
+    BlockDSPSummerNode *summer = system->createSummerNode(SUMMER_ID);
+    BlockDSPDelayLine *outDelayLine = system->createDelayLine(OUT_DELAY_ID, summer);
     outDelayLine->setSize(2);
     
-    BlockDSPMultiplierNode *a0Node = system->createMultiplierNode();
-    BlockDSPMultiplierNode *a1Node = system->createMultiplierNode();
-    BlockDSPMultiplierNode *a2Node = system->createMultiplierNode();
-    BlockDSPMultiplierNode *b1Node = system->createMultiplierNode();
-    BlockDSPMultiplierNode *b2Node = system->createMultiplierNode();
+    BlockDSPMultiplierNode *a0Node = system->createMultiplierNode(A0_NODE_ID);
+    BlockDSPMultiplierNode *a1Node = system->createMultiplierNode(A1_NODE_ID);
+    BlockDSPMultiplierNode *a2Node = system->createMultiplierNode(A2_NODE_ID);
+    BlockDSPMultiplierNode *b1Node = system->createMultiplierNode(B1_NODE_ID);
+    BlockDSPMultiplierNode *b2Node = system->createMultiplierNode(B2_NODE_ID);
     
-    BlockDSPMultiplierNode *outGainNode = system->createMultiplierNode();
+    BlockDSPMultiplierNode *outGainNode = system->createMultiplierNode(OUT_GAIN_ID);
     outGainNode->connectInput(summer);
     
     a0Node->connectInput(system->mainInputNode);
-    a1Node->connectInput(inDelayLine->nodeForDelayIndex(1));
-    a2Node->connectInput(inDelayLine->nodeForDelayIndex(2));
-    b1Node->connectInput(outDelayLine->nodeForDelayIndex(1));
-    b2Node->connectInput(outDelayLine->nodeForDelayIndex(2));
+    a1Node->connectInput(inDelayLine->nodeForDelayIndex(IN_DELAY_TAP1_ID, 1));
+    a2Node->connectInput(inDelayLine->nodeForDelayIndex(IN_DELAY_TAP2_ID, 2));
+    b1Node->connectInput(outDelayLine->nodeForDelayIndex(OUT_DELAY_TAP1_ID, 1));
+    b2Node->connectInput(outDelayLine->nodeForDelayIndex(OUT_DELAY_TAP2_ID, 2));
     
     summer->connectInput(a0Node);
     summer->connectInput(a1Node);

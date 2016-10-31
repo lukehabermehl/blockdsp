@@ -8,8 +8,8 @@
 
 #include "bdsp_node_apu.hpp"
 
-BlockDSPAPUNode::BlockDSPAPUNode(BlockDSPAPU *apu, uint32_t numInputChannels, uint32_t numOutputChannels)
-: BlockDSPNode(numInputChannels, numOutputChannels)
+BlockDSPAPUNode::BlockDSPAPUNode(BlockDSPNodeID nodeID, BlockDSPAPU *apu, uint32_t numInputChannels, uint32_t numOutputChannels)
+: BlockDSPNode(nodeID, numInputChannels, numOutputChannels)
 {
     apu->setMaxInputChannels(numInputChannels);
     apu->setMaxOutputChannels(numOutputChannels);

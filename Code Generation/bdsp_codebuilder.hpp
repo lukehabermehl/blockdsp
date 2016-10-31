@@ -51,13 +51,15 @@ public:
     /** Add a block node
       * @param name The name of the node. Think variable name.
       * @param type the operation type of the block
+      * @param nodeID the ID number that will be assigned to the node
       */
-    void addBlockNode(const char *name, BDBlockType type);
+    void addBlockNode(const char *name, BDBlockType type, BlockDSPNodeID nodeID);
     /** Add a delay line
       * @param name name of the delay line
       * @param size the number of samples of delay
+      * @param delayLineID the ID number that will be assigned to the delayLine
       */
-    void addDelayLine(const char *name, size_t size);
+    void addDelayLine(const char *name, size_t size, BlockDSPNodeID delayLineID);
     /** Connect a node as the input of a delay line
       * @param delayLineName The name of the delay line
       * @param inputNodeName the name of the input node
@@ -66,9 +68,10 @@ public:
     /** Create a variable for the sample at the given delay index
       * @param nodeName the name to assign to the created variable
       * @param delayLineName the name used to create the delay line
+      * @param nodeID the ID number that will be assigned to the delay line node
       * @param delayIndex the sample index of the delay
       */
-    void getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex);
+    void getDelayLineNode(const char *nodeName, const char *delayLineName, BlockDSPNodeID nodeID, size_t delayIndex);
     /** Create a parameter
       * @param varName variable name to assign
       * @param name the parameter name that will be exposed to the host application

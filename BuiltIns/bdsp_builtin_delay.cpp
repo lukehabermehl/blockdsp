@@ -38,19 +38,19 @@ void BDSPSimpleDelayEffect::configureSystem()
 {
     BlockDSPSystem *system = getSystem();
     
-    delayLine = system->createDelayLine(system->mainInputNode);
+    delayLine = system->createDelayLine(DELAY_LINE_ID, system->mainInputNode);
     delayLine->setSize(maxDelaySamples);
     
-    dryMultiplier = system->createMultiplierNode();
+    dryMultiplier = system->createMultiplierNode(DRY_MULTIPLIER_ID);
     dryMultiplier->connectInput(system->mainInputNode);
     dryMultiplier->coefficient.setFloatValue(0.7);
     
-    wetMultiplier = system->createMultiplierNode();
+    wetMultiplier = system->createMultiplierNode(WET_MULTIPLIER_ID);
     wetMultiplier->coefficient.setFloatValue(0.2);
     
     updateDelay();
     
-    outputSummer = system->createSummerNode();
+    outputSummer = system->createSummerNode(OUTPUT_SUMMER_ID);
     outputSummer->connectInput(dryMultiplier);
     outputSummer->connectInput(wetMultiplier);
     
@@ -87,7 +87,7 @@ void BDSPSimpleDelayEffect::updateDelay()
     if (samples > maxDelaySamples)
         samples = maxDelaySamples;
     
-    BlockDSPDelayLineNode *newDLNode = delayLine->nodeForDelayIndex(samples);
+    BlockDSPDelayLineNode *newDLNode = delayLine->nodeForDelayIndex(DELAY_LINE_TAP_ID, samples);
     wetMultiplier->connectInput(newDLNode);
     if (delayLineNode)
         delete delayLineNode;

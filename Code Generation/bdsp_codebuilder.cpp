@@ -198,7 +198,7 @@ void BDCodeBuilder::openSourceFile()
     fprintf(f, "\nvoid %s::configureSystem() {\n", className());
     fprintf(f, "BlockDSPSystem *system = getSystem();\n");
     fprintf(f, "BlockDSPInputNode *MAIN_INPUT_NODE = system->mainInputNode;\n");
-    fprintf(f, "BlockDSPMultiplierNode *MAIN_OUTPUT_NODE = system->createMultiplierNode();\n");
+    fprintf(f, "BlockDSPMultiplierNode *MAIN_OUTPUT_NODE = system->createMultiplierNode(1);\n");
     fprintf(f, "system->mainOutputNode = MAIN_OUTPUT_NODE;\n");
     fprintf(f, "MAIN_OUTPUT_NODE->coefficient.setFloatValue(1.0);\n");
 
@@ -217,7 +217,7 @@ void BDCodeBuilder::closeSourceFile()
     _pimpl->openFile = 0;
 }
 
-void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
+void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type, BlockDSPNodeID nodeID)
 {
     BD_FILE_CHECK();
 
@@ -236,7 +236,7 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
 
     BDInfoForBlockType(typeStr, factoryMethodName, type);
 
-    fprintf(_pimpl->openFile, "%s *%s = system->%s();\n", typeStr, name, factoryMethodName);
+    fprintf(_pimpl->openFile, "%s *%s = system->%s(%lu);\n", typeStr, name, factoryMethodName, nodeID);
     if (type == BDBlockTypeMultiplier)
     {
         //Use typeStr for space efficiency
@@ -245,13 +245,13 @@ void BDCodeBuilder::addBlockNode(const char *name, BDBlockType type)
     }
 }
 
-void BDCodeBuilder::addDelayLine(const char *name, size_t size)
+void BDCodeBuilder::addDelayLine(const char *name, size_t size, BlockDSPNodeID delayLineID)
 {
     BD_FILE_CHECK();
     
     _pimpl->delayLineSet[name] = true;
 
-    fprintf(_pimpl->openFile, "BlockDSPDelayLine *%s = system->createDelayLine(NULL);\n", name);
+    fprintf(_pimpl->openFile, "BlockDSPDelayLine *%s = system->createDelayLine(%lu, NULL);\n", name, delayLineID);
     fprintf(_pimpl->openFile, "%s->setSize(%lu);\n", name, size);
     //Must connect input node after nodes are initialized!
 }
@@ -277,7 +277,7 @@ void BDCodeBuilder::setDelayLineInput(const char *delayLineName, const char *inp
     fprintf(_pimpl->openFile, "%s->inputNode = %s;\n", delayLineName, inputNodeName);
 }
 
-void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLineName, size_t delayIndex)
+void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLineName, BlockDSPNodeID nodeID, size_t delayIndex)
 {
     BD_FILE_CHECK();
 
@@ -296,7 +296,7 @@ void BDCodeBuilder::getDelayLineNode(const char *nodeName, const char *delayLine
     }
 
     _pimpl->nodeSet[std::string(nodeName)] = true;
-    fprintf(_pimpl->openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu);\n", nodeName, delayLineName, delayIndex);
+    fprintf(_pimpl->openFile, "BlockDSPDelayLineNode *%s = %s->nodeForDelayIndex(%lu, %lu);\n", nodeName, delayLineName, nodeID, delayIndex);
 }
 
 void BDCodeBuilder::addParameter(const char *varName, const char *name, APUNumber minValue, APUNumber maxValue, APUNumber defaultValue, const char *callback, APUNumberType type)

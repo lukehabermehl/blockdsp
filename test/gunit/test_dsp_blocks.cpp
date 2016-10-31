@@ -17,7 +17,7 @@ protected:
 		outputFrame = new float[2];
 		outputFrame[0] = 0; outputFrame[1] = 0;
 
-		testInputNode = new BlockDSPInputNode(2);
+		testInputNode = new BlockDSPInputNode(1, 2);
 		testInputNode->inputBuffer = inputFrame;
 	}
 
@@ -47,7 +47,7 @@ TEST_F(DSPBlockTestFixture, test_multiplier_node)
 	APUNumber coeff;
 	coeff.setFloatValue(0.5);
 
-	BlockDSPMultiplierNode multiplierNode(2);
+	BlockDSPMultiplierNode multiplierNode(2, 2);
 	multiplierNode.coefficient = coeff;
 	multiplierNode.connectInput(testInputNode);
 
@@ -59,11 +59,11 @@ TEST_F(DSPBlockTestFixture, test_summer_node)
 {
 	SetInputFrame(0.5, -0.5);
 
-	BlockDSPInputNode inputNode2(2);
+	BlockDSPInputNode inputNode2(2, 2);
 	float inputBuf2[] = {0.2, 0.2};
 	inputNode2.inputBuffer = inputBuf2;
 
-	BlockDSPSummerNode summerNode(2);
+	BlockDSPSummerNode summerNode(3, 2);
 	summerNode.connectInput(testInputNode);
 	summerNode.connectInput(&inputNode2);
 
@@ -75,7 +75,7 @@ TEST_F(DSPBlockTestFixture, test_delay_line)
 {
 	SetInputFrame(0.5, -0.5);
 
-	BlockDSPDelayLine delayLine(2);
+	BlockDSPDelayLine delayLine(2, 2);
 	delayLine.setSize(1);
 	delayLine.inputNode = testInputNode;
 
@@ -101,7 +101,7 @@ TEST_F(DSPBlockTestFixture, test_bypass)
 	EXPECT_EQ(0.5, testInputNode->valueForChannel(0));
 	EXPECT_EQ(-0.5, testInputNode->valueForChannel(1));
 
-	BlockDSPMultiplierNode multiplierNode(2);
+	BlockDSPMultiplierNode multiplierNode(2, 2);
 	multiplierNode.connectInput(testInputNode);
 	multiplierNode.coefficient = APUNUM_FLOAT(0.5);
 	EXPECT_EQ(0.25, multiplierNode.valueForChannel(0));
@@ -113,7 +113,7 @@ TEST_F(DSPBlockTestFixture, test_bypass)
 
 	multiplierNode.setBypass(false);
 
-	BlockDSPSummerNode summerNode(2);
+	BlockDSPSummerNode summerNode(3, 2);
 	summerNode.connectInput(&multiplierNode);
 	summerNode.connectInput(testInputNode);
 	EXPECT_EQ(0.75, summerNode.valueForChannel(0));
