@@ -119,6 +119,8 @@ AudioManagerErrorCode AudioManager::error() const
 void AudioManager::setAudioProcessingUnit(AudioProcessingUnit *unit)
 {
     _pimpl->dspKernel->audioProcessingUnit = unit;
+    if (unit == NULL)
+        return;
     unit->setSampleRate(_pimpl->dspKernel->sampleRate);
 }
 

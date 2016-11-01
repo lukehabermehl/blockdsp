@@ -69,6 +69,7 @@ public:
     
 private:
     AudioProcessingUnit *passthroughUnit;
+    bool doStop;
 };
 
 

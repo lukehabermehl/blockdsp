@@ -99,6 +99,8 @@ bool AudioDSPKernel::start()
     if (stream == 0)
         return false;
 
+    doStop = false;
+
     paError = Pa_StartStream(stream);
     status = AudioManagerStatusRunning;
     if (streamStatusChangeCallback) {
@@ -112,14 +114,14 @@ bool AudioDSPKernel::stop()
     if (stream == 0)
         return false;
 
-    paError = Pa_StopStream(stream);
-    status = AudioManagerStatusDone;
-    return (paError == paNoError);
+    doStop = true;
+    return true;
 }
 
 void AudioDSPKernel::paStreamFinishedMethod()
 {
     status = AudioManagerStatusDone;
+    close();
     if (streamStatusChangeCallback) {
         streamStatusChangeCallback(streamStatusChangeCallbackCtx);
     }
@@ -130,6 +132,8 @@ int AudioDSPKernel::paCallbackMethod(const void *inputBuffer, void *outputBuffer
                      const PaStreamCallbackTimeInfo *timeInfo,
                      PaStreamCallbackFlags statusFlags)
 {
+    if (doStop) return paComplete;
+
     float *out = (float *)outputBuffer;
     float *in = 0;
     if (!useFileInput)
