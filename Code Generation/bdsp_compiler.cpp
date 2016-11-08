@@ -13,6 +13,8 @@
 static const char *default_libpath = "/usr/local/lib";
 static const char *default_headerpath = "/usr/local/include";
 
+#define OSS_CLEAN(_oss) { _oss.clear(); _oss.str(""); }
+
 BDCompiler::BDCompiler(BDCodeBuilder *builder)
 {
     _pimpl = new pimpl;
@@ -22,6 +24,7 @@ BDCompiler::BDCompiler(BDCodeBuilder *builder)
     _pimpl->headerpath  = std::string(default_headerpath);
     _pimpl->srcpath     = std::string(builder->dirpath());
     _pimpl->buildpath   = std::string(builder->dirpath());
+    _pimpl->basename    = std::string(builder->name());
     
     handler = 0;
     _pimpl->error = BDCompilerErrorNoError;
@@ -57,7 +60,11 @@ bool BDCompiler::compileLibrary(const char *outputPath)
         mkdir(buildpathCstr, 0700);
     
     std::ostringstream oss;
-    oss << "g++ -c -I" << _pimpl->headerpath << " " << _pimpl->srcpath << "/*.cpp";
+    oss << "rm -rf " << _pimpl->buildpath << "/*.o";
+    system(oss.str().c_str());
+    OSS_CLEAN(oss);
+
+    oss << "g++ -c -I" << _pimpl->headerpath << " \"" << _pimpl->srcpath << "/" << _pimpl->basename << ".cpp\"";
     
     if (system(oss.str().c_str()))
     {
@@ -69,8 +76,8 @@ bool BDCompiler::compileLibrary(const char *outputPath)
         return false;;
     }
     
-    oss.clear();
-    oss.str("");
+    OSS_CLEAN(oss);
+
     oss << "mv *.o " << _pimpl->buildpath;
     if (system(oss.str().c_str()))
     {
@@ -80,8 +87,7 @@ bool BDCompiler::compileLibrary(const char *outputPath)
             handler->handleCompilerFinished(this);
     }
     
-    oss.clear();
-    oss.str("");
+    OSS_CLEAN(oss);
     
     oss << "g++ -dynamiclib -undefined suppress -flat_namespace -lblockdsp -L" << _pimpl->libpath << " " << _pimpl->buildpath << "/*.o -o " << outputPath;
     

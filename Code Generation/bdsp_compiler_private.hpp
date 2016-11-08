@@ -16,6 +16,7 @@ public:
     std::string libpath;
     std::string headerpath;
     std::string buildpath;
+    std::string basename;
     
     BDCompilerError error;
 };
