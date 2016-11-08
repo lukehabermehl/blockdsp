@@ -10,6 +10,7 @@
 #include "bdsp_node_private.hpp"
 #include "dsputil_delaybuffer.hpp"
 #include "bdsp_number.hpp"
+#include "bdsp_logger.hpp"
 
 #pragma mark - BlockDSPNode
 BlockDSPNode::BlockDSPNode(BlockDSPNodeID nodeID, uint32_t numInputChannels, uint32_t numOutputChannels) {
@@ -183,6 +184,8 @@ BlockDSPDelayLineNode *BlockDSPDelayLine::nodeForDelayIndex(BlockDSPNodeID nodeI
     BlockDSPDelayLineNode *dlnode = new BlockDSPDelayLineNode(nodeID, _delayLinePimpl->numChannels);
     dlnode->delayLine = this;
     dlnode->delayIndex = index;
+
+    BDLogFormat("[BlockDSPDelayLine]", "Create delay line tap on delay line %lu at index %lu", nodeID, index);
     
     return dlnode;
 }
