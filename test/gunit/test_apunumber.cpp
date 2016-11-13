@@ -36,14 +36,6 @@ TEST_F(TestAPUNumber, test_number_types)
 	EXPECT_EQ(false, boolNumber.boolValue());
 }
 
-TEST_F(TestAPUNumber, test_copy_constructor)
-{
-	APUNumber num;
-	APUNumber num2(num);
-
-	num.setFloatValue(3.5);
-	EXPECT_EQ(3.5, num2.floatValue());
-}
 
 TEST_F(TestAPUNumber, test_assignment)
 {

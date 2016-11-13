@@ -19,7 +19,7 @@ APUNumber::APUNumber()
 
 APUNumber::APUNumber(const APUNumber& num)
 {
-    _pimpl = num._pimpl;
+    _pimpl = num._pimpl->copy();
 }
 
 APUNumber::APUNumber(std::shared_ptr<pimpl> impl)
