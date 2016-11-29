@@ -30,17 +30,14 @@ class APUNumber
 {
 public:
     APUNumber();
-    /** The copy constructor will increment the reference count */
-    APUNumber(APUNumber const &num);
-    /** The assignment operator will create a unique copy */
-    APUNumber& operator=(APUNumber const& num);
-    ~APUNumber();
-
+    //Default type is float
+    APUNumber(float f);
+    
     /** Get a copy of the number */
     APUNumber copy();
 
     /** Get the primitive type of the number */
-    APUNumberType getType();
+    APUNumberType getType() const;
 
     /** Create a new number for a float value */
     static APUNumber numberForFloat(float f);
@@ -70,10 +67,16 @@ public:
     void setBoolValue(bool b);
 
 private:
-    class pimpl;
-    std::shared_ptr<pimpl> _pimpl;
+    union APUNumberContainer_
+    {
+        int32_t intValue;
+        uint32_t unsignedIntValue;
+        bool boolValue;
+        float floatValue;
+    };
 
-    APUNumber(std::shared_ptr<pimpl> impl);
+    APUNumberContainer_ data_;
+    APUNumberType numberType_;
 };
 
 
