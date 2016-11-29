@@ -104,7 +104,6 @@
 		A342C6C81CF3ED9E000E354E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A34593711D6F59080055B14C /* autil_number.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = autil_number.cpp; path = "Audio Manager/autil_number.cpp"; sourceTree = "<group>"; };
 		A34593721D6F59080055B14C /* autil_number.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = autil_number.hpp; path = "Audio Manager/autil_number.hpp"; sourceTree = "<group>"; };
-		A34593751D6F5A420055B14C /* autil_number_private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = autil_number_private.hpp; path = "Audio Manager/autil_number_private.hpp"; sourceTree = "<group>"; };
 		A3569AFD1D70B8FD0055D991 /* autil_parameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = autil_parameter.cpp; path = "Audio Manager/autil_parameter.cpp"; sourceTree = "<group>"; };
 		A3569AFE1D70B8FD0055D991 /* autil_parameter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = autil_parameter.hpp; path = "Audio Manager/autil_parameter.hpp"; sourceTree = "<group>"; };
 		A3569B011D70BBFC0055D991 /* autil_parameter_private.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = autil_parameter_private.hpp; path = "Audio Manager/autil_parameter_private.hpp"; sourceTree = "<group>"; };
@@ -311,7 +310,6 @@
 			children = (
 				A31E34391CFCBCBD0051A6FB /* autil_file_private.hpp */,
 				A31E343A1CFCBCBD0051A6FB /* autil_manager_private.hpp */,
-				A34593751D6F5A420055B14C /* autil_number_private.hpp */,
 				A3569B011D70BBFC0055D991 /* autil_parameter_private.hpp */,
 				A3DD27F21D735B1D00254892 /* autil_audioprocessingunit_private.hpp */,
 				A3D9EBDA1D81D5540092FD24 /* autil_stringlist_private.hpp */,
