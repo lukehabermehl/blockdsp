@@ -17,6 +17,9 @@
 
 typedef BlockDSPSystem* (*BlockDSPSystemFactoryFunc)(BlockDSPAPU *);
 
+///When creating Block IDs, ascend from this value
+extern const BlockDSPNodeID kFirstUserBlockID;
+
 /** An AudioProcessingUnit built with a BlockDSP system */
 class BlockDSPAPU : public AudioProcessingUnit
 {

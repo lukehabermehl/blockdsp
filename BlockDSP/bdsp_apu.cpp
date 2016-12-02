@@ -9,6 +9,8 @@
 #include "bdsp_apu.hpp"
 #include "bdsp_parameter.hpp"
 
+const BlockDSPNodeID kFirstUserBlockID = 2;
+
 BlockDSPAPU::BlockDSPAPU(BlockDSPSystem *system) : AudioProcessingUnit(), system_(system)
 {
 }
