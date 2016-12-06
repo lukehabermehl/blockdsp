@@ -13,6 +13,8 @@
 #include "autil_uiattrs.h"
 #include "autil_stringlist.hpp"
 
+#define BDSP_MAX_UNITS_STRLEN 16
+
 class APUParameter;
 class AudioProcessingUnit;
 
@@ -44,9 +46,9 @@ public:
     APUNumberType type();
 
     /** Set the string representing the units of the parameter value */
-    virtual void setUnits(const char *units);
+    void setUnits(const char *units);
     /** Get the string representing the units of the parameter value */
-    virtual const char *getUnits();
+    const char *getUnits();
 
     /** Set the callback object for the parameter */
     void setCallback(APUParameterCallback *cb);

@@ -40,7 +40,7 @@ public:
         }
 
         setName(pname);
-        units = "";
+        memset(units, 0, BDSP_MAX_UNITS_STRLEN + 1);
     }
 
     ~Pimpl()
@@ -68,7 +68,6 @@ public:
     size_t smoothingFrames;
 
     char *name;
-    std::string units;
 
     APUNumber target;
     APUNumber current;
@@ -77,6 +76,8 @@ public:
     float diffPerUpdate;
     APUNumberType valueType;
     APUUIAttribute uiAttr;
+
+    char units[BDSP_MAX_UNITS_STRLEN + 1];
 
     APUParameterCallback *cb;
 };

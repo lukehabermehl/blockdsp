@@ -28,7 +28,7 @@ public:
     /** Get the singleton instance */
     static AUtilThreadManager * sharedThreadManager();
     
-    /** Create a new managed thread. 
+    /** Create a new managed thread. The memory will be automatically released when the thread exits
       * @param func function to call in the thread
       * @param ctx context pointer to pass to the function
       */
