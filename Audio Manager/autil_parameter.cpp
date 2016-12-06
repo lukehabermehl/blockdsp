@@ -12,6 +12,8 @@
 #include <climits>
 #include <assert.h>
 
+#define MIN2(_a, _b) ((_a <= _b) ? _a : _b)
+
 APUParameter::APUParameter(const char *name, APUNumberType valueType, APUNumber minValue, APUNumber maxValue, APUNumber defaultValue, APUParameterCallback *cb)
 {
     _pimpl = new Pimpl(valueType, name, cb);
@@ -38,12 +40,21 @@ void APUParameter::setName(const char *name)
 
 const char * APUParameter::getUnits()
 {
-    return _pimpl->units.c_str();
+    return _pimpl->units;
 }
 
 void APUParameter::setUnits(const char *units)
 {
-    _pimpl->units = std::string(units);
+    size_t l = strlen(units);
+    if (l < BDSP_MAX_UNITS_STRLEN)
+    {
+        memcpy(_pimpl->units, units, l);
+        memset(&_pimpl->units[l], 0, BDSP_MAX_UNITS_STRLEN - l);
+    }
+    else
+    {
+        memcpy(_pimpl->units, units, BDSP_MAX_UNITS_STRLEN);
+    }
 }
 
 APUNumberType APUParameter::type()

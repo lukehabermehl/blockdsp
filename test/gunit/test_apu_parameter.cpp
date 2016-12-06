@@ -27,8 +27,6 @@ public:
 TEST_F(APUParameterTestFixture, test_essentials)
 {
 	APUParameter param("param", APUNUM_FLOAT, APUNUM_FLOAT(0), APUNUM_FLOAT(10), APUNUM_FLOAT(0));
-	param.setUnits("Hz");
-	EXPECT_EQ("Hz", std::string(param.getUnits()));
 	EXPECT_EQ(0, strcmp("param", param.getName()));
 	param.setName("new_name");
 	EXPECT_EQ(0, strcmp("new_name", param.getName()));
@@ -70,6 +68,19 @@ TEST_F(APUParameterTestFixture, test_ui_attrs)
 	EXPECT_TRUE(((uiAttrs & APU_UI_TYPE_SLIDER) > 0));
 	EXPECT_TRUE(((uiAttrs & APU_UI_ORIENTATION_HORIZONTAL) > 0));
 	EXPECT_TRUE(((uiAttrs & APU_UI_TYPE_SWITCH) == 0));
+}
+
+TEST_F(APUParameterTestFixture, test_units)
+{
+	APUParameter *param = new APUParameter("param", APUNUM_FLOAT, -5, 5, 0);
+	param->setUnits("Hertz");
+	EXPECT_EQ("Hertz", std::string(param->getUnits()));
+
+	//Test max size = 16
+	param->setUnits("12345678901234567");
+	EXPECT_EQ("1234567890123456", std::string(param->getUnits()));
+
+	delete param;
 }
 
 TEST_F(APUParameterTestFixture, test_enum_param)
