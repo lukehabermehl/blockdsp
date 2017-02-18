@@ -9,7 +9,6 @@
 #include "bdsp_node.hpp"
 #include "bdsp_node_private.hpp"
 #include "dsputil_delaybuffer.hpp"
-#include "bdsp_number.hpp"
 #include "bdsp_logger.hpp"
 
 #pragma mark - BlockDSPNode

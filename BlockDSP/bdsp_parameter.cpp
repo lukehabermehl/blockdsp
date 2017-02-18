@@ -8,7 +8,6 @@
 
 #include "bdsp_parameter.hpp"
 #include "bdsp_parameter_private.hpp"
-#include "bdsp_number.hpp"
 #include "bdsp_apu.hpp"
 #include <string.h>
 #include <limits.h>

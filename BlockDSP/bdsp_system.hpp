@@ -11,7 +11,6 @@
 #define BlockDSPSystem_hpp
 
 #include "bdsp_node.hpp"
-#include "bdsp_number.hpp"
 
 class BlockDSPParameter;
 class BlockDSPAPU;

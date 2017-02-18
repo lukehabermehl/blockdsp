@@ -23,7 +23,6 @@
 #include <blockdsp/bdsp_compiler.hpp>
 #include <blockdsp/bdsp_node.hpp>
 #include <blockdsp/bdsp_node_apu.hpp>
-#include <blockdsp/bdsp_number.hpp>
 #include <blockdsp/bdsp_parameter.hpp>
 #include <blockdsp/bdsp_system.hpp>
 #include <blockdsp/bdsp_logger.hpp>

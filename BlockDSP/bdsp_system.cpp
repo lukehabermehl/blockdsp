@@ -10,7 +10,6 @@
 #include "bdsp_system_private.hpp"
 #include "bdsp_parameter.hpp"
 #include "dsphelpers.hpp"
-#include "bdsp_number.hpp"
 
 BlockDSPSystem::BlockDSPSystem() {
     _pimpl = new pimpl;
