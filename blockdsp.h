@@ -12,12 +12,7 @@
 
 #ifndef blockdsp_h
 #define blockdsp_h
-#include <blockdsp/autil_file.hpp>
-#include <blockdsp/autil_manager.hpp>
-#include <blockdsp/autil_number.hpp>
-#include <blockdsp/autil_audioprocessingunit.hpp>
-#include <blockdsp/autil_thread_manager.hpp>
-#include <blockdsp/autil_uiattrs.h>
+
 #include <blockdsp/bdsp_apuloader.hpp>
 #include <blockdsp/bdsp_codebuilder.hpp>
 #include <blockdsp/bdsp_compiler.hpp>

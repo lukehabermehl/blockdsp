@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "blockdsp.h"
+#include <aputils/aputils.h>
 
 class BDSPParameterTestFixture : public ::testing::Test
 {

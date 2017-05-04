@@ -4,23 +4,13 @@ project(libblockdsp)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
-include_directories(/usr/local/include "Audio Manager/" "BlockDSP/" "Code Generation/" "Logger/")
-file(GLOB SOURCES "Audio\ Manager/*.cpp" "Audio\ Manager/*.hpp" "BlockDSP/*.cpp" "BlockDSP/*.hpp" "Code\ Generation/*.cpp" "Code\ Generation.hpp" "Logger/*.cpp" "Logger/*.hpp" "BuiltIns/*.cpp" "BuiltIns/*.hpp")
+include_directories(/usr/local/include /usr/local/include/aputils "BlockDSP/" "Code Generation/" "Logger/")
+file(GLOB SOURCES "BlockDSP/*.cpp" "BlockDSP/*.hpp" "Code\ Generation/*.cpp" "Code\ Generation.hpp" "Logger/*.cpp" "Logger/*.hpp" "BuiltIns/*.cpp" "BuiltIns/*.hpp")
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-set(PUBLIC_HEADERS "Audio Manager/autil_audioprocessingunit.hpp"
-	"Audio Manager/autil_dspkernel.hpp"
-	"Audio Manager/autil_file.hpp"
-	"Audio Manager/autil_manager.hpp"
-	"Audio Manager/autil_number.hpp"
-	"Audio Manager/autil_parameter.hpp"
-	"Audio Manager/autil_parametermap.hpp"
-	"Audio Manager/autil_stringlist.hpp"
-	"Audio Manager/autil_thread_manager.hpp"
-	"Audio Manager/autil_uiattrs.h"
-	"BlockDSP/bdsp_apu.hpp"
+set(PUBLIC_HEADERS "BlockDSP/bdsp_apu.hpp"
 	"BlockDSP/bdsp_node.hpp"
 	"BlockDSP/bdsp_parameter.hpp"
 	"BlockDSP/bdsp_system.hpp"

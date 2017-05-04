@@ -10,10 +10,10 @@
 #ifndef BlockDSPAPU_hpp
 #define BlockDSPAPU_hpp
 
-#include "autil_audioprocessingunit.hpp"
+#include <aputils/autil_audioprocessingunit.hpp>
+#include <aputils/autil_number.hpp>
 #include "bdsp_system.hpp"
 #include "bdsp_parameter.hpp"
-#include "autil_number.hpp"
 
 typedef BlockDSPSystem* (*BlockDSPSystemFactoryFunc)(BlockDSPAPU *);
 

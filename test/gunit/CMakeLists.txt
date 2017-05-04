@@ -10,6 +10,9 @@ find_library(PORTAUDIO portaudio
 find_library(SNDFILE sndfile
 	PATHS /usr/local/lib)
 
+find_library(APUTILS aputils
+	PATHS /usr/local/lib)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../include/)
 
 set (SOURCES "test_bdsp_system.cpp" 
@@ -29,6 +32,7 @@ add_executable (test_all ${SOURCES})
 target_link_libraries(test_all 
 						${PORTAUDIO}
 						${SNDFILE}
+						${APUTILS}
 						${CMAKE_CURRENT_SOURCE_DIR}/../../lib/libblockdsp.a
 						${CMAKE_CURRENT_SOURCE_DIR}/../lib/libgtest.a
 						${CMAKE_CURRENT_SOURCE_DIR}/../lib/libgtest_main.a

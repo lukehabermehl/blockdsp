@@ -6,7 +6,6 @@
 
 #include "bdsp_codebuilder.hpp"
 #include "bdsp_codebuilder_private.hpp"
-#include "autil_number.hpp"
 #include "bdsp_logger.hpp"
 
 #include <stdio.h>
@@ -15,6 +14,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sstream>
+#include <aputils/autil_number.hpp>
 
 #define BD_FILE_CHECK() if (!_pimpl->openFile) { _pimpl->error = BDCodeBuilderErrorFileNotOpen; return; }
 

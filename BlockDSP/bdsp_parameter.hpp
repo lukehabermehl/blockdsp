@@ -10,8 +10,8 @@
 #ifndef BlockDSPParameter_hpp
 #define BlockDSPParameter_hpp
 
-#include "autil_number.hpp"
-#include "autil_parameter.hpp"
+#include <aputils/autil_number.hpp>
+#include <aputils/autil_parameter.hpp>
 #include <unordered_map>
 #include <string>
 

@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "blockdsp.h"
 #include <string.h>
+#include <aputils/aputils.h>
 
 class APUParameterTestFixture : public ::testing::Test
 {

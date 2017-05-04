@@ -12,8 +12,8 @@
 #ifndef BlockDSPNode_h
 #define BlockDSPNode_h
 
-#include "autil_number.hpp"
-#include "autil_parameter.hpp"
+#include <aputils/autil_number.hpp>
+#include <aputils/autil_parameter.hpp>
 
 #include <stdlib.h>
 #include <sys/types.h>

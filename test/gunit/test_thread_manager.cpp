@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
 #include "blockdsp.h"
+#include <aputils/autil_thread_manager.hpp>
+#include <aputils/aputils.h>
 
 class ThreadManagerTestFixture : public ::testing::Test 
 {
